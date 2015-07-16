@@ -3,6 +3,7 @@
 
 ## Build & Run
 
-- run "grunt"
-- navigate to http://localhost:3000
-- :)
+1. npm install
+2. grunt
+3. navigate to http://localhost:3000
+4. :)
