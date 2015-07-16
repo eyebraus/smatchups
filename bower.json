@@ -1,0 +1,19 @@
+{
+    "name": "smashschool",
+    "version": "0.1.0",
+    "description": "hur dur dur",
+    "license": "MIT",
+    "private": true,
+
+    "dependencies": {
+        "bootstrap": "3.3.x",
+        "jquery": "1.10.2",
+        "requirejs": "^2.0.x",
+        "underscore": "^1.6.x"
+    },
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "components"
+    ]
+}
