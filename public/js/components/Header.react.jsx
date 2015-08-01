@@ -4,21 +4,7 @@ module.exports = (function () {
 
     var React = require('react');
 
-    var HeaderMenuButton = React.createClass({
-
-        render: function () {
-            return (
-                <div className="header-menu-button col-xs-3 col-sm-3 col-md-3">
-                    <i className="fa fa-bars fa-3" />
-                </div>
-            );
-        },
-
-        onClick: function (event) {
-            return this.props.onClick(event);
-        }
-
-    });
+    var IconButton = require('./IconButton.react.jsx');
 
     var Header = React.createClass({
 
@@ -30,7 +16,10 @@ module.exports = (function () {
 
             return (
                 <div className="header row">
-                    <HeaderMenuButton
+                    <IconButton
+                            layoutColumns="3"
+                            iconType="fa-bars"
+                            iconSize="fa-3"
                             onClick={ onClickDelegate } />
 
                     <div className="header-logo col-xs-9 col-sm-9 col-md-9">

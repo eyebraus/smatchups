@@ -15,7 +15,7 @@ module.exports = (function () {
                 .map(function (prefix) {
                     return prefix + that.props.layoutColumns;
                 })
-                .union(['tab-control-section', 'row'])
+                .union(['tab-control-section'])
                 .value()
                 .join(' ');
 

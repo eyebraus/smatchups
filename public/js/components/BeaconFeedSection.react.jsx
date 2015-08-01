@@ -34,17 +34,19 @@ module.exports = (function () {
 
         render: function () {
             return (
-                <div className="feed-section-wrapper col-xs-12 col-sm-12 col-md-12">
-                    { this.beaconFeedRows() }
-                </div>
-
-                <div className="feed-section-toggle-mode col-xs-12 col-sm-12 col-md-12">
-                    <div className="feed-section-toggle-icon toggle-icon-disabled col-xs-6 col-sm-6 col-md-6">
-                        <i className="fa fa-list fa-3" />
+                <div className="feed-section row">
+                    <div className="feed-section-rows-wrapper col-xs-12 col-sm-12 col-md-12">
+                        { this.beaconFeedRows() }
                     </div>
 
-                    <div className="feed-section-toggle-icon toggle-icon-disabled col-xs-6 col-sm-6 col-md-6">
-                        <i className="fa fa-globe fa-3" />
+                    <div className="feed-section-toggle-mode col-xs-12 col-sm-12 col-md-12">
+                        <div className="feed-section-toggle-icon toggle-icon-disabled col-xs-6 col-sm-6 col-md-6">
+                            <i className="fa fa-list fa-3" />
+                        </div>
+
+                        <div className="feed-section-toggle-icon toggle-icon-disabled col-xs-6 col-sm-6 col-md-6">
+                            <i className="fa fa-globe fa-3" />
+                        </div>
                     </div>
                 </div>
             );

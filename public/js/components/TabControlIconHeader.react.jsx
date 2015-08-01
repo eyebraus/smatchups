@@ -9,7 +9,8 @@ module.exports = (function () {
         render: function () {
             var iconClassNames = ['fa', this.props.iconType, this.props.iconSize].join(' ')
               , divClassNames = ['tab-control-icon-header',
-                    this.props.isSelected ? 'tab-control-icon-selected' : 'tab-control-icon-unselected'];
+                    this.props.isSelected ? 'tab-control-icon-selected' : 'tab-control-icon-unselected']
+                    .join(' ');
 
             return (
                 <div className={ divClassNames }>
