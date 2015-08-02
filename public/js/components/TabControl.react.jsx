@@ -2,15 +2,10 @@
 module.exports = (function () {
     'use strict';
 
-    var React = require('react');
+    var React = require('react')
+      , Link = require('react-router').Link;
 
     var TabControl = React.createClass({
-
-        getInitialState: function () {
-            return {
-                index: 0
-            };
-        },
 
         render: function () {
             var that = this;
@@ -30,19 +25,9 @@ module.exports = (function () {
                         { this.headerComponents() }
                     </div>
 
-                    { this.sectionAtIndex(this.state.index) }
+                    { this.props.children }
                 </div>
             );
-        },
-
-        sectionAtIndex: function (i) {
-            if (React.Children.count(this.props.children) > 1) {
-                return this.props.children[i];
-            } else if (React.Children.count(this.props.children) == 1) {
-                return i == 0 ? React.Children.only(this.props.children) : null;
-            } else {
-                return null;
-            }
         },
 
         headerComponents: function () {
@@ -50,16 +35,8 @@ module.exports = (function () {
               , HeaderComponentTemplate = this.headerComponent;
 
             return _.map(this.headerComponentProps, function (props, index) {
-                var isSelected = index === that.state.index
-                  , onClickDelegate = function (event) {
-                        that.setState({ index: index });
-                    };
-
                 return (
-                    <HeaderComponentTemplate
-                            isSelected={ isSelected }
-                            onClick={ onClickDelegate }
-                            {...props} />
+                    <HeaderComponentTemplate {...props} />
                 );
             });
         }
