@@ -16,7 +16,15 @@ module.exports = (function () {
         },
 
         render: function () {
-            return _.maps(this.state.beacons, function (beacon) {
+            return (
+                <div className="beacons-list col-xs-12 col-sm-12 col-md-12">
+                    { this.beaconRows() }
+                </div>
+            );
+        },
+
+        beaconRows: function () {
+            return _.map(this.state.beacons, function (beacon) {
                 return (
                     <div className="beacon-row row">
                         <div className="beacon-image-frame col-xs-3 col-sm-3 col-md-3">

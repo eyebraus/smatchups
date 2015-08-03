@@ -3,7 +3,8 @@ module.exports = (function () {
     'use strict';
 
     var React = require('react')
-      , Link = require('react-router').Link;
+      , Link = require('react-router').Link
+      , _ = require('underscore')._;
 
     var TabControl = React.createClass({
 
