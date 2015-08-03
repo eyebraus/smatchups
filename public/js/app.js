@@ -7,16 +7,16 @@
       , DefaultRoute = Router.DefaultRoute
       , Route = Router.Route;
 
-    var BeaconsList = require('./components/BeaconsList.react.jsx')
+    var App = require('./components/App.react.jsx')
+      , BeaconsList = require('./components/BeaconsList.react.jsx')
       , BeaconsMap = require('./components/BeaconsMap.react.jsx')
       , BeaconsSection = require('./components/BeaconsSection.react.jsx')
       , Index = require('./components/Index.react.jsx')
-      , Settings = require('./components/Settings.react.jsx')
-      , SmatchupsApp = require('./components/SmatchupsApp.react.jsx');
+      , Settings = require('./components/Settings.react.jsx');
 
     // Set up routes
     var routes = (
-        <Route handler={ SmatchupsApp }>
+        <Route handler={ App }>
             <Route name="index" path="index" handler={ Index }>
                 <Route name="beacons" path="beacons" handler={ BeaconsSection }>
                     <DefaultRoute name="beacons-list" handler={ BeaconsList } />
