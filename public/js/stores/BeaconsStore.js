@@ -2,8 +2,10 @@
 module.exports = (function () {
     'use strict';
 
+    var _ = require('underscore')._;
+
     var Actions = require('../constants/Actions')
-      , AppDispatcher = require('../dispatcher/AppDispatcher')
+      , AppDispatcher = require('../dispatchers/AppDispatcher')
       , EventEmitter = require('events').EventEmitter
       , Events = require('../constants/Events');
 
@@ -23,8 +25,8 @@ module.exports = (function () {
         this.removeListener(Events.BeaconsStoreChanged, fn);
     };
 
-    BeaconsStore.addBeacons = function (beacons) {
-        _.each(beacons, function (beacon) {
+    BeaconsStore.addBeacons = function (newBeacons) {
+        _.each(newBeacons, function (beacon) {
             beacons[beacon.id] = beacon;
         });
     };
@@ -37,9 +39,7 @@ module.exports = (function () {
         return _.values(beacons);
     };
 
-    BeaconsStore.dispatchToken = AppDispatcher.register(function (payload) {
-        var action = payload.action;
-
+    BeaconsStore.dispatchToken = AppDispatcher.register(function (action) {
         switch (action.type) {
             case Actions.ReloadBeacons:
                 BeaconsStore.clearBeacons();

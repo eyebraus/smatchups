@@ -9,7 +9,7 @@ module.exports = (function () {
 
     var BeaconsResourceActions = require('../actions/BeaconsResourceActions')
       , BeaconsStore = require('../stores/BeaconsStore')
-      , StoreStateComponentFactory = require('./factories/StoreStateComponent');
+      , StoreStateComponentFactory = require('./factories/StoreStateComponent.react.jsx');
 
     var BeaconsList = React.createClass({
 
@@ -54,7 +54,9 @@ module.exports = (function () {
 
     // Mixin StoreStateComponent functionality for the BeaconsStore
     return StoreStateComponentFactory(BeaconsList, BeaconsStore, function (store) {
-        return store.getBeacons();
+        return {
+            beacons: store.getBeacons()
+        };
     });
 
 })();
