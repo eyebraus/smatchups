@@ -2,6 +2,18 @@
 module.exports = (function () {
     'use strict';
 
-    return {};
+    var httpPromise = require('../utilities/httpPromise');
+
+    return {
+
+        all: function () {
+            return httpPromise.get('/beacons', {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+        }
+
+    };
 
 })();

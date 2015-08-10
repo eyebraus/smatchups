@@ -7,12 +7,15 @@ module.exports = (function () {
       , Link = Router.Link
       , _ = require('underscore')._;
 
+    var BeaconsResourceActions = require('../actions/BeaconsResourceActions')
+      , BeaconsStore = require('../stores/BeaconsStore')
+      , StoreStateComponentFactory = require('./factories/StoreStateComponent');
+
     var BeaconsList = React.createClass({
 
-        getInitialState: function () {
-            return {
-                beacons: []
-            };
+        componentDidMount: function () {
+            // Trigger a full reload of the BeaconsStore
+            BeaconsResourceActions.reloadBeacons();
         },
 
         render: function () {
@@ -24,7 +27,7 @@ module.exports = (function () {
         },
 
         beaconRows: function () {
-            return _.map(this.state.beacons, function (beacon) {
+            return _.map(this.props.beacons, function (beacon) {
                 return (
                     <div className="beacon-row row">
                         <div className="beacon-image-frame col-xs-3 col-sm-3 col-md-3">
@@ -49,6 +52,9 @@ module.exports = (function () {
 
     });
 
-    return BeaconsList;
+    // Mixin StoreStateComponent functionality for the BeaconsStore
+    return StoreStateComponentFactory(BeaconsList, BeaconsStore, function (store) {
+        return store.getBeacons();
+    });
 
 })();

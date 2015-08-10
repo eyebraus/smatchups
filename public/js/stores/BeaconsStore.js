@@ -29,6 +29,10 @@ module.exports = (function () {
         });
     };
 
+    BeaconsStore.clearBeacons = function () {
+        beacons = {};
+    };
+
     BeaconsStore.getBeacons = function () {
         return _.values(beacons);
     };
@@ -37,7 +41,8 @@ module.exports = (function () {
         var action = payload.action;
 
         switch (action.type) {
-            case Actions.ListBeacons:
+            case Actions.ReloadBeacons:
+                BeaconsStore.clearBeacons();
                 BeaconsStore.addBeacons(action.beacons);
                 BeaconsStore.emitChanged();
 

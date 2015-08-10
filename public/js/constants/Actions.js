@@ -5,7 +5,7 @@ module.exports = (function () {
     var keymirror = require('keymirror');
 
     return keymirror({
-        ListBeacons: null
+        ReloadBeacons: null
     });
 
 })();

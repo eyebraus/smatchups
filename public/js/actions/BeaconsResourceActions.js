@@ -8,11 +8,11 @@ module.exports = (function () {
 
     return {
 
-        getBeacons: function () {
+        reloadBeacons: function () {
             BeaconsResource.all()
                 .then(function (beacons) {
                     AppDispatcher.handleServerAction({
-                        type: Actions.ListBeacons,
+                        type: Actions.ReloadBeacons,
                         beacons: beacons
                     });
                 });
