@@ -25,6 +25,10 @@ module.exports = (function () {
         this.removeListener(Events.BeaconsStoreChanged, fn);
     };
 
+    BeaconsStore.addBeacon = function (beacon) {
+        beacons[beacon.id] = beacon;
+    };
+
     BeaconsStore.addBeacons = function (newBeacons) {
         _.each(newBeacons, function (beacon) {
             beacons[beacon.id] = beacon;
@@ -41,6 +45,10 @@ module.exports = (function () {
 
     BeaconsStore.dispatchToken = AppDispatcher.register(function (action) {
         switch (action.type) {
+            case Actions.CreateBeacon:
+                BeaconsStore.addBeacon(action.beacon);
+                BeaconsStore.emitChanged();
+
             case Actions.ReloadBeacons:
                 BeaconsStore.clearBeacons();
                 BeaconsStore.addBeacons(action.beacons);

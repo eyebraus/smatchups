@@ -13,6 +13,10 @@ module.exports = (function () {
                     gameIcon: '/app/img/icon/ssbm-small.png',
                     message: 'lol play melee or whatever'
                 }]);
+        },
+
+        create: function (req, res) {
+            
         }
     };
 

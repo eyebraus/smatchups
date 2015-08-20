@@ -12,6 +12,14 @@ module.exports = (function () {
                     'Accept': 'application/json'
                 }
             });
+        },
+
+        create: function (beacon) {
+            return httpPromise.post('/beacons', beacon, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
         }
 
     };

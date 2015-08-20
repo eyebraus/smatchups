@@ -37,24 +37,30 @@ module.exports = (function () {
                         <div className="beacons-section-filters row">
                             <ToggleImageButton
                                     iconUrl="/img/icons/smash-64-toggle.png"
-                                    layoutColumns="3"
+                                    layoutColumns="2"
                                     toggleState={ this.state.isSmash64Enabled }
                                     onToggled={ onToggledFactory('isSmash64Enabled') } />
                             <ToggleImageButton
                                     iconUrl="/img/icons/melee-toggle.png"
-                                    layoutColumns="3"
+                                    layoutColumns="2"
                                     toggleState={ this.state.isMeleeEnabled }
                                     onToggled={ onToggledFactory('isMeleeEnabled') } />
                             <ToggleImageButton
                                     iconUrl="/img/icons/project-m-toggle.png"
-                                    layoutColumns="3"
+                                    layoutColumns="2"
                                     toggleState={ this.state.isProjectMEnabled }
                                     onToggled={ onToggledFactory('isProjectMEnabled') } />
                             <ToggleImageButton
                                     iconUrl="/img/icons/sm4sh-toggle.png"
-                                    layoutColumns="3"
+                                    layoutColumns="2"
                                     toggleState={ this.state.isSm4shEnabled }
                                     onToggled={ onToggledFactory('isSm4shEnabled') } />
+
+                            <LinkedIconButton
+                                    iconSize="fa-3"
+                                    iconType="fa-plus"
+                                    layoutColumns="3"
+                                    routeName="create-beacon" />
                         </div>
 
                         <div className="beacons-section row">

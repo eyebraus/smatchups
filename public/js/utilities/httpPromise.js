@@ -29,6 +29,33 @@ module.exports = (function () {
             });
 
             return deferral.promise;
+        },
+
+        post: function (path, body, options) {
+            var deferral = q.defer()
+              , bodyStr = JSON.stringify(body)
+              , opts = _.clone(options);
+
+            opts.path = path;
+            opts.headers['Content-Length'] = bodyStr.length;
+
+            var req = http.request(opts, function (res) {
+                var data = '';
+
+                res.on('data', function (chunk) {
+                    data += chunk;
+                });
+
+                res.on('end', function () {
+                    deferral.resolve(JSON.parse(data));
+                });
+            }).on('error', function (err) {
+                deferral.reject(err);
+            });
+
+            req.end(bodyStr);
+
+            return deferral.promise;
         }
 
     };
