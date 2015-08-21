@@ -1,5 +1,6 @@
 
 module.exports = (function () {
+    'use strict';
 
     var q = require('q')
       , _ = require('underscore')._
@@ -54,15 +55,14 @@ module.exports = (function () {
 
     Resource.prototype.all = function (/* [parameters] */) {
         var that = this
-          , args = new (vargs)(arguments)
-          , expandedProperty = expandProperty(this.path, args.all);
+          , args = new (vargs)(arguments);
 
         return this.isValid()
             .then(function () {
                 return that.isRequestValid(that.path, args.all)
             })
             .then(function () {
-                return that.redisClient.smembers(expandedProperty);
+                return that.redisClient.smembers(that.expandedPath(args.all));
             })
             .then(function (modelIds) {
                 var promises = [];
@@ -89,24 +89,19 @@ module.exports = (function () {
           , args = new (vargs)(arguments)
           , parameters = args.all.slice(0, -1)
           , document = args.last
-          , expandedPath = expandProperty(this.path, parameters)
+          , expandedPath = this.expandedPath(parameters)
           , currentTimestamp = new Date().toString();
 
         return this.isValid()
             .then(function () {
-                return that.isRequestValid(expandedPath, parameters);
+                return that.isRequestValid(that.path, parameters);
             })
             .then(function () {
                 // create an identifier for the new resource
                 return that.generateID(expandedPath);
             })
             .then(function (id) {
-                var createParameters = parameters.concat([id])
-                  , expandedIdPath = expandProperty(that.path + ':%s/id', createParameters)
-                  , expandedRevPath = expandProperty(that.path + ':%s/rev', createParameters)
-                  , expandedCreatedAtPath = expandProperty(that.path + ':%s/createdAt', createParameters)
-                  , expandedUpdatedAtPath = expandProperty(that.path + ':%s/updatedAt', createParameters)
-                  , expandedDocPath = expandProperty(that.path + ':%s/doc', createParameters);
+                var properties = that.expandProperties(id, parameters);
 
                 return that.idExists(expandedPath, id)
                     .then(function (idExists) {
@@ -117,15 +112,15 @@ module.exports = (function () {
                             });
                         }
 
-                        that.redisClient.watch(expandedIdPath);
+                        that.redisClient.watch(properties.id);
                         that.redisClient.multi();
 
-                        that.redisClient.sadd(expandedPath, id);
-                        that.redisClient.set(expandedIdPath, id);
-                        that.redisClient.incr(expandedRevPath);
-                        that.redisClient.set(expandedCreatedAtPath, currentTimestamp);
-                        that.redisClient.set(expandedUpdatedAtPath, currentTimestamp);
-                        that.redisClient.set(expandedDocPath, JSON.stringify(document));
+                        that.redisClient.sadd(that.expandedPath(parameters), id);
+                        that.redisClient.set(properties.id, id);
+                        that.redisClient.incr(properties.rev);
+                        that.redisClient.set(properties.createdAt, currentTimestamp);
+                        that.redisClient.set(properties.updatedAt, currentTimestamp);
+                        that.redisClient.set(properties.doc, JSON.stringify(document));
 
                         return that.redisClient.exec();
                     })
@@ -166,16 +161,15 @@ module.exports = (function () {
                         }
 
                         var data = {
-                                id: id,
-                                rev: revResult,
-                                createdAt: currentTimestamp,
-                                updatedAt: currentTimestamp,
-                                document: document,
-                                valid: isValid
-                            }
-                          , expandedValidPath = expandProperty(that.path + ':%s/valid', createParameters);
+                            id: id,
+                            rev: revResult,
+                            createdAt: currentTimestamp,
+                            updatedAt: currentTimestamp,
+                            document: document,
+                            valid: isValid
+                        };
 
-                        return that.redisClient.set(expandedValidPath, isValid ? 1 : 0)
+                        return that.redisClient.set(properties.valid, isValid ? 1 : 0)
                             .then(function () {
                                 if (isValid) {
                                     return q.fcall(function () {
@@ -204,23 +198,12 @@ module.exports = (function () {
         var that = this
           , args = new (vargs)(arguments)
           , id = args.at(-1)
-          , idPath = this.path + ':%s/id'
-          , revPath = this.path + ':%s/rev'
-          , createdAtPath = this.path + ':%s/createdAt'
-          , updatedAtPath = this.path + ':%s/updatedAt'
-          , docPath = this.path + ':%s/doc'
-          , validPath = this.path + ':%s/valid'
-          , expandedPath = expandProperty(this.path, args.all.slice(0, -1))
-          , expandedIdPath = expandProperty(idPath, args.all)
-          , expandedRevPath = expandProperty(revPath, args.all)
-          , expandedCreatedAtPath = expandProperty(createdAtPath, args.all)
-          , expandedUpdatedAtPath = expandProperty(updatedAtPath, args.all)
-          , expandedDocPath = expandProperty(docPath, args.all)
-          , expandedValidPath = expandProperty(validPath, args.all);
+          , expandedPath = this.expandedPath(args.all.slice(0, -1))
+          , properties = this.expandProperties(id, args.all.slice(0, -1));
 
         return this.isValid()
             .then(function () {
-                return that.isRequestValid(idPath, args.all);
+                return that.isRequestValid(that.propertyTemplates().id, args.all);
             })
             .then(function () {
                 return that.idExists(expandedPath, id);
@@ -233,7 +216,7 @@ module.exports = (function () {
                     });
                 }
 
-                return that.redisClient.get(expandedValidPath);
+                return that.redisClient.get(properties.valid);
             })
             .then(function (valid) {
                 if (valid <= 0) {
@@ -244,11 +227,11 @@ module.exports = (function () {
                 }
 
                 return q.all([
-                        that.redisClient.get(expandedIdPath),
-                        that.redisClient.get(expandedRevPath),
-                        that.redisClient.get(expandedCreatedAtPath),
-                        that.redisClient.get(expandedUpdatedAtPath),
-                        that.redisClient.get(expandedDocPath)])
+                        that.redisClient.get(properties.id),
+                        that.redisClient.get(properties.rev),
+                        that.redisClient.get(properties.createdAt),
+                        that.redisClient.get(properties.updatedAt),
+                        that.redisClient.get(properties.doc)])
                     .then(function (results) {
                         return q.fcall(function () {
                             return {
@@ -281,24 +264,13 @@ module.exports = (function () {
           , id = args.at(-3)
           , rev = args.at(-2)
           , document = args.at(-1)
-          , idPath = this.path + ':%s/id'
-          , revPath = this.path + ':%s/rev'
-          , createdAtPath = this.path + ':%s/createdAt'
-          , updatedAtPath = this.path + ':%s/updatedAt'
-          , docPath = this.path + ':%s/doc'
-          , validPath = this.path + ':%s/valid'
-          , expandedPath = expandProperty(this.path, args.all.slice(0, -3))
-          , expandedIdPath = expandProperty(idPath, pathParameters)
-          , expandedRevPath = expandProperty(revPath, pathParameters)
-          , expandedCreatedAtPath = expandProperty(createdAtPath, pathParameters)
-          , expandedUpdatedAtPath = expandProperty(updatedAtPath, pathParameters)
-          , expandedDocPath = expandProperty(docPath, pathParameters)
-          , expandedValidPath = expandProperty(validPath, pathParameters)
+          , expandedPath = this.expandedPath(args.all.slice(0, -3))
+          , properties = this.expandProperties(id, args.all.slice(0, -3))
           , currentTimestamp = new Date().toString();
 
         return this.isValid()
             .then(function () {
-                return that.isRequestValid(idPath, pathParameters);
+                return that.isRequestValid(that.propertyTemplates().id, pathParameters);
             })
             .then(function () {
                 return that.idExists(expandedPath, id);
@@ -311,7 +283,7 @@ module.exports = (function () {
                     });
                 }
 
-                return that.redisClient.get(expandedValidPath);
+                return that.redisClient.get(properties.valid);
             })
             .then(function (valid) {
                 if (valid <= 0) {
@@ -321,13 +293,13 @@ module.exports = (function () {
                     });
                 }
 
-                that.redisClient.watch(expandedRevPath);
+                that.redisClient.watch(properties.rev);
 
-                return that.redisClient.get(expandedRevPath);
+                return that.redisClient.get(properties.rev);
             })
             .then(function (serverRev) {
                 if (rev !== serverRev) {
-                    that.redisClient.unwatch(expandedRevPath);
+                    that.redisClient.unwatch(properties.rev);
 
                     return q.reject({
                         type: 'revIsOutOfDate',
@@ -336,10 +308,10 @@ module.exports = (function () {
                 }
 
                 that.redisClient.multi();
-                that.redisClient.incr(expandedRevPath);
-                that.redisClient.get(expandedCreatedAtPath);
-                that.redisClient.set(expandedUpdatedAtPath, currentTimestamp);
-                that.redisClient.set(expandedDocPath, JSON.stringify(document));
+                that.redisClient.incr(properties.rev);
+                that.redisClient.get(properties.createdAt);
+                that.redisClient.set(properties.updatedAt, currentTimestamp);
+                that.redisClient.set(properties.doc, JSON.stringify(document));
 
                 return that.redisClient.exec();
             })
@@ -374,7 +346,7 @@ module.exports = (function () {
                     valid: isValid
                 };
 
-                return that.redisClient.set(expandedValidPath, isValid ? 1 : 0)
+                return that.redisClient.set(properties.valid, isValid ? 1 : 0)
                     .then(function () {
                         if (isValid) {
                             return q.fcall(function () {
@@ -406,23 +378,12 @@ module.exports = (function () {
           , pathParameters = args.all.slice(0, -1)
           , id = args.at(-2)
           , rev = args.at(-1)
-          , idPath = this.path + ':%s/id'
-          , revPath = this.path + ':%s/rev'
-          , createdAtPath = this.path + ':%s/createdAt'
-          , updatedAtPath = this.path + ':%s/updatedAt'
-          , docPath = this.path + ':%s/doc'
-          , validPath = this.path + ':%s/valid'
-          , expandedPath = expandProperty(this.path, args.all.slice(0, -2))
-          , expandedIdPath = expandProperty(idPath, pathParameters)
-          , expandedRevPath = expandProperty(revPath, pathParameters)
-          , expandedCreatedAtPath = expandProperty(createdAtPath, pathParameters)
-          , expandedUpdatedAtPath = expandProperty(updatedAtPath, pathParameters)
-          , expandedDocPath = expandProperty(docPath, pathParameters)
-          , expandedValidPath = expandProperty(validPath, pathParameters);
+          , expandedPath = this.expandedPath(args.all.slice(0, -2))
+          , properties = this.expandProperties(id, args.all.slice(0, -2));
 
         return this.isValid()
             .then(function () {
-                return that.isRequestValid(idPath, pathParameters);
+                return that.isRequestValid(that.propertyTemplates().id, pathParameters);
             })
             .then(function () {
                 return that.idExists(expandedPath, id);
@@ -435,13 +396,13 @@ module.exports = (function () {
                     });
                 }
 
-                that.redisClient.watch(expandedRevPath);
+                that.redisClient.watch(properties.rev);
 
-                return that.redisClient.get(expandedRevPath);
+                return that.redisClient.get(properties.rev);
             })
             .then(function (serverRev) {
                 if (rev !== serverRev) {
-                    that.redisClient.unwatch(expandedRevPath);
+                    that.redisClient.unwatch(properties.rev);
 
                     return q.reject({
                         type: 'revIsOutOfDate',
@@ -450,12 +411,12 @@ module.exports = (function () {
                 }
 
                 that.redisClient.multi();
-                that.redisClient.del(expandedIdPath);
-                that.redisClient.del(expandedRevPath);
-                that.redisClient.del(expandedCreatedAtPath);
-                that.redisClient.del(expandedUpdatedAtPath);
-                that.redisClient.del(expandedDocPath);
-                that.redisClient.del(expandedValidPath);
+                that.redisClient.del(properties.id);
+                that.redisClient.del(properties.rev);
+                that.redisClient.del(properties.createdAt);
+                that.redisClient.del(properties.updatedAt);
+                that.redisClient.del(properties.doc);
+                that.redisClient.del(properties.valid);
                 that.redisClient.srem(expandedPath, id);
 
                 return that.redisClient.exec();
@@ -465,6 +426,56 @@ module.exports = (function () {
                     return true;
                 });
             });
+    };
+
+    /**
+     * Resource.expandedPath
+     * @description Return a fully-qualified expanded base path for the given arguments
+     * @param {array} args List of arguments for path template
+     * @return {string} Full path to resource, with given arguments
+     */
+
+    Resource.prototype.expandedPath = function (args) {
+        return expandProperty(this.path, args);
+    };
+
+    /**
+     * Resource.propertyTemplates
+     * @description Create template key names for resource instances
+     * @return {object} All template key names for resource instances
+     */
+
+    Resource.prototype.propertyTemplates = function () {
+        return {
+            id: this.path + ':%s/id',
+            rev: this.path + ':%s/rev',
+            createdAt: this.path + ':%s/createdAt',
+            updatedAt: this.path + ':%s/updatedAt',
+            doc: this.path + ':%s/doc',
+            valid: this.path + ':%s/valid'
+        };
+    };
+
+    /**
+     * Resource.expandedProperties
+     * @description Return all fully-qualified expanded properties for a resource instance
+     * @param {string} id ID of resource instance
+     * @param {array} args List of args for path template
+     * @return {object} All expanded properties for resource instance
+     */
+
+    Resource.prototype.expandProperties = function (id, args) {
+        var templates = this.propertyTemplates()
+          , allArguments = args.concat([id]);
+
+        return {
+            id: expandProperty(templates.id, allArguments),
+            rev: expandProperty(templates.rev, allArguments),
+            createdAt: expandProperty(templates.createdAt, allArguments),
+            updatedAt: expandProperty(templates.updatedAt, allArguments),
+            doc: expandProperty(templates.doc, allArguments),
+            valid: expandProperty(templates.valid, allArguments)
+        };
     };
 
     /**
