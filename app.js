@@ -46,6 +46,7 @@
         app.get('/', index);
 
         app.get('/beacons', beacons.all);
+        app.post('/beacons', beacons.create);
     });
 
     app.configure('development', function () {

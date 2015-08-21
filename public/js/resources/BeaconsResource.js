@@ -15,7 +15,7 @@ module.exports = (function () {
         },
 
         create: function (beacon) {
-            return httpPromise.post('/beacons', beacon, {
+            return httpPromise.post('/beacons', { document: beacon }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }

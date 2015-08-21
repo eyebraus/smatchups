@@ -36,6 +36,7 @@ module.exports = (function () {
               , bodyStr = JSON.stringify(body)
               , opts = _.clone(options);
 
+            opts.method = 'POST';
             opts.path = path;
             opts.headers['Content-Length'] = bodyStr.length;
 
