@@ -15,7 +15,7 @@ module.exports = (function () {
                 store.addChangedListener(this.onChanged);
             },
 
-            componentDidUnmount: function () {
+            componentWillUnmount: function () {
                 store.removeChangedListener(this.onChanged);
             },
 

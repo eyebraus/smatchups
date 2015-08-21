@@ -15,7 +15,7 @@ module.exports = (function () {
             return (
                 <div className="game-select-form-element">
                     <input type="checkbox" name={ this.props.name } checked={ this.props.isChecked } onChange={ this.props.onChange } />
-                    <label for={ this.props.name }>{ this.props.label }</label>
+                    <label htmlFor={ this.props.name }>{ this.props.label }</label>
                 </div>
             );
         }
@@ -36,6 +36,10 @@ module.exports = (function () {
                 entryFee: 0,
                 message: ''
             };
+        },
+
+        onCancel: function () {
+            this.goBack();
         },
 
         onChangeFactory: function (keyName) {
@@ -117,7 +121,7 @@ module.exports = (function () {
                     </div>
 
                     <div className="form-group">
-                        <label for="entry-fee-number" text="Entry fee:" />
+                        <label htmlFor="entry-fee-number">Entry fee:</label>
                         <input name="entry-fee-number"
                                 type="number"
                                 value={ this.state.entryFee }
@@ -135,8 +139,8 @@ module.exports = (function () {
                     </div>
 
                     <div className="form-group">
-                        <button name="submit-button" type="submit" value="Submit" className="btn btn-primary" />
-                        <button name="cancel-button" value="Cancel" className="btn btn-default" onClick={ this.goBack } />
+                        <button name="submit-button" type="submit" className="btn btn-primary">Submit</button>
+                        <button name="cancel-button" type="button" className="btn btn-default" onClick={ this.onCancel }>Cancel</button>
                     </div>
                 </form>
             );

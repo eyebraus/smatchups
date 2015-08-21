@@ -29,7 +29,7 @@ module.exports = (function () {
         beaconRows: function () {
             return _.map(this.props.beacons, function (beacon) {
                 return (
-                    <div className="beacon-row row">
+                    <div key={ beacon.id } className="beacon-row row">
                         <div className="beacon-image-frame col-xs-3 col-sm-3 col-md-3">
                             <img src={ beacon.document.profilePictureUrl } />
                         </div>
