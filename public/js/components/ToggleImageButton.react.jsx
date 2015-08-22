@@ -41,8 +41,8 @@ module.exports = (function () {
             var divClassNames = divClasses.join(' ');
 
             return (
-                <div className={ divClassNames }>
-                    <img src={ this.props.iconUrl } className={ imgClassNames } />
+                <div onClick={ this.onClick } className={ divClassNames }>
+                    <img src={ this.props.imageUrl } width={ this.props.imageWidth } height={ this.props.imageHeight } className={ imgClassNames } />
                 </div>
             );
         },
