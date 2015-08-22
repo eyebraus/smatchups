@@ -5,7 +5,9 @@ module.exports = (function () {
 
     var Resource = require('../model/resource');
 
-    var redisClient = redis.createClient()
+    var redisClient = typeof process.env.REDIS_URL !== 'undefined'
+            ? redis.createClient(process.env.REDIS_URL)
+            : redis.createClient()
       , beaconsResource = new Resource(redisClient, 'beacons');
 
     return {
