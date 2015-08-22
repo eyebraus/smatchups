@@ -58,24 +58,25 @@ module.exports = function (grunt) {
             }
         },
 
-        develop: {
+        express: {
+            options: {
+                script: 'app.js'
+            },
+
             devApp: {
-                file: 'app.js',
-                nodeArgs: ['--debug'],
-                env: { NODE_ENV: 'develop' }
+                node_env: 'develop'
             },
 
             prodApp: {
-                file: 'app.js',
-                env: { NODE_ENV: 'production' }
+                node_env: 'production'
             }
         },
 
         run: {
             app: {
                 options: {
-                    developTasks: ['watchify:devApp', 'stylus:devApp', 'copy:app', 'develop:devApp', 'watch'],
-                    productionTasks: ['browserify:prodApp', 'stylus:prodApp', 'copy:app', 'develop:prodApp']
+                    developTasks: ['watchify:devApp', 'stylus:devApp', 'copy:app', 'express:devApp', 'watch'],
+                    productionTasks: ['browserify:prodApp', 'stylus:prodApp', 'copy:app', 'express:prodApp', 'keepalive']
                 }
             }
         },
@@ -106,7 +107,7 @@ module.exports = function (grunt) {
                   'app.js',
                   'routes/*.js'
                 ],
-                tasks: ['develop:devApp', 'delayed-livereload']
+                tasks: ['express:devApp', 'delayed-livereload']
             },
             js: {
                 files: ['public/js/*.js', 'dist/js/*.js'],
