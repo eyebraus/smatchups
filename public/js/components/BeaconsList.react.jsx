@@ -7,12 +7,15 @@ module.exports = (function () {
       , Link = Router.Link
       , _ = require('underscore')._;
 
+    var BeaconsResourceActions = require('../actions/BeaconsResourceActions')
+      , BeaconsStore = require('../stores/BeaconsStore')
+      , StoreStateComponentFactory = require('./factories/StoreStateComponent.react.jsx');
+
     var BeaconsList = React.createClass({
 
-        getInitialState: function () {
-            return {
-                beacons: []
-            };
+        componentDidMount: function () {
+            // Trigger a full reload of the BeaconsStore
+            BeaconsResourceActions.reloadBeacons();
         },
 
         render: function () {
@@ -24,22 +27,22 @@ module.exports = (function () {
         },
 
         beaconRows: function () {
-            return _.map(this.state.beacons, function (beacon) {
+            return _.map(this.props.beacons, function (beacon) {
                 return (
-                    <div className="beacon-row row">
+                    <div key={ beacon.id } className="beacon-row row">
                         <div className="beacon-image-frame col-xs-3 col-sm-3 col-md-3">
-                            <img src={ beacon.profilePictureUrl } />
+                            <img src={ beacon.document.profilePictureUrl } />
                         </div>
 
                         <div className="beacon-content-frame col-xs-9 col-sm-9 col-md-9">
                             <div className="beacon-content-header row">
-                                <h3>{ beacon.userName }</h3>
-                                <img src={ beacon.gameIcon } />
-                                <span className="beacon-timestamp">{ beacon.timestamp }</span>
+                                <h3>{ beacon.document.userName }</h3>
+                                <img src={ beacon.document.gameIcon } />
+                                <span className="beacon-timestamp">{ beacon.createdAt }</span>
                             </div>
 
                             <div className="beacon-content-body row">
-                                { beacon.message }
+                                { beacon.document.message }
                             </div>
                         </div>
                     </div>
@@ -49,6 +52,11 @@ module.exports = (function () {
 
     });
 
-    return BeaconsList;
+    // Mixin StoreStateComponent functionality for the BeaconsStore
+    return StoreStateComponentFactory(BeaconsList, BeaconsStore, function (store) {
+        return {
+            beacons: store.getBeacons()
+        };
+    });
 
 })();

@@ -1,17 +1,24 @@
 
-/**
- * Module dependencies.
- */
-
-var express = require('express')
-  , http = require('http')
-  , index = require('./routes/index')
-  , path = require('path')
-  , stylus = require('stylus')
-  , winston = require('winston')
-  , _ = require('underscore')._;
-
 (function () {
+
+    /**
+     * npm dependencies
+     */
+
+    var express = require('express')
+      , http = require('http')
+      , path = require('path')
+      , stylus = require('stylus')
+      , winston = require('winston')
+      , _ = require('underscore')._;
+
+    /**
+     * Local dependencies
+     */
+
+    var beacons = require('./routes/beacons')
+      , index = require('./routes/index');
+
     var app = express()
       , log = new (winston.Logger)({
             transports: [
@@ -37,6 +44,9 @@ var express = require('express')
 
         // Routes go here!
         app.get('/', index);
+
+        app.get('/beacons', beacons.all);
+        app.post('/beacons', beacons.create);
     });
 
     app.configure('development', function () {
@@ -48,4 +58,5 @@ var express = require('express')
     server.listen(app.get('port'), function(){
         console.log("Express server listening on port " + app.get('port'));
     });
+
 })();

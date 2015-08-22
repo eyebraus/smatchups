@@ -4,12 +4,15 @@ module.exports = (function () {
 
     var React = require('react');
 
+    var BeaconsResourceActions = require('../actions/BeaconsResourceActions')
+      , BeaconsStore = require('../stores/BeaconsStore')
+      , StoreStateComponentFactory = require('./factories/StoreStateComponent.react.jsx');
+
     var BeaconsMap = React.createClass({
 
-        getInitialState: function () {
-            return {
-                beacons: []
-            };
+        componentDidMount: function () {
+            // Trigger a full reload of the BeaconsStore
+            BeaconsResourceActions.reloadBeacons();
         },
 
         render: function () {
@@ -22,6 +25,11 @@ module.exports = (function () {
 
     });
 
-    return BeaconsMap;
+    // Mixin StoreStateComponent functionality for the BeaconsStore
+    return StoreStateComponentFactory(BeaconsMap, BeaconsStore, function (store) {
+        return {
+            beacons: store.getBeacons()
+        };
+    });
 
 })();
