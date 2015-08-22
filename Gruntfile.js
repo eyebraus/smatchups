@@ -75,7 +75,7 @@ module.exports = function (grunt) {
             app: {
                 options: {
                     developTasks: ['watchify:devApp', 'stylus:devApp', 'copy:app', 'develop:devApp', 'watch'],
-                    productionTasks: ['watchify:prodApp', 'stylus:prodApp', 'copy:app', 'develop:prodApp']
+                    productionTasks: ['browserify:prodApp', 'stylus:prodApp', 'copy:app', 'develop:prodApp']
                 }
             }
         },
