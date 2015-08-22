@@ -1,11 +1,7 @@
 
 'use strict';
 
-var request = require('request');
-
 module.exports = function (grunt) {
-    // show elapsed time at the end
-    require('time-grunt')(grunt);
     // load all grunt tasks
     require('load-grunt-tasks')(grunt);
 
@@ -58,24 +54,25 @@ module.exports = function (grunt) {
             }
         },
 
-        develop: {
+        express: {
+            options: {
+                script: 'app.js'
+            },
+
             devApp: {
-                file: 'app.js',
-                nodeArgs: ['--debug'],
-                env: { NODE_ENV: 'develop' }
+                node_env: 'develop'
             },
 
             prodApp: {
-                file: 'app.js',
-                env: { NODE_ENV: 'production' }
+                node_env: 'production'
             }
         },
 
         run: {
             app: {
                 options: {
-                    developTasks: ['watchify:devApp', 'stylus:devApp', 'copy:app', 'develop:devApp', 'watch'],
-                    productionTasks: ['watchify:prodApp', 'stylus:prodApp', 'copy:app', 'develop:prodApp']
+                    developTasks: ['watchify:devApp', 'stylus:devApp', 'copy:app', 'express:devApp', 'watch'],
+                    productionTasks: ['browserify:prodApp', 'stylus:prodApp', 'copy:app', 'express:prodApp', 'keepalive']
                 }
             }
         },
@@ -103,10 +100,11 @@ module.exports = function (grunt) {
             },
             server: {
                 files: [
-                  'app.js',
-                  'routes/*.js'
+                    'app.js',
+                    'model/*.js',
+                    'routes/*.js'
                 ],
-                tasks: ['develop:devApp', 'delayed-livereload']
+                tasks: ['express:devApp', 'delayed-livereload']
             },
             js: {
                 files: ['public/js/*.js', 'dist/js/*.js'],
@@ -158,7 +156,9 @@ module.exports = function (grunt) {
     files = grunt.file.expand(files);
 
     grunt.registerTask('delayed-livereload', 'Live reload after the node server has restarted.', function () {
-        var done = this.async();
+        var request = require('request')
+          , done = this.async();
+
         setTimeout(function () {
             request.get('http://localhost:' + reloadPort + '/changed?files=' + files.join(','),  function (err, res) {
                 var reloaded = !err && res.statusCode === 200;
