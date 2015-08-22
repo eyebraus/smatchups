@@ -63,6 +63,7 @@
         "node": ">=0.10"
     },
     "scripts": {
-        "start": "./node_modules/grunt-cli/bin/grunt run:app:production"
+        "start": "./node_modules/grunt-cli/bin/grunt run:app:production",
+        "postinstall": "bower install"
     } 
 }
