@@ -3,11 +3,15 @@ module.exports = (function () {
     'use strict';
 
     var React = require('react')
+      , GoogleMap = require('react-google-maps').GoogleMap
+      , Marker = require('react-google-maps').Marker
+      , SearchBox = require('react-google-maps').SearchBox
       , Router = require('react-router')
       , Link = Router.Link
       , _ = require('underscore')._;
 
-    var BeaconsResourceActions = require('../actions/BeaconsResourceActions');
+    var BeaconsResourceActions = require('../actions/BeaconsResourceActions')
+      , geoPromise = require('../utilities/geoPromise');
 
     var GameSelectFormElement = React.createClass({
 
@@ -28,14 +32,39 @@ module.exports = (function () {
 
         getInitialState: function () {
             return {
+                bounds: null,
+                center: { lat: 47.6201451, lng: -122.3298646 },
+                currentLocation: null,
+                entryFee: 0,
+                games: [],
                 isSmash64Checked: false,
                 isMeleeChecked: false,
                 isProjectMChecked: false,
                 isSm4shChecked: false,
-                games: [],
-                entryFee: 0,
+                location: null,
                 message: ''
             };
+        },
+
+        componentDidMount: function () {
+            var that = this;
+
+            geoPromise.getCurrentPosition()
+                .then(function (position) {
+                    var geo = { lat: position.coords.latitude, lng: position.coords.longitude };
+
+                    that.setState({
+                        center: geo,
+                        currentLocation: geo
+                    });
+                });
+        },
+
+        onBoundsChanged: function () {
+            this.setState({
+                bounds: this.refs.map.getBounds(),
+                center: this.refs.map.getCenter()
+            });
         },
 
         onCancel: function () {
@@ -76,6 +105,17 @@ module.exports = (function () {
 
                 that.setState(newState);
             };
+        },
+
+        onPlacesChanged: function () {
+            var places = this.refs.searchBox.getPlaces();
+
+            if (places.length > 0) {
+                this.setState({
+                    center: places[0].geometry.location,
+                    location: places[0].geometry.location
+                });
+            }
         },
 
         onSubmit: function (event) {
@@ -129,6 +169,32 @@ module.exports = (function () {
                                 min="0"
                                 max="10"
                                 step="1" />
+                    </div>
+
+                    <div className="form-group">
+                        <GoogleMap
+                                center={ this.state.center }
+                                containerProps={ {
+                                    style: {
+                                        height: '800px'
+                                    }
+                                } }
+                                defaultZoom={ 15 }
+                                onBoundsChanged={ this.onBoundsChanged }
+                                ref="map">
+
+                            <SearchBox
+                                    bounds={ this.state.bounds }
+                                    classes="google-maps-search-box"
+                                    controlPosition={ google.maps.ControlPosition.TOP_LEFT }
+                                    onPlacesChanged={ this.onPlacesChanged }
+                                    ref="searchBox" />
+
+                            { null !== this.state.location
+                                ? <Marker position={ this.state.location } />
+                                : <noscript /> }
+
+                        </GoogleMap>
                     </div>
 
                     <div className="form-group">

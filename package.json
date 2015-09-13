@@ -42,6 +42,7 @@
         "q": "^1.1.x",
         "react": "^0.13.x",
         "reactify": "^1.0.x",
+        "react-google-maps": "^2.x.x",
         "react-router": "^0.13.x",
         "stylus": "^0.47.x",
         "superagent": "^0.18.x",
