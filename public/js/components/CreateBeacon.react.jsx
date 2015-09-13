@@ -107,6 +107,13 @@ module.exports = (function () {
             };
         },
 
+        onKeyPress: function (event) {
+            // Prevents Google Maps keypresses from submitting the form
+            if (event.which === 13) {
+                event.preventDefault();
+            }
+        },
+
         onPlacesChanged: function () {
             var places = this.refs.searchBox.getPlaces();
 
@@ -132,7 +139,7 @@ module.exports = (function () {
 
         render: function () {
             return (
-                <form className="beacon-form col-xs-12 col-sm-12 col-md-12" onSubmit={ this.onSubmit }>
+                <form className="beacon-form col-xs-12 col-sm-12 col-md-12" onKeyPress={ this.onKeyPress } onSubmit={ this.onSubmit }>
                     <div className="form-group">
                         <fieldset>
                             <legend>What games are you playing?</legend>
