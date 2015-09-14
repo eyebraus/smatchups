@@ -131,7 +131,18 @@ module.exports = (function () {
             // Block normal event propagation
             event.preventDefault();
 
-            BeaconsResourceActions.createBeaconFromForm(_.clone(this.state))
+            var beacon = {
+                entryFee: this.state.entryFee,
+                games: this.state.games,
+                isSmash64Checked: this.state.isSmash64Checked,
+                isMeleeChecked: this.state.isMeleeChecked,
+                isProjectMChecked: this.state.isProjectMChecked,
+                isSm4shChecked: this.state.isSm4shChecked,
+                location: this.state.location,
+                message: this.state.message
+            };
+
+            BeaconsResourceActions.createBeaconFromForm(beacon)
                 .then(function () {
                     that.goBack();
                 });
