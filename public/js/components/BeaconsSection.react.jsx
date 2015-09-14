@@ -3,6 +3,8 @@ module.exports = (function () {
     'use strict';
 
     var React = require('react')
+      , Column = require('react-bootstrap').Column
+      , Row = require('react-bootstrap').Row
       , Router = require('react-router')
       , RouteHandler = Router.RouteHandler;
 
@@ -33,64 +35,72 @@ module.exports = (function () {
 
         render: function () {
             return (
-                <div className="row">
-                    <div className="beacons-section-wrapper col-xs-12 col-sm-12 col-md-12">
-                        <div className="beacons-section-filters row">
-                            <ToggleImageButton
-                                    imageUrl="/app/img/icon/smash-64-toggle.png"
-                                    imageWidth="24"
-                                    imageHeight="24"
-                                    layoutColumns="2"
-                                    toggleState={ this.state.isSmash64Enabled }
-                                    onToggled={ this.onToggledFactory('isSmash64Enabled') } />
-                            <ToggleImageButton
-                                    imageUrl="/app/img/icon/melee-toggle.png"
-                                    imageWidth="24"
-                                    imageHeight="24"
-                                    layoutColumns="2"
-                                    toggleState={ this.state.isMeleeEnabled }
-                                    onToggled={ this.onToggledFactory('isMeleeEnabled') } />
-                            <ToggleImageButton
-                                    imageUrl="/app/img/icon/project-m-toggle.png"
-                                    imageWidth="24"
-                                    imageHeight="24"
-                                    layoutColumns="2"
-                                    toggleState={ this.state.isProjectMEnabled }
-                                    onToggled={ this.onToggledFactory('isProjectMEnabled') } />
-                            <ToggleImageButton
-                                    imageUrl="/app/img/icon/sm4sh-toggle.png"
-                                    imageWidth="24"
-                                    imageHeight="24"
-                                    layoutColumns="2"
-                                    toggleState={ this.state.isSm4shEnabled }
-                                    onToggled={ this.onToggledFactory('isSm4shEnabled') } />
+                <Row>
+                    <Column xs={ 12 } sm={ 12 } md={ 12 } className="beacons-section-wrapper">
+                        <Row className="beacons-section-filters">
+                            <Column xs={ 2 } sm={ 2 } md={ 2 }>
+                                <ToggleImageButton
+                                        imageUrl="/app/img/icon/smash-64-toggle.png"
+                                        imageWidth="24"
+                                        imageHeight="24"
+                                        toggleState={ this.state.isSmash64Enabled }
+                                        onToggled={ this.onToggledFactory('isSmash64Enabled') } />
+                            </Column>
 
-                            <LinkedIconButton
-                                    iconSize="fa-3"
-                                    iconType="fa-plus"
-                                    layoutColumns="3"
-                                    layoutOffset="1"
-                                    routeName="create-beacon" />
-                        </div>
+                            <Column xs={ 2 } sm={ 2 } md={ 2 }>
+                                <ToggleImageButton
+                                        imageUrl="/app/img/icon/melee-toggle.png"
+                                        imageWidth="24"
+                                        imageHeight="24"
+                                        toggleState={ this.state.isMeleeEnabled }
+                                        onToggled={ this.onToggledFactory('isMeleeEnabled') } />
+                            </Column>
 
-                        <div className="beacons-section row">
+                            <Column xs={ 2 } sm={ 2 } md={ 2 }>
+                                <ToggleImageButton
+                                        imageUrl="/app/img/icon/project-m-toggle.png"
+                                        imageWidth="24"
+                                        imageHeight="24"
+                                        toggleState={ this.state.isProjectMEnabled }
+                                        onToggled={ this.onToggledFactory('isProjectMEnabled') } />
+                            </Column>
+
+                            <Column xs={ 2 } sm={ 2 } md={ 2 }>
+                                <ToggleImageButton
+                                        imageUrl="/app/img/icon/sm4sh-toggle.png"
+                                        imageWidth="24"
+                                        imageHeight="24"
+                                        toggleState={ this.state.isSm4shEnabled }
+                                        onToggled={ this.onToggledFactory('isSm4shEnabled') } />
+                            </Column>
+
+                            <Column xs={ 3 } xsOffset={ 1 } sm={ 3 } smOffset={ 1 } md={ 3 } mdOffset={ 1 }>
+                                <LinkedIconButton
+                                        iconSize="fa-3"
+                                        iconType="fa-plus"
+                                        routeName="create-beacon" />
+                            </Column>
+                        </Row>
+
+                        <Row className="beacons-section">
                             <RouteHandler />
 
-                            <div className="beacons-section-toggle-mode col-xs-12 col-sm-12 col-md-12">
+                            <Column xs={ 6 } sm={ 6 } md={ 6 } className="beacons-section-toggle-mode">
                                 <LinkedIconButton
                                         iconSize="fa-3"
                                         iconType="fa-list"
-                                        layoutColumns="6"
                                         routeName="beacons-list" />
+                            </Column>
+
+                            <Column xs={ 6 } sm={ 6 } md={ 6 } className="beacons-section-toggle-mode">
                                 <LinkedIconButton
                                         iconSize="fa-3"
                                         iconType="fa-globe"
-                                        layoutColumns="6"
                                         routeName="beacons-map" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            </Column>
+                        </Row>
+                    </Column>
+                </Row>
             );
         }
 

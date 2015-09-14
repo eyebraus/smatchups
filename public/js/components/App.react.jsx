@@ -3,6 +3,10 @@ module.exports = (function () {
     'use strict';
 
     var React = require('react')
+      , Column = require('react-bootstrap').Column
+      , Grid = require('react-bootstrap').Grid
+      , PageHeader = require('react-bootstrap').PageHeader
+      , Row = require('react-bootstrap').Row
       , Router = require('react-router')
       , Navigation = Router.Navigation
       , RouteHandler = Router.RouteHandler;
@@ -24,21 +28,22 @@ module.exports = (function () {
 
         render: function () {
             return (
-                <div className="smatchups-app container">
-                    <div className="header row">
-                        <LinkedIconButton
-                                iconType="fa-bars"
-                                iconSize="fa-3"
-                                layoutColumns="3"
-                                routeName="settings" />
+                <Grid>
+                    <Row className="header">
+                        <Column xs={ 3 } sm={ 3 } md={ 3 }>
+                            <LinkedIconButton
+                                    iconType="fa-bars"
+                                    iconSize="fa-3"
+                                    routeName="settings" />
+                        </Column>
 
-                        <div className="header-logo col-xs-9 col-sm-9 col-md-9">
-                            <h3>Smatchups</h3>
-                        </div>
-                    </div>
+                        <Column xs={ 9 } sm={ 9 } md={ 9 } className="header-logo">
+                            <PageHeader>Smatchups</PageHeader>
+                        </Column>
+                    </Row>
 
                     <RouteHandler />
-                </div>
+                </Grid>
             );
         }
 

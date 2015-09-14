@@ -3,6 +3,7 @@ module.exports = (function () {
     'use strict';
 
     var React = require('react')
+      , Row = require('react-bootstrap').Row
       , GoogleMap = require('react-google-maps').GoogleMap
       , Marker = require('react-google-maps').Marker
       , SearchBox = require('react-google-maps').SearchBox;
@@ -54,7 +55,7 @@ module.exports = (function () {
 
         render: function () {
             return (
-                <div className="beacon-map row">
+                <Row className="beacon-map">
                     <GoogleMap
                             center={ this.state.center }
                             containerProps={ {
@@ -78,7 +79,7 @@ module.exports = (function () {
                         }) }
 
                     </GoogleMap>
-                </div>
+                </Row>
             );
         }
 

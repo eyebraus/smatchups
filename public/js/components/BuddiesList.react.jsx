@@ -2,15 +2,16 @@
 module.exports = (function () {
     'use strict';
 
-    var React = require('react');
+    var React = require('react')
+      , Row = require('react-bootstrap').Row;
 
     var BuddiesList = React.createClass({
 
         render: function () {
             return (
-                <div className="buddies-list row">
+                <Row className="buddies-list">
                     <h3>Nothing here yet :)</h3>
-                </div>
+                </Row>
             );
         }
 

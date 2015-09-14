@@ -3,6 +3,8 @@ module.exports = (function () {
     'use strict';
 
     var React = require('react')
+      , Column = require('react-bootstrap').Column
+      , Row = require('react-bootstrap').Row
       , Router = require('react-router')
       , Link = Router.Link
       , _ = require('underscore')._;
@@ -20,9 +22,9 @@ module.exports = (function () {
 
         render: function () {
             return (
-                <div className="beacons-list col-xs-12 col-sm-12 col-md-12">
+                <Column xs={ 12 } sm={ 12 } md={ 12 } className="beacons-list">
                     { this.beaconRows() }
-                </div>
+                </Column>
             );
         },
 
@@ -31,25 +33,25 @@ module.exports = (function () {
 
             return _.map(this.props.beacons, function (beacon) {
                 return (
-                    <div key={ beacon.id } className="beacon-row row">
-                        <div className="beacon-image-frame col-xs-3 col-sm-3 col-md-3">
+                    <Row key={ beacon.id } className="beacon-row">
+                        <Column xs={ 3 } sm={ 3 } md={ 3 } className="beacon-image-frame">
                             <img src={ beacon.document.profilePictureUrl } />
-                        </div>
+                        </Column>
 
-                        <div className="beacon-content-frame col-xs-9 col-sm-9 col-md-9">
-                            <div className="beacon-content-header row">
+                        <Column xs={ 9 } sm={ 9 } md={ 9 } className="beacon-content-frame">
+                            <Row className="beacon-content-header">
                                 <h3>{ beacon.document.userName }</h3>
                                 <div className="beacon-games-ribbon">
                                     { that.gamesRibbonIcons(beacon.document.games) }
                                 </div>
                                 <span className="beacon-timestamp">{ new Date(beacon.createdAt).toLocaleString('en-US') }</span>
-                            </div>
+                            </Row>
 
-                            <div className="beacon-content-body row">
+                            <Row className="beacon-content-body">
                                 { beacon.document.message }
-                            </div>
-                        </div>
-                    </div>
+                            </Row>
+                        </Column>
+                    </Row>
                 );
             });
         },
