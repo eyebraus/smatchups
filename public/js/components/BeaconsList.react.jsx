@@ -27,6 +27,8 @@ module.exports = (function () {
         },
 
         beaconRows: function () {
+            var that = this;
+
             return _.map(this.props.beacons, function (beacon) {
                 return (
                     <div key={ beacon.id } className="beacon-row row">
@@ -37,8 +39,10 @@ module.exports = (function () {
                         <div className="beacon-content-frame col-xs-9 col-sm-9 col-md-9">
                             <div className="beacon-content-header row">
                                 <h3>{ beacon.document.userName }</h3>
-                                <img src={ beacon.document.gameIcon } />
-                                <span className="beacon-timestamp">{ beacon.createdAt }</span>
+                                <div className="beacon-games-ribbon">
+                                    { that.gamesRibbonIcons(beacon.document.games) }
+                                </div>
+                                <span className="beacon-timestamp">{ new Date(beacon.createdAt).toLocaleString('en-US') }</span>
                             </div>
 
                             <div className="beacon-content-body row">
@@ -46,6 +50,34 @@ module.exports = (function () {
                             </div>
                         </div>
                     </div>
+                );
+            });
+        },
+
+        gamesRibbonIcons: function (games) {
+            return _.map(games, function (game) {
+                var gameImage = '/app/img/icon/smash-franchise-toggle.png';
+
+                switch(game) {
+                    case 'smash64':
+                        gameImage = '/app/img/icon/smash-64-toggle.png';
+                        break;
+
+                    case 'melee':
+                        gameImage = '/app/img/icon/melee-toggle.png';
+                        break;
+                    
+                    case 'projectM':
+                        gameImage = '/app/img/icon/project-m-toggle.png';
+                        break;
+                    
+                    case 'sm4sh':
+                        gameImage = '/app/img/icon/sm4sh-toggle.png';
+                        break;
+                }
+
+                return (
+                    <img key={ game } src={ gameImage } width="24" height="24" className="beacon-games-ribbon-icon" />
                 );
             });
         }

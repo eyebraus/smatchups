@@ -33,9 +33,9 @@ module.exports = (function () {
 
         headerComponents: function () {
             var that = this
-              , HeaderComponentTemplate = this.headerComponent;
+              , HeaderComponentTemplate = this.props.headerComponent;
 
-            return _.map(this.headerComponentProps, function (props, index) {
+            return _.map(this.props.headerComponentProps, function (props, index) {
                 return (
                     <HeaderComponentTemplate {...props} />
                 );

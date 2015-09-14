@@ -19,47 +19,57 @@ module.exports = (function () {
                 isSm4shEnabled: false
             };
         },
+        
+        onToggledFactory: function (keyName) {
+            var that = this;
+
+            return function (toggleState) {
+                var newState = {};
+                newState[keyName] = toggleState;
+
+                that.setState(newState);
+            };
+        },
 
         render: function () {
-            var that = this
-              , onToggledFactory = function (keyName) {
-                    return function (toggleState) {
-                        var newState = {};
-                        newState[keyName] = toggleState;
-
-                        that.setState(newState);
-                    };
-                };
-
             return (
                 <div className="row">
                     <div className="beacons-section-wrapper col-xs-12 col-sm-12 col-md-12">
                         <div className="beacons-section-filters row">
                             <ToggleImageButton
-                                    iconUrl="/img/icons/smash-64-toggle.png"
+                                    imageUrl="/app/img/icon/smash-64-toggle.png"
+                                    imageWidth="24"
+                                    imageHeight="24"
                                     layoutColumns="2"
                                     toggleState={ this.state.isSmash64Enabled }
-                                    onToggled={ onToggledFactory('isSmash64Enabled') } />
+                                    onToggled={ this.onToggledFactory('isSmash64Enabled') } />
                             <ToggleImageButton
-                                    iconUrl="/img/icons/melee-toggle.png"
+                                    imageUrl="/app/img/icon/melee-toggle.png"
+                                    imageWidth="24"
+                                    imageHeight="24"
                                     layoutColumns="2"
                                     toggleState={ this.state.isMeleeEnabled }
-                                    onToggled={ onToggledFactory('isMeleeEnabled') } />
+                                    onToggled={ this.onToggledFactory('isMeleeEnabled') } />
                             <ToggleImageButton
-                                    iconUrl="/img/icons/project-m-toggle.png"
+                                    imageUrl="/app/img/icon/project-m-toggle.png"
+                                    imageWidth="24"
+                                    imageHeight="24"
                                     layoutColumns="2"
                                     toggleState={ this.state.isProjectMEnabled }
-                                    onToggled={ onToggledFactory('isProjectMEnabled') } />
+                                    onToggled={ this.onToggledFactory('isProjectMEnabled') } />
                             <ToggleImageButton
-                                    iconUrl="/img/icons/sm4sh-toggle.png"
+                                    imageUrl="/app/img/icon/sm4sh-toggle.png"
+                                    imageWidth="24"
+                                    imageHeight="24"
                                     layoutColumns="2"
                                     toggleState={ this.state.isSm4shEnabled }
-                                    onToggled={ onToggledFactory('isSm4shEnabled') } />
+                                    onToggled={ this.onToggledFactory('isSm4shEnabled') } />
 
                             <LinkedIconButton
                                     iconSize="fa-3"
                                     iconType="fa-plus"
                                     layoutColumns="3"
+                                    layoutOffset="1"
                                     routeName="create-beacon" />
                         </div>
 
