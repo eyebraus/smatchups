@@ -3,7 +3,7 @@ module.exports = (function () {
     'use strict';
 
     var React = require('react')
-      , Column = require('react-bootstrap').Column
+      , Col = require('react-bootstrap').Col
       , Row = require('react-bootstrap').Row
       , Router = require('react-router')
       , Link = Router.Link
@@ -22,9 +22,9 @@ module.exports = (function () {
 
         render: function () {
             return (
-                <Column xs={ 12 } sm={ 12 } md={ 12 } className="beacons-list">
+                <div className="beacons-list">
                     { this.beaconRows() }
-                </Column>
+                </div>
             );
         },
 
@@ -34,11 +34,11 @@ module.exports = (function () {
             return _.map(this.props.beacons, function (beacon) {
                 return (
                     <Row key={ beacon.id } className="beacon-row">
-                        <Column xs={ 3 } sm={ 3 } md={ 3 } className="beacon-image-frame">
+                        <Col xs={ 3 } sm={ 3 } md={ 3 } className="beacon-image-frame">
                             <img src={ beacon.document.profilePictureUrl } />
-                        </Column>
+                        </Col>
 
-                        <Column xs={ 9 } sm={ 9 } md={ 9 } className="beacon-content-frame">
+                        <Col xs={ 9 } sm={ 9 } md={ 9 } className="beacon-content-frame">
                             <Row className="beacon-content-header">
                                 <h3>{ beacon.document.userName }</h3>
                                 <div className="beacon-games-ribbon">
@@ -50,7 +50,7 @@ module.exports = (function () {
                             <Row className="beacon-content-body">
                                 { beacon.document.message }
                             </Row>
-                        </Column>
+                        </Col>
                     </Row>
                 );
             });

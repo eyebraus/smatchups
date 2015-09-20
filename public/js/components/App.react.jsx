@@ -3,7 +3,7 @@ module.exports = (function () {
     'use strict';
 
     var React = require('react')
-      , Column = require('react-bootstrap').Column
+      , Col = require('react-bootstrap').Col
       , Grid = require('react-bootstrap').Grid
       , PageHeader = require('react-bootstrap').PageHeader
       , Row = require('react-bootstrap').Row
@@ -30,16 +30,16 @@ module.exports = (function () {
             return (
                 <Grid>
                     <Row className="header">
-                        <Column xs={ 3 } sm={ 3 } md={ 3 }>
+                        <Col xs={ 3 } sm={ 3 } md={ 3 }>
                             <LinkedIconButton
                                     iconType="fa-bars"
                                     iconSize="fa-3"
                                     routeName="settings" />
-                        </Column>
+                        </Col>
 
-                        <Column xs={ 9 } sm={ 9 } md={ 9 } className="header-logo">
+                        <Col xs={ 9 } sm={ 9 } md={ 9 } className="header-logo">
                             <PageHeader>Smatchups</PageHeader>
-                        </Column>
+                        </Col>
                     </Row>
 
                     <RouteHandler />

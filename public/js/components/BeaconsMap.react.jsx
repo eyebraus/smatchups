@@ -3,7 +3,6 @@ module.exports = (function () {
     'use strict';
 
     var React = require('react')
-      , Row = require('react-bootstrap').Row
       , GoogleMap = require('react-google-maps').GoogleMap
       , Marker = require('react-google-maps').Marker
       , SearchBox = require('react-google-maps').SearchBox;
@@ -55,31 +54,29 @@ module.exports = (function () {
 
         render: function () {
             return (
-                <Row className="beacon-map">
-                    <GoogleMap
-                            center={ this.state.center }
-                            containerProps={ {
-                                style: {
-                                    height: '800px'
-                                }
-                            } }
-                            defaultZoom={ 15 }
-                            onBoundsChanged={ this.onBoundsChanged }
-                            ref="map">
+                <GoogleMap
+                        center={ this.state.center }
+                        containerProps={ {
+                            style: {
+                                height: '800px'
+                            }
+                        } }
+                        defaultZoom={ 15 }
+                        onBoundsChanged={ this.onBoundsChanged }
+                        ref="map">
 
-                        <SearchBox
-                                bounds={ this.state.bounds }
-                                classes="google-maps-search-box"
-                                controlPosition={ google.maps.ControlPosition.TOP_LEFT }
-                                onPlacesChanged={ this.onPlacesChanged }
-                                ref="searchBox" />
+                    <SearchBox
+                            bounds={ this.state.bounds }
+                            classes="google-maps-search-box"
+                            controlPosition={ google.maps.ControlPosition.TOP_LEFT }
+                            onPlacesChanged={ this.onPlacesChanged }
+                            ref="searchBox" />
 
-                        { this.props.beacons.map(function (beacon, index) {
-                            <Marker key={ index } position={ beacon.position } />
-                        }) }
+                    { this.props.beacons.map(function (beacon, index) {
+                        <Marker key={ index } position={ beacon.position } />
+                    }) }
 
-                    </GoogleMap>
-                </Row>
+                </GoogleMap>
             );
         }
 

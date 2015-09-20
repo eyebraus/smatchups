@@ -3,28 +3,19 @@ module.exports = (function () {
     'use strict';
 
     var React = require('react')
+      , Col = require('react-bootstrap').Col
+      , Row = require('react-bootstrap').Row
       , Link = require('react-router').Link
       , _ = require('underscore')._;
 
     var TabControl = React.createClass({
 
         render: function () {
-            var that = this;
-
-            // Calculate layoutColumns class names:w
-            var classNames = _.chain(['col-xs-', 'col-sm-', 'col-md-'])
-                .map(function (prefix) {
-                    return prefix + that.props.layoutColumns;
-                })
-                .union(['tab-control'])
-                .value()
-                .join(' ');
-
             return (
-                <div className={ classNames }>
-                    <div className="tab-control-header row">
+                <div className="tab-control">
+                    <Row className="tab-control-header">
                         { this.headerComponents() }
-                    </div>
+                    </Row>
 
                     { this.props.children }
                 </div>
@@ -33,11 +24,14 @@ module.exports = (function () {
 
         headerComponents: function () {
             var that = this
+              , columnSize = this.props.iconColSize || 1
               , HeaderComponentTemplate = this.props.headerComponent;
 
             return _.map(this.props.headerComponentProps, function (props, index) {
                 return (
-                    <HeaderComponentTemplate {...props} />
+                    <Col xs={ columnSize } sm={ columnSize } md={ columnSize }>
+                        <HeaderComponentTemplate {...props} />
+                    </Col>
                 );
             });
         }

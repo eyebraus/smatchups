@@ -3,7 +3,8 @@ module.exports = (function () {
     'use strict';
 
     var React = require('react')
-      , Column = require('react-bootstrap').Column
+      , ButtonInput = require('react-bootstrap').ButtonInput
+      , Col = require('react-bootstrap').Col
       , Input = require('react-bootstrap').Input
       , Row = require('react-bootstrap').Row
       , GoogleMap = require('react-google-maps').GoogleMap
@@ -150,83 +151,88 @@ module.exports = (function () {
 
         render: function () {
             return (
-                <form className="beacon-form col-xs-12 col-sm-12 col-md-12" onKeyPress={ this.onKeyPress } onSubmit={ this.onSubmit }>
-                    <div className="form-group">
-                        <fieldset>
-                            <legend>What games are you playing?</legend>
+                <Row>
+                    <Col xs={ 12 } sm={ 12 } md={ 12 } className="create-beacon-form-frame">
+                        <form className="beacon-form" onKeyPress={ this.onKeyPress } onSubmit={ this.onSubmit }>
+                            <div className="form-group">
+                                <fieldset>
+                                    <legend>What games are you playing?</legend>
 
-                            <GameSelectFormElement
-                                    name="smash-64-checkbox"
-                                    label="SSB 64"
-                                    isChecked={ this.state.isSmash64Checked }
-                                    onChange={ this.onCheckedFactory('isSmash64Checked') } />
-                            <GameSelectFormElement
-                                    name="melee-checkbox"
-                                    label="SSB Melee"
-                                    isChecked={ this.state.isMeleeChecked }
-                                    onChange={ this.onCheckedFactory('isMeleeChecked') } />
-                            <GameSelectFormElement
-                                    name="project-m-checkbox"
-                                    label="Project M"
-                                    isChecked={ this.state.isProjectMChecked }
-                                    onChange={ this.onCheckedFactory('isProjectMChecked') } />
-                            <GameSelectFormElement
-                                    name="sm4sh-checkbox"
-                                    label="SSB for Wii U"
-                                    isChecked={ this.state.isSm4shChecked }
-                                    onChange={ this.onCheckedFactory('isSm4shChecked') } />
-                        </fieldset>
-                    </div>
+                                    <GameSelectFormElement
+                                            name="smash-64-checkbox"
+                                            label="SSB 64"
+                                            isChecked={ this.state.isSmash64Checked }
+                                            onChange={ this.onCheckedFactory('isSmash64Checked') } />
+                                    <GameSelectFormElement
+                                            name="melee-checkbox"
+                                            label="SSB Melee"
+                                            isChecked={ this.state.isMeleeChecked }
+                                            onChange={ this.onCheckedFactory('isMeleeChecked') } />
+                                    <GameSelectFormElement
+                                            name="project-m-checkbox"
+                                            label="Project M"
+                                            isChecked={ this.state.isProjectMChecked }
+                                            onChange={ this.onCheckedFactory('isProjectMChecked') } />
+                                    <GameSelectFormElement
+                                            name="sm4sh-checkbox"
+                                            label="SSB for Wii U"
+                                            isChecked={ this.state.isSm4shChecked }
+                                            onChange={ this.onCheckedFactory('isSm4shChecked') } />
+                                </fieldset>
+                            </div>
 
-                    <div className="form-group">
-                        <label htmlFor="entry-fee-number">Entry fee:</label>
-                        <input name="entry-fee-number"
-                                type="number"
-                                value={ this.state.entryFee }
-                                onChange={ this.onChangeFactory('entryFee') }
-                                min="0"
-                                max="10"
-                                step="1" />
-                    </div>
+                            <div className="form-group">
+                                <Input name="entry-fee-number"
+                                        label="Entry fee:"
+                                        type="number"
+                                        value={ this.state.entryFee }
+                                        onChange={ this.onChangeFactory('entryFee') }
+                                        min="0"
+                                        max="10"
+                                        step="1" />
+                            </div>
 
-                    <div className="form-group">
-                        <GoogleMap
-                                center={ this.state.center }
-                                containerProps={ {
-                                    style: {
-                                        height: '800px'
-                                    }
-                                } }
-                                defaultZoom={ 15 }
-                                onBoundsChanged={ this.onBoundsChanged }
-                                ref="map">
+                            <div className="form-group">
+                                <GoogleMap
+                                        center={ this.state.center }
+                                        containerProps={ {
+                                            style: {
+                                                height: '800px'
+                                            }
+                                        } }
+                                        defaultZoom={ 15 }
+                                        onBoundsChanged={ this.onBoundsChanged }
+                                        ref="map">
 
-                            <SearchBox
-                                    bounds={ this.state.bounds }
-                                    classes="google-maps-search-box"
-                                    controlPosition={ google.maps.ControlPosition.TOP_LEFT }
-                                    onPlacesChanged={ this.onPlacesChanged }
-                                    ref="searchBox" />
+                                    <SearchBox
+                                            bounds={ this.state.bounds }
+                                            classes="google-maps-search-box"
+                                            controlPosition={ google.maps.ControlPosition.TOP_LEFT }
+                                            onPlacesChanged={ this.onPlacesChanged }
+                                            ref="searchBox" />
 
-                            { null !== this.state.location
-                                ? <Marker position={ this.state.location } />
-                                : <noscript /> }
+                                    { null !== this.state.location
+                                        ? <Marker position={ this.state.location } />
+                                        : <noscript /> }
 
-                        </GoogleMap>
-                    </div>
+                                </GoogleMap>
+                            </div>
 
-                    <div className="form-group">
-                        <textarea name="message-textarea"
-                                value={ this.state.message }
-                                onChange={ this.onChangeFactory('message') }
-                                placeholder="Leave a message for other players..." />
-                    </div>
+                            <div className="form-group">
+                                <Input name="message-textarea"
+                                        type="textarea"
+                                        value={ this.state.message }
+                                        onChange={ this.onChangeFactory('message') }
+                                        placeholder="Leave a message for other players..." />
+                            </div>
 
-                    <div className="form-group">
-                        <button name="submit-button" type="submit" className="btn btn-primary">Submit</button>
-                        <button name="cancel-button" type="button" className="btn btn-default" onClick={ this.onCancel }>Cancel</button>
-                    </div>
-                </form>
+                            <div className="form-group">
+                                <ButtonInput name="submit-button" type="submit" className="btn btn-primary">Submit</ButtonInput>
+                                <ButtonInput name="cancel-button" type="button" className="btn btn-default" onClick={ this.onCancel }>Cancel</ButtonInput>
+                            </div>
+                        </form>
+                    </Col>
+                </Row>
             );
         }
 
