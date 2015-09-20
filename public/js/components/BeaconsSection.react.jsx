@@ -4,6 +4,7 @@ module.exports = (function () {
 
     var React = require('react')
       , Col = require('react-bootstrap').Col
+      , PageHeader = require('react-bootstrap').PageHeader
       , Row = require('react-bootstrap').Row
       , Router = require('react-router')
       , RouteHandler = Router.RouteHandler;
@@ -37,48 +38,49 @@ module.exports = (function () {
             return (
                 <Row>
                     <Col xs={ 12 } sm={ 12 } md={ 12 } className="beacons-section-wrapper">
+                        <Row className="beacons-section-header">
+                            <PageHeader className="section-header">Beacons</PageHeader>
+                        </Row>
+
                         <Row className="beacons-section-filters">
-                            <Col xs={ 2 } sm={ 2 } md={ 2 }>
+                            <Col xs={ 3 } sm={ 3 } md={ 3 }>
                                 <ToggleImageButton
                                         imageUrl="/app/img/icon/smash-64-toggle.png"
-                                        imageWidth="24"
-                                        imageHeight="24"
+                                        imageWidth="32"
+                                        imageHeight="32"
+                                        text="Super Smash Bros. 64"
                                         toggleState={ this.state.isSmash64Enabled }
                                         onToggled={ this.onToggledFactory('isSmash64Enabled') } />
                             </Col>
 
-                            <Col xs={ 2 } sm={ 2 } md={ 2 }>
+                            <Col xs={ 3 } sm={ 3 } md={ 3 }>
                                 <ToggleImageButton
                                         imageUrl="/app/img/icon/melee-toggle.png"
-                                        imageWidth="24"
-                                        imageHeight="24"
+                                        imageWidth="32"
+                                        imageHeight="32"
+                                        text="Super Smash Bros. Melee"
                                         toggleState={ this.state.isMeleeEnabled }
                                         onToggled={ this.onToggledFactory('isMeleeEnabled') } />
                             </Col>
 
-                            <Col xs={ 2 } sm={ 2 } md={ 2 }>
+                            <Col xs={ 3 } sm={ 3 } md={ 3 }>
                                 <ToggleImageButton
                                         imageUrl="/app/img/icon/project-m-toggle.png"
-                                        imageWidth="24"
-                                        imageHeight="24"
+                                        imageWidth="32"
+                                        imageHeight="32"
+                                        text="Project M"
                                         toggleState={ this.state.isProjectMEnabled }
                                         onToggled={ this.onToggledFactory('isProjectMEnabled') } />
                             </Col>
 
-                            <Col xs={ 2 } sm={ 2 } md={ 2 }>
+                            <Col xs={ 3 } sm={ 3 } md={ 3 }>
                                 <ToggleImageButton
                                         imageUrl="/app/img/icon/sm4sh-toggle.png"
-                                        imageWidth="24"
-                                        imageHeight="24"
+                                        imageWidth="32"
+                                        imageHeight="32"
+                                        text="Super Smash Bros. for Wii U"
                                         toggleState={ this.state.isSm4shEnabled }
                                         onToggled={ this.onToggledFactory('isSm4shEnabled') } />
-                            </Col>
-
-                            <Col xs={ 3 } xsOffset={ 1 } sm={ 3 } smOffset={ 1 } md={ 3 } mdOffset={ 1 }>
-                                <LinkedIconButton
-                                        iconSize="fa-3"
-                                        iconType="fa-plus"
-                                        routeName="create-beacon" />
                             </Col>
                         </Row>
 

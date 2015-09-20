@@ -3,6 +3,7 @@ module.exports = (function () {
     'use strict';
 
     var React = require('react')
+      , Button = require('react-bootstrap').Button
       , _ = require('underscore')._;
 
     var ToggleImageButton = React.createClass({
@@ -22,9 +23,10 @@ module.exports = (function () {
             var divClassNames = divClasses.join(' ');
 
             return (
-                <div onClick={ this.onClick } className={ divClassNames }>
+                <Button bsSize="large">
                     <img src={ this.props.imageUrl } width={ this.props.imageWidth } height={ this.props.imageHeight } className={ imgClassNames } />
-                </div>
+                    { this.props.text }
+                </Button>
             );
         },
 
