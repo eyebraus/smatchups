@@ -4,14 +4,16 @@ module.exports = (function () {
 
     var React = require('react')
       , Col = require('react-bootstrap').Col
+      , CollapsibleNav = require('react-bootstrap').CollapsibleNav
       , Grid = require('react-bootstrap').Grid
+      , Nav = require('react-bootstrap').Nav
+      , Navbar = require('react-bootstrap').Navbar
+      , NavItem = require('react-bootstrap').NavItem
       , PageHeader = require('react-bootstrap').PageHeader
       , Row = require('react-bootstrap').Row
       , Router = require('react-router')
       , Navigation = Router.Navigation
       , RouteHandler = Router.RouteHandler;
-
-    var LinkedIconButton = require('./LinkedIconButton.react.jsx');
 
     var SmatchupsApp = React.createClass({
 
@@ -26,21 +28,27 @@ module.exports = (function () {
             this.replaceWith('beacons');
         },
 
+        onNavSelect: function (selectedKey) {
+            this.transitionTo(selectedKey);
+        },
+
         render: function () {
             return (
                 <Grid>
-                    <Row className="header">
-                        <Col xs={ 3 } sm={ 3 } md={ 3 }>
-                            <LinkedIconButton
-                                    iconType="fa-bars"
-                                    iconSize="fa-3"
-                                    routeName="settings" />
-                        </Col>
+                    <Navbar brand={ <a href="#">Smatchups</a> } toggleNavKey={ 0 }>
+                        <CollapsibleNav eventKey={ 0 }>
+                            <Nav navbar onSelect={ this.onNavSelect }>
+                                <NavItem eventKey={ 'beacons' }>Beacons</NavItem>
+                                <NavItem eventKey={ 'events' }>Events</NavItem>
+                                <NavItem eventKey={ 'buddies' }>Buddies</NavItem>
+                                <NavItem eventKey={ 'challenges' }>Challenges</NavItem>
+                            </Nav>
 
-                        <Col xs={ 9 } sm={ 9 } md={ 9 } className="header-logo">
-                            <PageHeader>Smatchups</PageHeader>
-                        </Col>
-                    </Row>
+                            <Nav navbar right onSelect={ this.onNavSelect }>
+                                <NavItem eventKey={ 'settings' }>Settings</NavItem>
+                            </Nav>
+                        </CollapsibleNav>
+                    </Navbar>
 
                     <RouteHandler />
                 </Grid>
