@@ -1,8 +1,20 @@
 
+/*
+ * Constants & functions
+ */
+
+$colorPrimary = #673AB7
+$colorTextContrastPrimary = #FAFAFA
+
+/*
+ * Style
+ */
+
 body
     font-family 'Lato' sans-serif
+    padding-top 50px
 
-h1, h2, h3, h4, h5, h6
+h1, h2, h3, h4, h5, h6, .navbar
     font-family 'Fjalla One' sans-serif
 
 .beacons-section-filters
@@ -21,6 +33,30 @@ h1, h2, h3, h4, h5, h6
     padding 0 12px
     text-overflow ellipsis
     width 400px
+
+.navbar-default
+    background-color $colorPrimary
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover
+    color $colorTextContrastPrimary
+
+.navbar-default .navbar-nav > li > a
+    color $colorTextContrastPrimary
+
+.navbar-default .navbar-nav > li > a:hover
+    background-color $colorTextContrastPrimary
+    border-bottom 2px solid $colorTextContrastPrimary
+    color $colorPrimary
+
+.navbar-default .navbar-nav > li.active > a
+    background-color $colorPrimary
+    border-bottom 2px solid $colorTextContrastPrimary
+    color $colorTextContrastPrimary
+
+.navbar-default .navbar-nav > li.active > a:hover
+    background-color $colorTextContrastPrimary
+    border-bottom 2px solid $colorTextContrastPrimary
+    color $colorPrimary
 
 .section-header
     margin 20px 0

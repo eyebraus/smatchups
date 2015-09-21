@@ -20,23 +20,27 @@ module.exports = (function () {
         mixins: [Navigation],
 
         getInitialState: function () {
-            return {};
+            return {
+                activeRoute: 'beacons'
+            };
         },
 
         componentDidMount: function () {
             // Hacky: force a "DefaultRoute" in code-behind so page isn't blank
-            this.replaceWith('beacons');
+            this.replaceWith(this.state.activeRoute);
         },
 
         onNavSelect: function (selectedKey) {
             this.transitionTo(selectedKey);
+
+            this.setState({ activeRoute: selectedKey });
         },
 
         render: function () {
             return (
                 <Grid>
-                    <Navbar brand={ <a href="#">Smatchups</a> } toggleNavKey={ 0 }>
-                        <CollapsibleNav eventKey={ 0 }>
+                    <Navbar brand={ <a href="#">Smatchups</a> } fixedTop toggleNavKey={ 0 }>
+                        <CollapsibleNav activeKey={ this.state.activeRoute } eventKey={ 0 }>
                             <Nav navbar onSelect={ this.onNavSelect }>
                                 <NavItem eventKey={ 'beacons' }>Beacons</NavItem>
                                 <NavItem eventKey={ 'events' }>Events</NavItem>
