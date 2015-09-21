@@ -8,8 +8,6 @@
       , Route = Router.Route;
 
     var App = require('./components/App.react.jsx')
-      , BeaconsList = require('./components/BeaconsList.react.jsx')
-      , BeaconsMap = require('./components/BeaconsMap.react.jsx')
       , BeaconsSection = require('./components/BeaconsSection.react.jsx')
       , BuddiesList = require('./components/BuddiesList.react.jsx')
       , ChallengesList = require('./components/ChallengesList.react.jsx')
@@ -20,10 +18,7 @@
     // Set up routes
     var routes = (
         <Route handler={ App }>
-            <Route name="beacons" path="beacons" handler={ BeaconsSection }>
-                <DefaultRoute name="beacons-list" handler={ BeaconsList } />
-                <Route name="beacons-map" path="map" handler={ BeaconsMap } />
-            </Route>
+            <Route name="beacons" path="beacons" handler={ BeaconsSection } />
             <Route name="events" path="events" handler={ EventsList } />
             <Route name="buddies" path="buddies" handler={ BuddiesList } />
             <Route name="challenges" path="challenges" handler={ ChallengesList } />
