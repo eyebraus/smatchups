@@ -23,9 +23,8 @@ module.exports = (function () {
             var divClassNames = divClasses.join(' ');
 
             return (
-                <Button bsSize="large">
-                    <img src={ this.props.imageUrl } width={ this.props.imageWidth } height={ this.props.imageHeight } className={ imgClassNames } />
-                    { this.props.text }
+                <Button>
+                    <img src={ this.props.imageUrl } width={ this.props.imageWidth } height={ this.props.imageHeight } className={ imgClassNames } /> { this.props.text }
                 </Button>
             );
         },
