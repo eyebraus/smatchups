@@ -11,6 +11,7 @@ module.exports = (function () {
       , Marker = require('react-google-maps').Marker
       , SearchBox = require('react-google-maps').SearchBox
       , Router = require('react-router')
+      , TimeAgo = require('react-timeago')
       , _ = require('underscore')._;
 
     var BeaconsResourceActions = require('../actions/BeaconsResourceActions')
@@ -169,25 +170,31 @@ module.exports = (function () {
 
             return _.map(this.props.beacons, function (beacon) {
                 return (
-                    <Row key={ beacon.id } className="beacon-row">
-                        <Col xs={ 3 } sm={ 3 } md={ 3 } className="beacon-image-frame">
-                            <img src={ beacon.document.profilePictureUrl } />
-                        </Col>
+                    <div key={ beacon.id } className="beacon-row">
+                        <div className="beacon-frame beacon-image-frame">
+                            <img src={ beacon.document.profilePictureUrl } className="img-circle" />
+                        </div>
 
-                        <Col xs={ 9 } sm={ 9 } md={ 9 } className="beacon-content-frame">
-                            <Row className="beacon-content-header">
-                                <h3>{ beacon.document.userName }</h3>
-                                <div className="beacon-games-ribbon">
-                                    { that.gamesRibbonIcons(beacon.document.games) }
-                                </div>
-                                <span className="beacon-timestamp">{ new Date(beacon.createdAt).toLocaleString('en-US') }</span>
-                            </Row>
+                        <div className="beacon-frame beacon-content-frame">
+                            <div className="beacon-content-header">
+                                <h4>{ beacon.document.userName }</h4>
+                            </div>
 
-                            <Row className="beacon-content-body">
-                                { beacon.document.message }
-                            </Row>
-                        </Col>
-                    </Row>
+                            <div className="beacon-content-body">
+                                <p>{ beacon.document.message }</p>
+                            </div>
+                        </div>
+
+                        <div className="beacon-frame beacon-info-frame">
+                            <div className="beacon-timestamp">
+                                <TimeAgo date={ new Date(beacon.createdAt).toLocaleString('en-US') } />
+                            </div>
+
+                            <div className="beacon-games-ribbon">
+                                { that.gamesRibbonIcons(beacon.document.games) }
+                            </div>
+                        </div>
+                    </div>
                 );
             });
         },

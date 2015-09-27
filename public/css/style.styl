@@ -5,6 +5,7 @@
 
 $colorPrimary = #673AB7
 $colorTextContrastPrimary = #FAFAFA
+$colorTextTimestamp = rgba(0, 0, 0, 0.6)
 
 /*
  * Style
@@ -17,8 +18,64 @@ body
 h1, h2, h3, h4, h5, h6, .navbar
     font-family 'Fjalla One' sans-serif
 
+.beacon-content-header > .beacon-timestamp
+    float right
+
+.beacon-content-header > div, .beacon-content-header > span
+    float left
+
+.beacon-content-header > h4
+    margin-bottom 5px
+    margin-top 0px
+
+.beacon-frame
+    float left
+    margin-right 16px
+    margin-top 5px
+
+.beacon-frame > div
+    clear both
+    float left
+    width 100%
+
+.beacon-games-ribbon > img
+    float right
+
+.beacon-image-frame
+    margin-top 0px
+
+    img
+        border 1px solid $colorPrimary
+        box-shadow 2px 2px 6px rgba(0, 0, 0, 0.3)
+        box-sizing border-box
+        -moz-box-sizing border-box
+        height 80px
+        width 80px
+
+.beacon-info-frame
+    float right
+
+.beacons-map > div
+    border 1px solid transparent
+    border-radius 8px
+
+.beacon-row
+    border 1px solid transparent
+    border-radius 4px
+    box-shadow 2px 2px 6px rgba(0, 0, 0, 0.3)
+    box-sizing border-box
+    -moz-box-sizing border-box
+    clear both
+    float left
+    margin-bottom 10px
+    padding 8px 10px
+    width 100%
+
 .beacons-section-filters
     margin-bottom 20px
+
+.beacon-timestamp
+    color $colorTextTimestamp
 
 .google-maps-search-box
     border 1px solid transparent
@@ -36,6 +93,8 @@ h1, h2, h3, h4, h5, h6, .navbar
 
 .navbar-default
     background-color $colorPrimary
+    border none
+    box-shadow 0 2px 6px rgba(0 0 0 0.3)
 
 .navbar-default .navbar-brand, .navbar-default .navbar-brand:hover
     color $colorTextContrastPrimary
