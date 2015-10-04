@@ -3,6 +3,8 @@ module.exports = (function () {
     'use strict';
 
     var React = require('react')
+      , Col = require('react-bootstrap').Col
+      , Row = require('react-bootstrap').Row
       , Router = require('react-router')
       , Link = Router.Link;
 
@@ -10,9 +12,11 @@ module.exports = (function () {
 
         render: function () {
             return (
-                <div className="settings-menu col-xs-12 col-sm-12 col-md-12">
-                    <h3>Nothing here yet :)</h3>
-                </div>
+                <Row>
+                    <Col className="settings-menu" xs={ 12 } sm={ 12 } md={ 12 }>
+                        <h3>Nothing here yet :)</h3>
+                    </Col>
+                </Row>
             );
         }
 

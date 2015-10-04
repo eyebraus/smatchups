@@ -3,42 +3,54 @@ module.exports = (function () {
     'use strict';
 
     var React = require('react')
+      , Col = require('react-bootstrap').Col
+      , CollapsibleNav = require('react-bootstrap').CollapsibleNav
+      , Grid = require('react-bootstrap').Grid
+      , Nav = require('react-bootstrap').Nav
+      , Navbar = require('react-bootstrap').Navbar
+      , NavItem = require('react-bootstrap').NavItem
+      , PageHeader = require('react-bootstrap').PageHeader
+      , Row = require('react-bootstrap').Row
       , Router = require('react-router')
       , Navigation = Router.Navigation
       , RouteHandler = Router.RouteHandler;
-
-    var LinkedIconButton = require('./LinkedIconButton.react.jsx');
 
     var SmatchupsApp = React.createClass({
 
         mixins: [Navigation],
 
         getInitialState: function () {
-            return {};
+            return {
+                activeRoute: 'beacons'
+            };
         },
 
-        componentDidMount: function () {
-            // Hacky: force a "DefaultRoute" in code-behind so page isn't blank
-            this.replaceWith('beacons');
+        onNavSelect: function (selectedKey) {
+            this.transitionTo(selectedKey);
+
+            this.setState({ activeRoute: selectedKey });
         },
 
         render: function () {
             return (
-                <div className="smatchups-app container">
-                    <div className="header row">
-                        <LinkedIconButton
-                                iconType="fa-bars"
-                                iconSize="fa-3"
-                                layoutColumns="3"
-                                routeName="settings" />
+                <Grid>
+                    <Navbar brand={ <a href="#">Smatchups</a> } fixedTop toggleNavKey={ 0 }>
+                        <CollapsibleNav activeKey={ this.state.activeRoute } eventKey={ 0 }>
+                            <Nav navbar onSelect={ this.onNavSelect }>
+                                <NavItem eventKey={ 'beacons' }>Beacons</NavItem>
+                                <NavItem eventKey={ 'events' }>Events</NavItem>
+                                <NavItem eventKey={ 'buddies' }>Buddies</NavItem>
+                                <NavItem eventKey={ 'challenges' }>Challenges</NavItem>
+                            </Nav>
 
-                        <div className="header-logo col-xs-9 col-sm-9 col-md-9">
-                            <h3>Smatchups</h3>
-                        </div>
-                    </div>
+                            <Nav navbar right onSelect={ this.onNavSelect }>
+                                <NavItem eventKey={ 'settings' }>Settings</NavItem>
+                            </Nav>
+                        </CollapsibleNav>
+                    </Navbar>
 
                     <RouteHandler />
-                </div>
+                </Grid>
             );
         }
 

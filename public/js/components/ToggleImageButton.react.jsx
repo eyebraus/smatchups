@@ -3,6 +3,7 @@ module.exports = (function () {
     'use strict';
 
     var React = require('react')
+      , Button = require('react-bootstrap').Button
       , _ = require('underscore')._;
 
     var ToggleImageButton = React.createClass({
@@ -19,31 +20,12 @@ module.exports = (function () {
                     .value();
             }
 
-            // Add any layout classes
-            if (_.contains(_.keys(this.props), 'layoutColumns')) {
-                divClasses = _.chain(['col-xs-', 'col-sm-', 'col-md-'])
-                    .map(function (prefix) {
-                        return prefix + that.props.layoutColumns;
-                    })
-                    .union(divClasses)
-                    .value();
-            }
-
-            if (_.contains(_.keys(this.props), 'layoutOffset')) {
-                divClasses = _.chain(['col-xs-offset-', 'col-sm-offset-', 'col-md-offset-'])
-                    .map(function (prefix) {
-                        return prefix + that.props.layoutOffset;
-                    })
-                    .union(divClasses)
-                    .value();
-            }
-
             var divClassNames = divClasses.join(' ');
 
             return (
-                <div onClick={ this.onClick } className={ divClassNames }>
-                    <img src={ this.props.imageUrl } width={ this.props.imageWidth } height={ this.props.imageHeight } className={ imgClassNames } />
-                </div>
+                <Button>
+                    <img src={ this.props.imageUrl } width={ this.props.imageWidth } height={ this.props.imageHeight } className={ imgClassNames } /> { this.props.text }
+                </Button>
             );
         },
 

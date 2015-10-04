@@ -3,21 +3,67 @@ module.exports = (function () {
     'use strict';
 
     var React = require('react')
-      , Router = require('react-router')
-      , RouteHandler = Router.RouteHandler;
+      , Button = require('react-bootstrap').Button
+      , ButtonGroup = require('react-bootstrap').ButtonGroup
+      , ButtonToolbar = require('react-bootstrap').ButtonToolbar
+      , Col = require('react-bootstrap').Col
+      , PageHeader = require('react-bootstrap').PageHeader
+      , Row = require('react-bootstrap').Row
+      , GoogleMap = require('react-google-maps').GoogleMap
+      , Marker = require('react-google-maps').Marker
+      , SearchBox = require('react-google-maps').SearchBox
+      , Link = require('react-router').Link
+      , TimeAgo = require('react-timeago')
+      , _ = require('underscore')._;
 
-    var LinkedIconButton = require('./LinkedIconButton.react.jsx')
+    var BeaconsResourceActions = require('../actions/BeaconsResourceActions')
+      , BeaconsStore = require('../stores/BeaconsStore')
+      , geoPromise = require('../utilities/geoPromise')
+      , StoreStateComponentFactory = require('./factories/StoreStateComponent.react.jsx')
       , ToggleImageButton = require('./ToggleImageButton.react.jsx');
 
     var BeaconsSection = React.createClass({
 
         getInitialState: function () {
             return {
+                bounds: null,
+                center: { lat: 47.6201451, lng: -122.3298646 },
                 isSmash64Enabled: false,
                 isMeleeEnabled: true,
                 isProjectMEnabled: false,
                 isSm4shEnabled: false
             };
+        },
+
+        componentDidMount: function () {
+            var that = this;
+
+            // Trigger a full reload of the BeaconsStore
+            BeaconsResourceActions.reloadBeacons();
+
+            geoPromise.getCurrentPosition()
+                .then(function (position) {
+                    that.setState({
+                        center: { lat: position.coords.latitude, lng: position.coords.longitude }
+                    });
+                });
+        },
+
+        onBoundsChanged: function () {
+            this.setState({
+                bounds: this.refs.map.getBounds(),
+                center: this.refs.map.getCenter()
+            });
+        },
+
+        onPlacesChanged: function () {
+            var places = this.refs.searchBox.getPlaces();
+
+            if (places.length > 0) {
+                this.setState({
+                    center: places[0].geometry.location
+                });
+            }
         },
         
         onToggledFactory: function (keyName) {
@@ -33,69 +79,183 @@ module.exports = (function () {
 
         render: function () {
             return (
-                <div className="row">
-                    <div className="beacons-section-wrapper col-xs-12 col-sm-12 col-md-12">
-                        <div className="beacons-section-filters row">
-                            <ToggleImageButton
-                                    imageUrl="/app/img/icon/smash-64-toggle.png"
-                                    imageWidth="24"
-                                    imageHeight="24"
-                                    layoutColumns="2"
-                                    toggleState={ this.state.isSmash64Enabled }
-                                    onToggled={ this.onToggledFactory('isSmash64Enabled') } />
-                            <ToggleImageButton
-                                    imageUrl="/app/img/icon/melee-toggle.png"
-                                    imageWidth="24"
-                                    imageHeight="24"
-                                    layoutColumns="2"
-                                    toggleState={ this.state.isMeleeEnabled }
-                                    onToggled={ this.onToggledFactory('isMeleeEnabled') } />
-                            <ToggleImageButton
-                                    imageUrl="/app/img/icon/project-m-toggle.png"
-                                    imageWidth="24"
-                                    imageHeight="24"
-                                    layoutColumns="2"
-                                    toggleState={ this.state.isProjectMEnabled }
-                                    onToggled={ this.onToggledFactory('isProjectMEnabled') } />
-                            <ToggleImageButton
-                                    imageUrl="/app/img/icon/sm4sh-toggle.png"
-                                    imageWidth="24"
-                                    imageHeight="24"
-                                    layoutColumns="2"
-                                    toggleState={ this.state.isSm4shEnabled }
-                                    onToggled={ this.onToggledFactory('isSm4shEnabled') } />
+                <Row className="beacons-section">
+                    <Col xs={ 12 } sm={ 12 } md={ 12 } className="beacons-filters">
+                        { this.beaconsFilters() }
+                    </Col>
 
-                            <LinkedIconButton
-                                    iconSize="fa-3"
-                                    iconType="fa-plus"
-                                    layoutColumns="3"
-                                    layoutOffset="1"
-                                    routeName="create-beacon" />
+                    <Col xs={ 6 } sm={ 6 } md={ 6 } className="beacons-list">
+                        <Link to={ 'create-beacon' }>
+                            <div key="post-new" className="beacon-row new-beacon-row">
+                                <div className="beacon-frame beacon-icon-frame">
+                                    <i className="fa fa-plus fa-4" />
+                                </div>
+
+                                <div className="beacon-frame beacon-content-frame">
+                                    <div className="beacon-content-header">
+                                        <h4>Create a new beacon!</h4>
+                                    </div>
+
+                                    <div className="beacon-content-body">
+                                        <p>Let your friends know when, where, and what you're playing.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </Link>
+
+                        { this.beaconsList() }
+                    </Col>
+
+                    <Col xs={ 6 } sm={ 6 } md={ 6 } className="beacons-map" data-spy="affix" data-offset-top="58">
+                        { this.beaconsMap() }
+                    </Col>
+                </Row>
+            );
+        },
+
+        beaconsFilters: function () {
+            return (
+                <ButtonGroup justified>
+                    <ButtonGroup>
+                        <ToggleImageButton
+                                imageUrl="/app/img/icon/smash-64-toggle.png"
+                                imageWidth="24"
+                                imageHeight="24"
+                                text="Super Smash Bros. 64"
+                                toggleState={ this.state.isSmash64Enabled }
+                                onToggled={ this.onToggledFactory('isSmash64Enabled') } />
+                    </ButtonGroup>
+
+                    <ButtonGroup>
+                        <ToggleImageButton
+                                imageUrl="/app/img/icon/melee-toggle.png"
+                                imageWidth="24"
+                                imageHeight="24"
+                                text="Super Smash Bros. Melee"
+                                toggleState={ this.state.isMeleeEnabled }
+                                onToggled={ this.onToggledFactory('isMeleeEnabled') } />
+                    </ButtonGroup>
+
+                    <ButtonGroup>
+                        <ToggleImageButton
+                                imageUrl="/app/img/icon/project-m-toggle.png"
+                                imageWidth="24"
+                                imageHeight="24"
+                                text="Project M"
+                                toggleState={ this.state.isProjectMEnabled }
+                                onToggled={ this.onToggledFactory('isProjectMEnabled') } />
+                    </ButtonGroup>
+
+                    <ButtonGroup>
+                        <ToggleImageButton
+                                imageUrl="/app/img/icon/sm4sh-toggle.png"
+                                imageWidth="24"
+                                imageHeight="24"
+                                text="Super Smash Bros. for Wii U"
+                                toggleState={ this.state.isSm4shEnabled }
+                                onToggled={ this.onToggledFactory('isSm4shEnabled') } />
+                    </ButtonGroup>
+                </ButtonGroup>
+            );
+        },
+
+        beaconsList: function () {
+            var that = this;
+
+            return _.map(this.props.beacons, function (beacon) {
+                return (
+                    <div key={ beacon.id } className="beacon-row">
+                        <div className="beacon-frame beacon-image-frame">
+                            <img src={ beacon.document.profilePictureUrl } className="img-circle" />
                         </div>
 
-                        <div className="beacons-section row">
-                            <RouteHandler />
+                        <div className="beacon-frame beacon-content-frame">
+                            <div className="beacon-content-header">
+                                <h4>{ beacon.document.userName }</h4>
+                            </div>
 
-                            <div className="beacons-section-toggle-mode col-xs-12 col-sm-12 col-md-12">
-                                <LinkedIconButton
-                                        iconSize="fa-3"
-                                        iconType="fa-list"
-                                        layoutColumns="6"
-                                        routeName="beacons-list" />
-                                <LinkedIconButton
-                                        iconSize="fa-3"
-                                        iconType="fa-globe"
-                                        layoutColumns="6"
-                                        routeName="beacons-map" />
+                            <div className="beacon-content-body">
+                                <p>{ beacon.document.message }</p>
+                            </div>
+                        </div>
+
+                        <div className="beacon-frame beacon-info-frame">
+                            <div className="beacon-timestamp">
+                                <TimeAgo date={ new Date(beacon.createdAt).toLocaleString('en-US') } />
+                            </div>
+
+                            <div className="beacon-games-ribbon">
+                                { that.gamesRibbonIcons(beacon.document.games) }
                             </div>
                         </div>
                     </div>
-                </div>
+                );
+            });
+        },
+
+        beaconsMap: function () {
+            return (
+                <GoogleMap
+                        center={ this.state.center }
+                        containerProps={ {
+                            style: {
+                                height: '800px'
+                            }
+                        } }
+                        defaultZoom={ 15 }
+                        onBoundsChanged={ this.onBoundsChanged }
+                        ref="map">
+
+                    <SearchBox
+                            bounds={ this.state.bounds }
+                            classes="google-maps-search-box"
+                            controlPosition={ google.maps.ControlPosition.TOP_LEFT }
+                            onPlacesChanged={ this.onPlacesChanged }
+                            ref="searchBox" />
+
+                    { this.props.beacons.map(function (beacon, index) {
+                        <Marker key={ index } position={ beacon.position } />
+                    }) }
+
+                </GoogleMap>
             );
+        },
+
+        gamesRibbonIcons: function (games) {
+            return _.map(games, function (game) {
+                var gameImage = '/app/img/icon/smash-franchise-toggle.png';
+
+                switch(game) {
+                    case 'smash64':
+                        gameImage = '/app/img/icon/smash-64-toggle.png';
+                        break;
+
+                    case 'melee':
+                        gameImage = '/app/img/icon/melee-toggle.png';
+                        break;
+                    
+                    case 'projectM':
+                        gameImage = '/app/img/icon/project-m-toggle.png';
+                        break;
+                    
+                    case 'sm4sh':
+                        gameImage = '/app/img/icon/sm4sh-toggle.png';
+                        break;
+                }
+
+                return (
+                    <img key={ game } src={ gameImage } width="24" height="24" className="beacon-games-ribbon-icon" />
+                );
+            });
         }
 
     });
 
-    return BeaconsSection;
+    // Mixin StoreStateComponent functionality for the BeaconsStore
+    return StoreStateComponentFactory(BeaconsSection, BeaconsStore, function (store) {
+        return {
+            beacons: store.getBeacons()
+        };
+    });
 
 })();

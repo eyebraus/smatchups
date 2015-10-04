@@ -117,6 +117,13 @@ module.exports = function (grunt) {
                   livereload: reloadPort
                 }
             },
+            styl: {
+                files: ['public/css/*.styl'],
+                tasks: ['stylus:devApp'],
+                options: {
+                  livereload: reloadPort
+                }
+            },
             jade: {
                 files: ['views/*.jade'],
                 options: {

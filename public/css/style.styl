@@ -1,4 +1,117 @@
 
+/*
+ * Constants & functions
+ */
+
+$colorPrimary = #673AB7
+$colorSecondary = #18F541
+$colorTertiary = #09B228
+$colorTextPrimary = rgba(51, 51, 51, 1.0)
+$colorTextContrastPrimary = #FAFAFA
+$colorTextTimestamp = rgba(0, 0, 0, 0.6)
+
+/*
+ * Style
+ */
+
+body
+    font-family 'Lato' sans-serif
+    padding-top 50px
+
+h1, h2, h3, h4, h5, h6, .navbar
+    font-family 'Fjalla One' sans-serif
+
+.beacon-content-header > .beacon-timestamp
+    float right
+
+.beacon-content-header > div, .beacon-content-header > span
+    float left
+
+.beacon-content-header > h4
+    margin-bottom 5px
+    margin-top 0px
+
+.beacon-frame
+    float left
+    margin-right 16px
+    margin-top 5px
+
+.beacon-frame > div
+    clear both
+    float left
+    width 100%
+
+.beacon-games-ribbon > img
+    float right
+
+.beacon-icon-frame
+    height 80px
+    width 80px
+
+    i
+        color $colorSecondary
+        display block
+        font-size 4em
+        margin auto
+        width 44px
+
+.beacon-image-frame
+    margin-top 0px
+
+    img
+        border 1px solid $colorPrimary
+        box-shadow 2px 2px 6px rgba(0, 0, 0, 0.3)
+        box-sizing border-box
+        -moz-box-sizing border-box
+        height 80px
+        width 80px
+
+.beacon-info-frame
+    float right
+
+.beacons-map.affix
+    padding-left 51px
+    padding-right 30px
+    position fixed
+    right 15px
+    top 72px
+
+.beacons-map > div, .create-beacon-map > div
+    border 1px solid transparent
+    border-radius 8px
+
+.beacon-row
+    border 1px solid transparent
+    border-radius 4px
+    box-shadow 2px 2px 6px rgba(0, 0, 0, 0.3)
+    box-sizing border-box
+    -moz-box-sizing border-box
+    clear both
+    float left
+    margin-bottom 10px
+    padding 8px 10px
+    width 100%
+
+.beacons-filters
+    margin-bottom 20px
+    margin-top 20px
+
+.beacon-timestamp
+    color $colorTextTimestamp
+
+.create-beacon-buttons > .form-group
+    float right
+    margin-left 10px
+
+.create-beacon-form-frame, .create-beacon-map
+    margin-top 20px
+
+.game-select-group .form-group    
+    margin-left 24px
+
+    div img
+        margin-right 4px
+
 .google-maps-search-box
     border 1px solid transparent
     border-radius 1px
@@ -12,3 +125,45 @@
     padding 0 12px
     text-overflow ellipsis
     width 400px
+
+.navbar-default
+    background-color $colorPrimary
+    border none
+    box-shadow 0 2px 6px rgba(0 0 0 0.3)
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover
+    color $colorTextContrastPrimary
+
+.navbar-default .navbar-nav > li > a
+    color $colorTextContrastPrimary
+
+.navbar-default .navbar-nav > li > a:hover
+    background-color $colorTextContrastPrimary
+    border-bottom 2px solid $colorTextContrastPrimary
+    color $colorPrimary
+
+.navbar-default .navbar-nav > li.active > a
+    background-color $colorPrimary
+    border-bottom 2px solid $colorTextContrastPrimary
+    color $colorTextContrastPrimary
+
+.navbar-default .navbar-nav > li.active > a:hover
+    background-color $colorTextContrastPrimary
+    border-bottom 2px solid $colorTextContrastPrimary
+    color $colorPrimary
+
+.new-beacon-row
+    border 1px solid $colorTertiary
+
+    .beacon-content-body
+        color $colorTextPrimary
+
+    .beacon-content-header
+        color $colorTertiary
+
+.section-header
+    margin 20px 0
+    text-align center
+
+.toggle-image-button
+    width 100%
