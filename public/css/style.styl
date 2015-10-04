@@ -4,6 +4,9 @@
  */
 
 $colorPrimary = #673AB7
+$colorSecondary = #18F541
+$colorTertiary = #09B228
+$colorTextPrimary = rgba(51, 51, 51, 1.0)
 $colorTextContrastPrimary = #FAFAFA
 $colorTextTimestamp = rgba(0, 0, 0, 0.6)
 
@@ -40,6 +43,17 @@ h1, h2, h3, h4, h5, h6, .navbar
 
 .beacon-games-ribbon > img
     float right
+
+.beacon-icon-frame
+    height 80px
+    width 80px
+
+    i
+        color $colorSecondary
+        display block
+        font-size 4em
+        margin auto
+        width 44px
 
 .beacon-image-frame
     margin-top 0px
@@ -124,6 +138,15 @@ h1, h2, h3, h4, h5, h6, .navbar
     background-color $colorTextContrastPrimary
     border-bottom 2px solid $colorTextContrastPrimary
     color $colorPrimary
+
+.new-beacon-row
+    border 1px solid $colorTertiary
+
+    .beacon-content-body
+        color $colorTextPrimary
+
+    .beacon-content-header
+        color $colorTertiary
 
 .section-header
     margin 20px 0

@@ -3,6 +3,7 @@ module.exports = (function () {
     'use strict';
 
     var React = require('react')
+      , Button = require('react-bootstrap').Button
       , ButtonGroup = require('react-bootstrap').ButtonGroup
       , ButtonToolbar = require('react-bootstrap').ButtonToolbar
       , Col = require('react-bootstrap').Col
@@ -11,7 +12,7 @@ module.exports = (function () {
       , GoogleMap = require('react-google-maps').GoogleMap
       , Marker = require('react-google-maps').Marker
       , SearchBox = require('react-google-maps').SearchBox
-      , Router = require('react-router')
+      , Link = require('react-router').Link
       , TimeAgo = require('react-timeago')
       , _ = require('underscore')._;
 
@@ -84,6 +85,24 @@ module.exports = (function () {
                     </Col>
 
                     <Col xs={ 6 } sm={ 6 } md={ 6 } className="beacons-list">
+                        <Link to={ 'create-beacon' }>
+                            <div key="post-new" className="beacon-row new-beacon-row">
+                                <div className="beacon-frame beacon-icon-frame">
+                                    <i className="fa fa-plus fa-4" />
+                                </div>
+
+                                <div className="beacon-frame beacon-content-frame">
+                                    <div className="beacon-content-header">
+                                        <h4>Create a new beacon!</h4>
+                                    </div>
+
+                                    <div className="beacon-content-body">
+                                        <p>Let your friends know when, where, and what you're playing.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </Link>
+
                         { this.beaconsList() }
                     </Col>
 
@@ -96,51 +115,59 @@ module.exports = (function () {
 
         beaconsFilters: function () {
             return (
-                <ButtonToolbar>
-                    <ButtonGroup justified>
-                        <ButtonGroup>
-                            <ToggleImageButton
-                                    imageUrl="/app/img/icon/smash-64-toggle.png"
-                                    imageWidth="24"
-                                    imageHeight="24"
-                                    text="Super Smash Bros. 64"
-                                    toggleState={ this.state.isSmash64Enabled }
-                                    onToggled={ this.onToggledFactory('isSmash64Enabled') } />
-                        </ButtonGroup>
-
-                        <ButtonGroup>
-                            <ToggleImageButton
-                                    imageUrl="/app/img/icon/melee-toggle.png"
-                                    imageWidth="24"
-                                    imageHeight="24"
-                                    text="Super Smash Bros. Melee"
-                                    toggleState={ this.state.isMeleeEnabled }
-                                    onToggled={ this.onToggledFactory('isMeleeEnabled') } />
-                        </ButtonGroup>
-
-                        <ButtonGroup>
-                            <ToggleImageButton
-                                    imageUrl="/app/img/icon/project-m-toggle.png"
-                                    imageWidth="24"
-                                    imageHeight="24"
-                                    text="Project M"
-                                    toggleState={ this.state.isProjectMEnabled }
-                                    onToggled={ this.onToggledFactory('isProjectMEnabled') } />
-                        </ButtonGroup>
-
-                        <ButtonGroup>
-                            <ToggleImageButton
-                                    imageUrl="/app/img/icon/sm4sh-toggle.png"
-                                    imageWidth="24"
-                                    imageHeight="24"
-                                    text="Super Smash Bros. for Wii U"
-                                    toggleState={ this.state.isSm4shEnabled }
-                                    onToggled={ this.onToggledFactory('isSm4shEnabled') } />
-                        </ButtonGroup>
+                <ButtonGroup justified>
+                    <ButtonGroup>
+                        <ToggleImageButton
+                                imageUrl="/app/img/icon/smash-64-toggle.png"
+                                imageWidth="24"
+                                imageHeight="24"
+                                text="Super Smash Bros. 64"
+                                toggleState={ this.state.isSmash64Enabled }
+                                onToggled={ this.onToggledFactory('isSmash64Enabled') } />
                     </ButtonGroup>
-                </ButtonToolbar>
+
+                    <ButtonGroup>
+                        <ToggleImageButton
+                                imageUrl="/app/img/icon/melee-toggle.png"
+                                imageWidth="24"
+                                imageHeight="24"
+                                text="Super Smash Bros. Melee"
+                                toggleState={ this.state.isMeleeEnabled }
+                                onToggled={ this.onToggledFactory('isMeleeEnabled') } />
+                    </ButtonGroup>
+
+                    <ButtonGroup>
+                        <ToggleImageButton
+                                imageUrl="/app/img/icon/project-m-toggle.png"
+                                imageWidth="24"
+                                imageHeight="24"
+                                text="Project M"
+                                toggleState={ this.state.isProjectMEnabled }
+                                onToggled={ this.onToggledFactory('isProjectMEnabled') } />
+                    </ButtonGroup>
+
+                    <ButtonGroup>
+                        <ToggleImageButton
+                                imageUrl="/app/img/icon/sm4sh-toggle.png"
+                                imageWidth="24"
+                                imageHeight="24"
+                                text="Super Smash Bros. for Wii U"
+                                toggleState={ this.state.isSm4shEnabled }
+                                onToggled={ this.onToggledFactory('isSm4shEnabled') } />
+                    </ButtonGroup>
+                </ButtonGroup>
             );
         },
+
+        // beaconsControls: function () {
+        //     return (
+        //         <ButtonGroup>
+        //             <Button bsStyle="link">
+        //                 <span className="glyphicon glyphicon-plus"></span> Post
+        //             </Button>
+        //         </ButtonGroup>
+        //     );
+        // },
 
         beaconsList: function () {
             var that = this;
