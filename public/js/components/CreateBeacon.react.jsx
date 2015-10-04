@@ -200,9 +200,6 @@ module.exports = (function () {
                             </div>
 
                             <div className="form-group">
-                            </div>
-
-                            <div className="form-group">
                                 <Input name="message-textarea"
                                         type="textarea"
                                         value={ this.state.message }
