@@ -25,11 +25,6 @@ module.exports = (function () {
             };
         },
 
-        componentDidMount: function () {
-            // Hacky: force a "DefaultRoute" in code-behind so page isn't blank
-            this.replaceWith(this.state.activeRoute);
-        },
-
         onNavSelect: function (selectedKey) {
             this.transitionTo(selectedKey);
 

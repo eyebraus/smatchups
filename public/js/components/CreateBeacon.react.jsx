@@ -21,7 +21,10 @@ module.exports = (function () {
 
         render: function () {
             return (
-                <Input type="checkbox" label={ this.props.label } name={ this.props.name } checked={ this.props.isChecked } onChange={ this.props.onChange } />
+                <Input type="checkbox" name={ this.props.name } checked={ this.props.isChecked } onChange={ this.props.onChange }>
+                    <img src={ this.props.imageUrl } width="24" height="24" />
+                    <span>{ this.props.label }</span>
+                </Input>
             );
         }
 
@@ -152,30 +155,34 @@ module.exports = (function () {
         render: function () {
             return (
                 <Row>
-                    <Col xs={ 12 } sm={ 12 } md={ 12 } className="create-beacon-form-frame">
+                    <Col xs={ 6 } sm={ 6 } md={ 6 } className="create-beacon-form-frame">
                         <form className="beacon-form" onKeyPress={ this.onKeyPress } onSubmit={ this.onSubmit }>
-                            <div className="form-group">
+                            <div className="form-group game-select-group">
                                 <fieldset>
-                                    <legend>What games are you playing?</legend>
+                                    <legend><h2>What games are you playing?</h2></legend>
 
                                     <GameSelectFormElement
+                                            imageUrl="/app/img/icon/smash-64-toggle.png"
                                             name="smash-64-checkbox"
-                                            label="SSB 64"
+                                            label="Super Smash Bros."
                                             isChecked={ this.state.isSmash64Checked }
                                             onChange={ this.onCheckedFactory('isSmash64Checked') } />
                                     <GameSelectFormElement
+                                            imageUrl="/app/img/icon/melee-toggle.png"
                                             name="melee-checkbox"
-                                            label="SSB Melee"
+                                            label="Super Smash Bros. Melee"
                                             isChecked={ this.state.isMeleeChecked }
                                             onChange={ this.onCheckedFactory('isMeleeChecked') } />
                                     <GameSelectFormElement
+                                            imageUrl="/app/img/icon/project-m-toggle.png"
                                             name="project-m-checkbox"
                                             label="Project M"
                                             isChecked={ this.state.isProjectMChecked }
                                             onChange={ this.onCheckedFactory('isProjectMChecked') } />
                                     <GameSelectFormElement
+                                            imageUrl="/app/img/icon/sm4sh-toggle.png"
                                             name="sm4sh-checkbox"
-                                            label="SSB for Wii U"
+                                            label="Smash for Wii U"
                                             isChecked={ this.state.isSm4shChecked }
                                             onChange={ this.onCheckedFactory('isSm4shChecked') } />
                                 </fieldset>
@@ -193,29 +200,6 @@ module.exports = (function () {
                             </div>
 
                             <div className="form-group">
-                                <GoogleMap
-                                        center={ this.state.center }
-                                        containerProps={ {
-                                            style: {
-                                                height: '800px'
-                                            }
-                                        } }
-                                        defaultZoom={ 15 }
-                                        onBoundsChanged={ this.onBoundsChanged }
-                                        ref="map">
-
-                                    <SearchBox
-                                            bounds={ this.state.bounds }
-                                            classes="google-maps-search-box"
-                                            controlPosition={ google.maps.ControlPosition.TOP_LEFT }
-                                            onPlacesChanged={ this.onPlacesChanged }
-                                            ref="searchBox" />
-
-                                    { null !== this.state.location
-                                        ? <Marker position={ this.state.location } />
-                                        : <noscript /> }
-
-                                </GoogleMap>
                             </div>
 
                             <div className="form-group">
@@ -226,11 +210,37 @@ module.exports = (function () {
                                         placeholder="Leave a message for other players..." />
                             </div>
 
-                            <div className="form-group">
-                                <ButtonInput name="submit-button" type="submit" className="btn btn-primary">Submit</ButtonInput>
+                            <div className="form-group create-beacon-buttons">
                                 <ButtonInput name="cancel-button" type="button" className="btn btn-default" onClick={ this.onCancel }>Cancel</ButtonInput>
+                                <ButtonInput name="submit-button" type="submit" className="btn btn-primary">Submit</ButtonInput>
                             </div>
                         </form>
+                    </Col>
+
+                    <Col xs={ 6 } sm={ 6 } md={ 6 } className="create-beacon-map">
+                        <GoogleMap
+                                center={ this.state.center }
+                                containerProps={ {
+                                    style: {
+                                        height: '800px'
+                                    }
+                                } }
+                                defaultZoom={ 15 }
+                                onBoundsChanged={ this.onBoundsChanged }
+                                ref="map">
+
+                            <SearchBox
+                                    bounds={ this.state.bounds }
+                                    classes="google-maps-search-box"
+                                    controlPosition={ google.maps.ControlPosition.TOP_LEFT }
+                                    onPlacesChanged={ this.onPlacesChanged }
+                                    ref="searchBox" />
+
+                            { null !== this.state.location
+                                ? <Marker position={ this.state.location } />
+                                : <noscript /> }
+
+                        </GoogleMap>
                     </Col>
                 </Row>
             );

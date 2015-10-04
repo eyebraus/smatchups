@@ -159,16 +159,6 @@ module.exports = (function () {
             );
         },
 
-        // beaconsControls: function () {
-        //     return (
-        //         <ButtonGroup>
-        //             <Button bsStyle="link">
-        //                 <span className="glyphicon glyphicon-plus"></span> Post
-        //             </Button>
-        //         </ButtonGroup>
-        //     );
-        // },
-
         beaconsList: function () {
             var that = this;
 
