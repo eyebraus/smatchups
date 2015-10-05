@@ -88,9 +88,17 @@ h1, h2, h3, h4, h5, h6, .navbar
     -moz-box-sizing border-box
     clear both
     float left
+    height 98px
     margin-bottom 10px
     padding 8px 10px
+    transition height 200ms ease-in-out
+    -moz-transition height 200ms ease-in-out
+    -o-transition height 200ms ease-in-out
+    -webkit-transition height 200ms ease-in-out
     width 100%
+
+.beacon-row-hidden
+    height 0px
 
 .beacons-filters
     margin-bottom 20px
@@ -151,6 +159,10 @@ h1, h2, h3, h4, h5, h6, .navbar
     background-color $colorTextContrastPrimary
     border-bottom 2px solid $colorTextContrastPrimary
     color $colorPrimary
+
+.new-beacon-form
+    border 1px solid $colorTertiary
+    height 800px
 
 .new-beacon-row
     border 1px solid $colorTertiary
