@@ -20,6 +20,7 @@ module.exports = (function () {
       , _ = require('underscore')._;
 
     var Autocomplete = require('./Autocomplete.react.jsx')
+      , BeaconForm = require('./BeaconForm.react.jsx')
       , BeaconsResourceActions = require('../actions/BeaconsResourceActions')
       , BeaconsStore = require('../stores/BeaconsStore')
       , geoPromise = require('../utilities/geoPromise')
@@ -32,25 +33,13 @@ module.exports = (function () {
         getInitialState: function () {
             return {
                 bounds: null,
-                capacity: 0,
                 center: { lat: 47.6201451, lng: -122.3298646 },
                 currentLocation: null,
-                expiresInMinutes: 30,
-                formAddress: {},
-                formLocationValue: '',
                 isFormActive: false,
                 isSmash64Enabled: false,
                 isMeleeEnabled: true,
                 isProjectMEnabled: false,
-                isSm4shEnabled: false,
-                location: null,
-                message: '',
-                name: '',
-                setupCountSmash64: 0,
-                setupCountMelee: 0,
-                setupCountProjectM: 0,
-                setupCountSm4sh: 0,
-                visibility: 'locals'
+                isSm4shEnabled: false
             };
         },
 
@@ -73,24 +62,6 @@ module.exports = (function () {
             this.setState({ isFormActive: false });
         },
 
-        onAutocompleteChanged: function (place) {
-            var newState = {};
-            newState.formLocationValue = place.name;
-
-            if (place.address_components) {
-                newState.formAddress = {
-                    number: (place.address_components[0] && place.address_components[0].long_name || ''),
-                    street: (place.address_components[1] && place.address_components[1].long_name || ''),
-                    city: (place.address_components[2] && place.address_components[2].long_name || ''),
-                    state: (place.address_components[3] && place.address_components[3].long_name || ''),
-                    country: (place.address_components[4] && place.address_components[4].long_name || ''),
-                    zipCode: (place.address_components[5] && place.address_components[5].long_name || '')
-                };
-            }
-
-            this.setState(newState);
-        },
-
         onBoundsChanged: function () {
             this.setState({
                 bounds: this.refs.map.getBounds(),
@@ -98,32 +69,13 @@ module.exports = (function () {
             });
         },
 
-        onChangeFactory: function (keyName) {
+        onFormSubmitted: function (beacon) {
             var that = this;
 
-            return function (event) {
-                var newState = {};
-                newState[keyName] = event.target.value;
-
-                that.setState(newState);
-            };
-        },
-
-        onCheckedFactory: function (enumValue) {
-            var that = this;
-
-            return function (event) {
-                that.setState({
-                    visibility: enumValue
+            BeaconsResourceActions.createBeaconFromForm(beacon)
+                .then(function () {
+                    that.hideForm();
                 });
-            };
-        },
-
-        onKeyPress: function (event) {
-            // Prevents Google Maps keypresses from submitting the form
-            if (event.which === 13) {
-                event.preventDefault();
-            }
         },
 
         onPlacesChanged: function () {
@@ -134,29 +86,6 @@ module.exports = (function () {
                     center: places[0].geometry.location
                 });
             }
-        },
-
-        onSubmit: function (event) {
-            var that = this;
-
-            // Block normal event propagation
-            event.preventDefault();
-
-            var beacon = {
-                entryFee: this.state.entryFee,
-                games: this.state.games,
-                isSmash64Checked: this.state.isSmash64Checked,
-                isMeleeChecked: this.state.isMeleeChecked,
-                isProjectMChecked: this.state.isProjectMChecked,
-                isSm4shChecked: this.state.isSm4shChecked,
-                location: this.state.location,
-                message: this.state.message
-            };
-
-            BeaconsResourceActions.createBeaconFromForm(beacon)
-                .then(function () {
-                    that.hideForm();
-                });
         },
         
         onToggledFactory: function (keyName) {
@@ -188,7 +117,10 @@ module.exports = (function () {
                     <Col xs={ 6 } sm={ 6 } md={ 6 } className="beacons-list-and-form">
                         <div key="post-new" className={ createRowClassNames }>
                             { this.state.isFormActive
-                                ? this.createBeaconForm()
+                                ? <BeaconForm
+                                        bounds={ this.state.bounds }
+                                        onCancel={ this.hideForm } 
+                                        onSubmit={ this.onFormSubmitted }/>
                                 : this.createBeaconRow() }
                         </div>
 
@@ -247,108 +179,6 @@ module.exports = (function () {
                                 onToggled={ this.onToggledFactory('isSm4shEnabled') } />
                     </ButtonGroup>
                 </ButtonGroup>
-            );
-        },
-
-        createBeaconForm: function () {
-            return (
-                <form className="beacon-form" onKeyPress={ this.onKeyPress } onSubmit={ this.onSubmit }>
-                    <Input name="beacon-name"
-                            label="Friendly name:"
-                            placeholder="Give your fest a memorable title!"
-                            type="text"
-                            value={ this.state.name }
-                            onChange={ this.onChangeFactory('name') } />
-
-                    <Autocomplete
-                            bounds={ this.state.bounds }
-                            name="beacon-location"
-                            label="Location:"
-                            placeholder="e.g. Folsom Street Foundry"
-                            type="text"
-                            value={ this.state.formLocationValue }
-                            onChange={ this.onChangeFactory('formLocationValue') }
-                            onPlaceChanged={ this.onAutocompleteChanged } />
-
-                    <div className="form-group setups-form-group">
-                        <label>Setups:</label>
-
-                        <SetupInputElement
-                                imageUrl="/app/img/icon/smash-64-toggle.png"
-                                name="smash-64-setup-input"
-                                value={ this.state.setupCountSmash64 }
-                                onChange={ this.onChangeFactory('setupCountSmash64') } />
-                        <SetupInputElement
-                                imageUrl="/app/img/icon/melee-toggle.png"
-                                name="melee-setup-input"
-                                value={ this.state.setupCountMelee }
-                                onChange={ this.onChangeFactory('setupCountMelee') } />
-                        <SetupInputElement
-                                imageUrl="/app/img/icon/project-m-toggle.png"
-                                name="project-m-setup-input"
-                                value={ this.state.setupCountProjectM }
-                                onChange={ this.onChangeFactory('setupCountProjectM') } />
-                        <SetupInputElement
-                                imageUrl="/app/img/icon/sm4sh-toggle.png"
-                                name="sm4sh-setup-input"
-                                value={ this.state.setupCountSm4sh }
-                                onChange={ this.onChangeFactory('setupCountSm4sh') } />
-
-                        <Panel bsStyle="warning">
-                            Please only report full setups. For example, if you have a GameCube, but no CRT, don't report a full Melee setup.
-                        </Panel>
-                    </div>
-
-                    <Input name="capacity-number"
-                            label="How many players can you host?"
-                            type="number"
-                            value={ this.state.capacity }
-                            onChange={ this.onChangeFactory('capacity') }
-                            min="0"
-                            step="1" />
-
-                    <p className="help-block">Note: a capacity of 0 indicates no desired capacity.</p>
-
-                    <Input name="expires-in-minutes-number"
-                            label="How many minutes should this beacon stay up?"
-                            type="number"
-                            value={ this.state.expiresInMinutes }
-                            onChange={ this.onChangeFactory('expiresInMinutes') }
-                            min="0"
-                            max="60"
-                            step="1" />
-
-                    <div className="form-group">
-                        <label>Who can see and respond to your beacon?</label>
-
-                        <Input name="visibility-radio"
-                                label="All players"
-                                type="radio"
-                                checked={ this.state.visibility === 'public' }
-                                onChange={ this.onCheckedFactory('public') } />
-                        <Input name="visibility-radio"
-                                label="Nearby players & buddies"
-                                type="radio"
-                                checked={ this.state.visibility === 'locals' }
-                                onChange={ this.onCheckedFactory('locals') } />
-                        <Input name="visibility-radio"
-                                label="Buddies only"
-                                type="radio"
-                                checked={ this.state.visibility === 'buddies' }
-                                onChange={ this.onCheckedFactory('buddies') } />
-                    </div>
-
-                    <Input name="message-textarea"
-                            type="textarea"
-                            value={ this.state.message }
-                            onChange={ this.onChangeFactory('message') }
-                            placeholder="Leave a message for other players..." />
-
-                    <div className="form-group create-beacon-buttons">
-                        <ButtonInput name="cancel-button" type="button" className="btn btn-default" onClick={ this.hideForm }>Cancel</ButtonInput>
-                        <ButtonInput name="submit-button" type="submit" className="btn btn-primary">Submit</ButtonInput>
-                    </div>
-                </form>
             );
         },
 
