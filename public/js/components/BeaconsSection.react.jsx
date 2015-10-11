@@ -10,6 +10,7 @@ module.exports = (function () {
       , Col = require('react-bootstrap').Col
       , Input = require('react-bootstrap').Input
       , PageHeader = require('react-bootstrap').PageHeader
+      , Panel = require('react-bootstrap').Panel
       , Row = require('react-bootstrap').Row
       , GoogleMap = require('react-google-maps').GoogleMap
       , Marker = require('react-google-maps').Marker
@@ -24,14 +25,56 @@ module.exports = (function () {
       , StoreStateComponentFactory = require('./factories/StoreStateComponent.react.jsx')
       , ToggleImageButton = require('./ToggleImageButton.react.jsx');
 
-    var GameSelectFormElement = React.createClass({
+    var LocationAutocomplete = React.createClass({
+
+        componentDidMount: function () {
+            var that = this;
+
+            this.autocomplete = new google.maps.places.Autocomplete(this.refs.textbox.getDOMNode());
+            this.autocomplete.setBounds(this.props.bounds);
+
+            this.autocomplete.addListener('place_changed', function () {
+                that.props.onPlaceChanged(that.autocomplete.getPlace());
+            });
+        },
+
+        componentDidUpdate: function () {
+            this.autocomplete.setBounds(this.props.bounds);
+        },
 
         render: function () {
             return (
-                <Input type="checkbox" name={ this.props.name } checked={ this.props.isChecked } onChange={ this.props.onChange }>
-                    <img src={ this.props.imageUrl } width="24" height="24" />
-                    <span>{ this.props.label }</span>
-                </Input>
+                <div className="form-group">
+                    <label className="control-label">{ this.props.label }</label>
+                    <input className="form-control"
+                            label={ this.props.label }
+                            name={ this.props.name }
+                            placeholder={ this.props.placeholder }
+                            type="text"
+                            value={ this.props.value }
+                            ref="textbox"
+                            onChange={ this.props.onChange } />
+                </div>
+            );
+        }
+
+    });
+
+    var SetupInputElement = React.createClass({
+
+        render: function () {
+            return (
+                <div className="input-group">
+                    <div className="input-group-addon">
+                        <img src={ this.props.imageUrl } width="20" height="20" />
+                    </div>
+                    <Input name={ this.props.name }
+                            type="number"
+                            value={ this.props.value }
+                            onChange={ this.props.onChange }
+                            min="0"
+                            step="1" />
+                </div>
             );
         }
 
@@ -42,22 +85,25 @@ module.exports = (function () {
         getInitialState: function () {
             return {
                 bounds: null,
+                capacity: 0,
                 center: { lat: 47.6201451, lng: -122.3298646 },
                 currentLocation: null,
-                entryFee: 0,
-                games: [],
+                expiresInMinutes: 30,
+                formAddress: {},
+                formLocationValue: '',
                 isFormActive: false,
-                isSmash64Checked: false,
                 isSmash64Enabled: false,
-                isMeleeChecked: false,
                 isMeleeEnabled: true,
-                isProjectMChecked: false,
                 isProjectMEnabled: false,
                 isSm4shEnabled: false,
-                isSm4shChecked: false,
                 location: null,
                 message: '',
-                name: ''
+                name: '',
+                setupCountSmash64: 0,
+                setupCountMelee: 0,
+                setupCountProjectM: 0,
+                setupCountSm4sh: 0,
+                visibility: 'locals'
             };
         },
 
@@ -80,6 +126,23 @@ module.exports = (function () {
             this.setState({ isFormActive: false });
         },
 
+        onAutocompleteChanged: function (place) {
+            var newState = {};
+
+            if (place.address_components) {
+                newState.formAddress = {
+                    number: (place.address_components[0] && place.address_components[0].long_name || ''),
+                    street: (place.address_components[1] && place.address_components[1].long_name || ''),
+                    city: (place.address_components[2] && place.address_components[2].long_name || ''),
+                    state: (place.address_components[3] && place.address_components[3].long_name || ''),
+                    country: (place.address_components[4] && place.address_components[4].long_name || ''),
+                    zipCode: (place.address_components[5] && place.address_components[5].long_name || '')
+                };
+            }
+
+            this.setState(newState);
+        },
+
         onBoundsChanged: function () {
             this.setState({
                 bounds: this.refs.map.getBounds(),
@@ -98,28 +161,13 @@ module.exports = (function () {
             };
         },
 
-        onCheckedFactory: function (keyName) {
+        onCheckedFactory: function (enumValue) {
             var that = this;
 
             return function (event) {
-                var newState = {};
-                newState[keyName] = event.target.checked;
-                newState.games = that.state.games;
-
-                var flagToGameMap = {
-                    'isSmash64Checked': 'smash64',
-                    'isMeleeChecked': 'melee',
-                    'isProjectMChecked': 'projectM',
-                    'isSm4shChecked': 'sm4sh'
-                };
-
-                if (event.target.checked) {
-                    newState.games = _.union(newState.games, [flagToGameMap[keyName]]);
-                } else {
-                    newState.games = _.without(newState.games, flagToGameMap[keyName]);
-                }
-
-                that.setState(newState);
+                that.setState({
+                    visibility: enumValue
+                });
             };
         },
 
@@ -257,59 +305,96 @@ module.exports = (function () {
         createBeaconForm: function () {
             return (
                 <form className="beacon-form" onKeyPress={ this.onKeyPress } onSubmit={ this.onSubmit }>
-                    <div className="form-group game-select-group">
-                        <fieldset>
-                            <Input name="beacon-name"
-                                    label="Friendly name:"
-                                    type="text"
-                                    value={ this.state.name }
-                                    onChange={ this.onChangeFactory('name') } />
+                    <Input name="beacon-name"
+                            label="Friendly name:"
+                            placeholder="Give your fest a memorable title!"
+                            type="text"
+                            value={ this.state.name }
+                            onChange={ this.onChangeFactory('name') } />
 
-                            <GameSelectFormElement
-                                    imageUrl="/app/img/icon/smash-64-toggle.png"
-                                    name="smash-64-checkbox"
-                                    label="Super Smash Bros."
-                                    isChecked={ this.state.isSmash64Checked }
-                                    onChange={ this.onCheckedFactory('isSmash64Checked') } />
-                            <GameSelectFormElement
-                                    imageUrl="/app/img/icon/melee-toggle.png"
-                                    name="melee-checkbox"
-                                    label="Super Smash Bros. Melee"
-                                    isChecked={ this.state.isMeleeChecked }
-                                    onChange={ this.onCheckedFactory('isMeleeChecked') } />
-                            <GameSelectFormElement
-                                    imageUrl="/app/img/icon/project-m-toggle.png"
-                                    name="project-m-checkbox"
-                                    label="Project M"
-                                    isChecked={ this.state.isProjectMChecked }
-                                    onChange={ this.onCheckedFactory('isProjectMChecked') } />
-                            <GameSelectFormElement
-                                    imageUrl="/app/img/icon/sm4sh-toggle.png"
-                                    name="sm4sh-checkbox"
-                                    label="Smash for Wii U"
-                                    isChecked={ this.state.isSm4shChecked }
-                                    onChange={ this.onCheckedFactory('isSm4shChecked') } />
-                        </fieldset>
+                    <LocationAutocomplete
+                            bounds={ this.state.bounds }
+                            name="beacon-location"
+                            label="Location:"
+                            placeholder="e.g. Folsom Street Foundry"
+                            type="text"
+                            value={ this.state.formLocationValue }
+                            onChange={ this.onChangeFactory('formLocationValue') }
+                            onPlaceChanged={ this.onAutocompleteChanged } />
+
+                    <div className="form-group setups-form-group">
+                        <label>Setups:</label>
+
+                        <SetupInputElement
+                                imageUrl="/app/img/icon/smash-64-toggle.png"
+                                name="smash-64-setup-input"
+                                value={ this.state.setupCountSmash64 }
+                                onChange={ this.onChangeFactory('setupCountSmash64') } />
+                        <SetupInputElement
+                                imageUrl="/app/img/icon/melee-toggle.png"
+                                name="melee-setup-input"
+                                value={ this.state.setupCountMelee }
+                                onChange={ this.onChangeFactory('setupCountMelee') } />
+                        <SetupInputElement
+                                imageUrl="/app/img/icon/project-m-toggle.png"
+                                name="project-m-setup-input"
+                                value={ this.state.setupCountProjectM }
+                                onChange={ this.onChangeFactory('setupCountProjectM') } />
+                        <SetupInputElement
+                                imageUrl="/app/img/icon/sm4sh-toggle.png"
+                                name="sm4sh-setup-input"
+                                value={ this.state.setupCountSm4sh }
+                                onChange={ this.onChangeFactory('setupCountSm4sh') } />
+
+                        <Panel bsStyle="warning">
+                            Please only report full setups. For example, if you have a GameCube, but no CRT, don't report a full Melee setup.
+                        </Panel>
                     </div>
+
+                    <Input name="capacity-number"
+                            label="How many players can you host?"
+                            type="number"
+                            value={ this.state.capacity }
+                            onChange={ this.onChangeFactory('capacity') }
+                            min="0"
+                            step="1" />
+
+                    <p className="help-block">Note: a capacity of 0 indicates no desired capacity.</p>
+
+                    <Input name="expires-in-minutes-number"
+                            label="How many minutes should this beacon stay up?"
+                            type="number"
+                            value={ this.state.expiresInMinutes }
+                            onChange={ this.onChangeFactory('expiresInMinutes') }
+                            min="0"
+                            max="60"
+                            step="1" />
 
                     <div className="form-group">
-                        <Input name="entry-fee-number"
-                                label="Entry fee:"
-                                type="number"
-                                value={ this.state.entryFee }
-                                onChange={ this.onChangeFactory('entryFee') }
-                                min="0"
-                                max="10"
-                                step="1" />
+                        <label>Who can see and respond to your beacon?</label>
+
+                        <Input name="visibility-radio"
+                                label="All players"
+                                type="radio"
+                                checked={ this.state.visibility === 'public' }
+                                onChange={ this.onCheckedFactory('public') } />
+                        <Input name="visibility-radio"
+                                label="Nearby players & buddies"
+                                type="radio"
+                                checked={ this.state.visibility === 'locals' }
+                                onChange={ this.onCheckedFactory('locals') } />
+                        <Input name="visibility-radio"
+                                label="Buddies only"
+                                type="radio"
+                                checked={ this.state.visibility === 'buddies' }
+                                onChange={ this.onCheckedFactory('buddies') } />
                     </div>
 
-                    <div className="form-group">
-                        <Input name="message-textarea"
-                                type="textarea"
-                                value={ this.state.message }
-                                onChange={ this.onChangeFactory('message') }
-                                placeholder="Leave a message for other players..." />
-                    </div>
+                    <Input name="message-textarea"
+                            type="textarea"
+                            value={ this.state.message }
+                            onChange={ this.onChangeFactory('message') }
+                            placeholder="Leave a message for other players..." />
 
                     <div className="form-group create-beacon-buttons">
                         <ButtonInput name="cancel-button" type="button" className="btn btn-default" onClick={ this.hideForm }>Cancel</ButtonInput>
