@@ -19,66 +19,13 @@ module.exports = (function () {
       , TimeAgo = require('react-timeago')
       , _ = require('underscore')._;
 
-    var BeaconsResourceActions = require('../actions/BeaconsResourceActions')
+    var Autocomplete = require('./Autocomplete.react.jsx')
+      , BeaconsResourceActions = require('../actions/BeaconsResourceActions')
       , BeaconsStore = require('../stores/BeaconsStore')
       , geoPromise = require('../utilities/geoPromise')
+      , SetupInputElement = require('./SetupInputElement.react.jsx')
       , StoreStateComponentFactory = require('./factories/StoreStateComponent.react.jsx')
       , ToggleImageButton = require('./ToggleImageButton.react.jsx');
-
-    var LocationAutocomplete = React.createClass({
-
-        componentDidMount: function () {
-            var that = this;
-
-            this.autocomplete = new google.maps.places.Autocomplete(this.refs.textbox.getDOMNode());
-            this.autocomplete.setBounds(this.props.bounds);
-
-            this.autocomplete.addListener('place_changed', function () {
-                that.props.onPlaceChanged(that.autocomplete.getPlace());
-            });
-        },
-
-        componentDidUpdate: function () {
-            this.autocomplete.setBounds(this.props.bounds);
-        },
-
-        render: function () {
-            return (
-                <div className="form-group">
-                    <label className="control-label">{ this.props.label }</label>
-                    <input className="form-control"
-                            label={ this.props.label }
-                            name={ this.props.name }
-                            placeholder={ this.props.placeholder }
-                            type="text"
-                            value={ this.props.value }
-                            ref="textbox"
-                            onChange={ this.props.onChange } />
-                </div>
-            );
-        }
-
-    });
-
-    var SetupInputElement = React.createClass({
-
-        render: function () {
-            return (
-                <div className="input-group">
-                    <div className="input-group-addon">
-                        <img src={ this.props.imageUrl } width="20" height="20" />
-                    </div>
-                    <Input name={ this.props.name }
-                            type="number"
-                            value={ this.props.value }
-                            onChange={ this.props.onChange }
-                            min="0"
-                            step="1" />
-                </div>
-            );
-        }
-
-    });
 
     var BeaconsSection = React.createClass({
 
@@ -128,6 +75,7 @@ module.exports = (function () {
 
         onAutocompleteChanged: function (place) {
             var newState = {};
+            newState.formLocationValue = place.name;
 
             if (place.address_components) {
                 newState.formAddress = {
@@ -312,7 +260,7 @@ module.exports = (function () {
                             value={ this.state.name }
                             onChange={ this.onChangeFactory('name') } />
 
-                    <LocationAutocomplete
+                    <Autocomplete
                             bounds={ this.state.bounds }
                             name="beacon-location"
                             label="Location:"
