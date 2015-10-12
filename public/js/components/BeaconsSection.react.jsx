@@ -191,7 +191,7 @@ module.exports = (function () {
 
                     <div className="beacon-frame beacon-content-frame">
                         <div className="beacon-content-header">
-                            <h4>Create a new beacon!</h4>
+                            <h3>Create a new beacon!</h3>
                         </div>
 
                         <div className="beacon-content-body">
@@ -214,11 +214,12 @@ module.exports = (function () {
                     <div key={ beacon.id } className={ rowClassNames }>
                         <div className="beacon-frame beacon-image-frame">
                             <img src={ beacon.document.profilePictureUrl } className="img-circle" />
+                            <h5>{ beacon.document.userName }</h5>
                         </div>
 
                         <div className="beacon-frame beacon-content-frame">
                             <div className="beacon-content-header">
-                                <h4>{ beacon.document.userName }</h4>
+                                <h3>{ beacon.document.name }</h3>
                             </div>
 
                             <div className="beacon-content-body">
@@ -231,8 +232,12 @@ module.exports = (function () {
                                 <TimeAgo date={ new Date(beacon.createdAt).toLocaleString('en-US') } />
                             </div>
 
+                            <div className="beacon-attendees-ribbon">
+                                <span>{ beacon.document.attendees.length } / { beacon.document.capacity } <i className="fa fa-users fa-2" /></span>
+                            </div>
+
                             <div className="beacon-games-ribbon">
-                                { that.gamesRibbonIcons(beacon.document.games) }
+                                { that.gamesRibbonIcons(beacon.document.setups) }
                             </div>
                         </div>
                     </div>
@@ -268,30 +273,34 @@ module.exports = (function () {
             );
         },
 
-        gamesRibbonIcons: function (games) {
-            return _.map(games, function (game) {
-                var gameImage = '/app/img/icon/smash-franchise-toggle.png';
+        gamesRibbonIcons: function (setups) {
+            var ribbonIcons = [];
 
-                switch(game) {
-                    case 'smash64':
-                        gameImage = '/app/img/icon/smash-64-toggle.png';
-                        break;
+            _.each(setups, function (count, game) {
+                if (count > 0) {
+                    switch(game) {
+                        case 'smash64':
+                            ribbonIcons.push('/app/img/icon/smash-64-toggle.png');
+                            break;
 
-                    case 'melee':
-                        gameImage = '/app/img/icon/melee-toggle.png';
-                        break;
-                    
-                    case 'projectM':
-                        gameImage = '/app/img/icon/project-m-toggle.png';
-                        break;
-                    
-                    case 'sm4sh':
-                        gameImage = '/app/img/icon/sm4sh-toggle.png';
-                        break;
+                        case 'melee':
+                            ribbonIcons.push('/app/img/icon/melee-toggle.png');
+                            break;
+                        
+                        case 'projectM':
+                            ribbonIcons.push('/app/img/icon/project-m-toggle.png');
+                            break;
+                        
+                        case 'sm4sh':
+                            ribbonIcons.push('/app/img/icon/sm4sh-toggle.png');
+                            break;
+                    }
                 }
-
+            });
+        
+            return _.map(ribbonIcons, function (imgUrl) {
                 return (
-                    <img key={ game } src={ gameImage } width="24" height="24" className="beacon-games-ribbon-icon" />
+                    <img src={ imgUrl } width="24" height="24" className="beacon-games-ribbon-icon" />
                 );
             });
         }

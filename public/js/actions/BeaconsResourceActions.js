@@ -11,11 +11,21 @@ module.exports = (function () {
         createBeaconFromForm: function (formData) {
             // Convert beacon form data into beacon model
             var data = {
-                userName: 'beerz4yearz',
+                address: formData.address,
+                attendees: [],
+                capacity: formData.capacity,
+                expiresInMinutes: formData.expiresInMinutes,
+                location: formData.location,
+                message: formData.message,
+                name: formData.name,
                 profilePictureUrl: '/app/img/prof-pic-placekitten.png',
-                games: formData.games,
-                entryFee: formData.entryFee,
-                message: formData.message
+                setups: {
+                    smash64: formData.setupCountSmash64,
+                    melee: formData.setupCountMelee,
+                    projectM: formData.setupCountProjectM,
+                    sm4sh: formData.setupCountSm4sh
+                },
+                userName: 'beerz4yearz'
             };
 
             return BeaconsResource.create(data)

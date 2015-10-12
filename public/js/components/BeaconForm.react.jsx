@@ -90,7 +90,7 @@ module.exports = (function () {
 
         render: function () {
             return (
-                <form className="beacon-form" onKeyPress={ this.onKeyPress } onSubmit={ this.props.onSubmit }>
+                <form className="beacon-form" onKeyPress={ this.onKeyPress } onSubmit={ this.onSubmit }>
                     <Input name="beacon-name"
                             label="Friendly name:"
                             placeholder="Give your fest a memorable title!"
