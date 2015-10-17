@@ -35,11 +35,8 @@ module.exports = (function () {
                 bounds: null,
                 center: { lat: 47.6201451, lng: -122.3298646 },
                 currentLocation: null,
-                isFormActive: false,
-                isSmash64Enabled: false,
-                isMeleeEnabled: true,
-                isProjectMEnabled: false,
-                isSm4shEnabled: false
+                filteredGame: null,
+                isFormActive: false
             };
         },
 
@@ -88,12 +85,17 @@ module.exports = (function () {
             }
         },
         
-        onToggledFactory: function (keyName) {
+        onToggledFactory: function (game) {
             var that = this;
 
             return function (toggleState) {
                 var newState = {};
-                newState[keyName] = toggleState;
+
+                if (toggleState) {
+                    newState.filteredGame = game;
+                } else {
+                    newState.filteredGame = null;
+                }
 
                 that.setState(newState);
             };
@@ -145,8 +147,8 @@ module.exports = (function () {
                                 imageWidth="24"
                                 imageHeight="24"
                                 text="Super Smash Bros. 64"
-                                toggleState={ this.state.isSmash64Enabled }
-                                onToggled={ this.onToggledFactory('isSmash64Enabled') } />
+                                toggleState={ this.state.filteredGame === 'smash64' }
+                                onToggled={ this.onToggledFactory('smash64') } />
                     </ButtonGroup>
 
                     <ButtonGroup>
@@ -155,8 +157,8 @@ module.exports = (function () {
                                 imageWidth="24"
                                 imageHeight="24"
                                 text="Super Smash Bros. Melee"
-                                toggleState={ this.state.isMeleeEnabled }
-                                onToggled={ this.onToggledFactory('isMeleeEnabled') } />
+                                toggleState={ this.state.filteredGame === 'melee' }
+                                onToggled={ this.onToggledFactory('melee') } />
                     </ButtonGroup>
 
                     <ButtonGroup>
@@ -165,8 +167,8 @@ module.exports = (function () {
                                 imageWidth="24"
                                 imageHeight="24"
                                 text="Project M"
-                                toggleState={ this.state.isProjectMEnabled }
-                                onToggled={ this.onToggledFactory('isProjectMEnabled') } />
+                                toggleState={ this.state.filteredGame === 'projectM' }
+                                onToggled={ this.onToggledFactory('projectM') } />
                     </ButtonGroup>
 
                     <ButtonGroup>
@@ -175,8 +177,8 @@ module.exports = (function () {
                                 imageWidth="24"
                                 imageHeight="24"
                                 text="Super Smash Bros. for Wii U"
-                                toggleState={ this.state.isSm4shEnabled }
-                                onToggled={ this.onToggledFactory('isSm4shEnabled') } />
+                                toggleState={ this.state.filteredGame === 'sm4sh' }
+                                onToggled={ this.onToggledFactory('sm4sh') } />
                     </ButtonGroup>
                 </ButtonGroup>
             );
@@ -203,9 +205,17 @@ module.exports = (function () {
         },
 
         beaconsList: function () {
-            var that = this;
+            var that = this
+              , beacons = _.clone(this.props.beacons);
 
-            return _.map(this.props.beacons, function (beacon) {
+            // Filter down to beacons matching game criteria
+            if (this.state.filteredGame) {
+                beacons = _.filter(beacons, function (beacon) {
+                    return beacon.document.setups[that.state.filteredGame] > 0;
+                });
+            }
+
+            return _.map(beacons, function (beacon) {
                 var rowClassNames = that.state.isFormActive
                     ? "beacon-row beacon-row-hidden"
                     : "beacon-row";
