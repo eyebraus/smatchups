@@ -21,19 +21,35 @@ body
 h1, h2, h3, h4, h5, h6, .navbar
     font-family 'Fjalla One' sans-serif
 
+.beacon-attendees-ribbon
+    text-align right
+
+    i
+        color $colorPrimary
+        font-size 17px
+        margin-left 4px
+
 .beacon-content-header > .beacon-timestamp
     float right
 
 .beacon-content-header > div, .beacon-content-header > span
     float left
 
-.beacon-content-header > h4
+.beacon-content-header > h3
     margin-bottom 5px
     margin-top 0px
 
+.beacon-form
+    .setups-form-group .input-group
+        margin-bottom 10px
+
+        .form-group
+            max-width 72px
+            min-width 40px
+
 .beacon-frame
     float left
-    margin-right 16px
+    margin-right 20px
     margin-top 5px
 
 .beacon-frame > div
@@ -45,7 +61,6 @@ h1, h2, h3, h4, h5, h6, .navbar
     float right
 
 .beacon-icon-frame
-    height 80px
     width 80px
 
     i
@@ -57,6 +72,7 @@ h1, h2, h3, h4, h5, h6, .navbar
 
 .beacon-image-frame
     margin-top 0px
+    text-align center
 
     img
         border 1px solid $colorPrimary
@@ -68,6 +84,9 @@ h1, h2, h3, h4, h5, h6, .navbar
 
 .beacon-info-frame
     float right
+
+    > div
+        margin-bottom 4px
 
 .beacons-map.affix
     padding-left 51px
@@ -89,8 +108,16 @@ h1, h2, h3, h4, h5, h6, .navbar
     clear both
     float left
     margin-bottom 10px
+    min-height 133px
     padding 8px 10px
+    transition height 200ms ease-in-out
+    -moz-transition height 200ms ease-in-out
+    -o-transition height 200ms ease-in-out
+    -webkit-transition height 200ms ease-in-out
     width 100%
+
+.beacon-row-hidden
+    height 0px
 
 .beacons-filters
     margin-bottom 20px
@@ -106,7 +133,7 @@ h1, h2, h3, h4, h5, h6, .navbar
 .create-beacon-form-frame, .create-beacon-map
     margin-top 20px
 
-.game-select-group .form-group    
+.game-select-group fieldset  
     margin-left 24px
 
     div img
@@ -152,8 +179,13 @@ h1, h2, h3, h4, h5, h6, .navbar
     border-bottom 2px solid $colorTextContrastPrimary
     color $colorPrimary
 
+.new-beacon-form
+    border 1px solid $colorTertiary
+    height 885px
+
 .new-beacon-row
     border 1px solid $colorTertiary
+    min-height 0px
 
     .beacon-content-body
         color $colorTextPrimary

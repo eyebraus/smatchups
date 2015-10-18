@@ -11,7 +11,6 @@
       , BeaconsSection = require('./components/BeaconsSection.react.jsx')
       , BuddiesList = require('./components/BuddiesList.react.jsx')
       , ChallengesList = require('./components/ChallengesList.react.jsx')
-      , CreateBeacon = require('./components/CreateBeacon.react.jsx')
       , EventsList = require('./components/EventsList.react.jsx')
       , Settings = require('./components/Settings.react.jsx');
 
@@ -22,7 +21,6 @@
             <Route name="events" path="events" handler={ EventsList } />
             <Route name="buddies" path="buddies" handler={ BuddiesList } />
             <Route name="challenges" path="challenges" handler={ ChallengesList } />
-            <Route name="create-beacon" path="create-beacon" handler={ CreateBeacon } />
             <Route name="settings" path="settings" handler={ Settings } />
         </Route>
     );

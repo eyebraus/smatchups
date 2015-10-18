@@ -5,9 +5,12 @@ module.exports = (function () {
     var React = require('react')
       , Button = require('react-bootstrap').Button
       , ButtonGroup = require('react-bootstrap').ButtonGroup
+      , ButtonInput = require('react-bootstrap').ButtonInput
       , ButtonToolbar = require('react-bootstrap').ButtonToolbar
       , Col = require('react-bootstrap').Col
+      , Input = require('react-bootstrap').Input
       , PageHeader = require('react-bootstrap').PageHeader
+      , Panel = require('react-bootstrap').Panel
       , Row = require('react-bootstrap').Row
       , GoogleMap = require('react-google-maps').GoogleMap
       , Marker = require('react-google-maps').Marker
@@ -16,9 +19,12 @@ module.exports = (function () {
       , TimeAgo = require('react-timeago')
       , _ = require('underscore')._;
 
-    var BeaconsResourceActions = require('../actions/BeaconsResourceActions')
+    var Autocomplete = require('./Autocomplete.react.jsx')
+      , BeaconForm = require('./BeaconForm.react.jsx')
+      , BeaconsResourceActions = require('../actions/BeaconsResourceActions')
       , BeaconsStore = require('../stores/BeaconsStore')
       , geoPromise = require('../utilities/geoPromise')
+      , SetupInputElement = require('./SetupInputElement.react.jsx')
       , StoreStateComponentFactory = require('./factories/StoreStateComponent.react.jsx')
       , ToggleImageButton = require('./ToggleImageButton.react.jsx');
 
@@ -28,10 +34,9 @@ module.exports = (function () {
             return {
                 bounds: null,
                 center: { lat: 47.6201451, lng: -122.3298646 },
-                isSmash64Enabled: false,
-                isMeleeEnabled: true,
-                isProjectMEnabled: false,
-                isSm4shEnabled: false
+                currentLocation: null,
+                filteredGame: null,
+                isFormActive: false
             };
         },
 
@@ -44,9 +49,14 @@ module.exports = (function () {
             geoPromise.getCurrentPosition()
                 .then(function (position) {
                     that.setState({
-                        center: { lat: position.coords.latitude, lng: position.coords.longitude }
+                        center: { lat: position.coords.latitude, lng: position.coords.longitude },
+                        currentLocation: { lat: position.coords.latitude, lng: position.coords.longitude }
                     });
                 });
+        },
+
+        hideForm: function () {
+            this.setState({ isFormActive: false });
         },
 
         onBoundsChanged: function () {
@@ -54,6 +64,15 @@ module.exports = (function () {
                 bounds: this.refs.map.getBounds(),
                 center: this.refs.map.getCenter()
             });
+        },
+
+        onFormSubmitted: function (beacon) {
+            var that = this;
+
+            BeaconsResourceActions.createBeaconFromForm(beacon)
+                .then(function () {
+                    that.hideForm();
+                });
         },
 
         onPlacesChanged: function () {
@@ -66,44 +85,50 @@ module.exports = (function () {
             }
         },
         
-        onToggledFactory: function (keyName) {
+        onToggledFactory: function (game) {
             var that = this;
 
             return function (toggleState) {
                 var newState = {};
-                newState[keyName] = toggleState;
+
+                if (toggleState) {
+                    newState.filteredGame = game;
+                } else {
+                    newState.filteredGame = null;
+                }
 
                 that.setState(newState);
             };
         },
 
+        showForm: function ()  {
+            this.setState({ isFormActive: true });
+        },
+
         render: function () {
+            var createRowClassNames = this.state.isFormActive
+                ? "beacon-row new-beacon-form"
+                : "beacon-row new-beacon-row";
+
             return (
                 <Row className="beacons-section">
                     <Col xs={ 12 } sm={ 12 } md={ 12 } className="beacons-filters">
                         { this.beaconsFilters() }
                     </Col>
 
-                    <Col xs={ 6 } sm={ 6 } md={ 6 } className="beacons-list">
-                        <Link to={ 'create-beacon' }>
-                            <div key="post-new" className="beacon-row new-beacon-row">
-                                <div className="beacon-frame beacon-icon-frame">
-                                    <i className="fa fa-plus fa-4" />
-                                </div>
+                    <Col xs={ 6 } sm={ 6 } md={ 6 } className="beacons-list-and-form">
+                        <div key="post-new" className={ createRowClassNames }>
+                            { this.state.isFormActive
+                                ? <BeaconForm
+                                        bounds={ this.state.bounds }
+                                        onCancel={ this.hideForm } 
+                                        onSubmit={ this.onFormSubmitted }/>
+                                : this.createBeaconRow() }
+                        </div>
 
-                                <div className="beacon-frame beacon-content-frame">
-                                    <div className="beacon-content-header">
-                                        <h4>Create a new beacon!</h4>
-                                    </div>
-
-                                    <div className="beacon-content-body">
-                                        <p>Let your friends know when, where, and what you're playing.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </Link>
-
-                        { this.beaconsList() }
+                        { !this.state.isFormActive
+                            ? this.beaconsList()
+                            : <noscript /> }
                     </Col>
 
                     <Col xs={ 6 } sm={ 6 } md={ 6 } className="beacons-map" data-spy="affix" data-offset-top="58">
@@ -122,8 +147,8 @@ module.exports = (function () {
                                 imageWidth="24"
                                 imageHeight="24"
                                 text="Super Smash Bros. 64"
-                                toggleState={ this.state.isSmash64Enabled }
-                                onToggled={ this.onToggledFactory('isSmash64Enabled') } />
+                                toggleState={ this.state.filteredGame === 'smash64' }
+                                onToggled={ this.onToggledFactory('smash64') } />
                     </ButtonGroup>
 
                     <ButtonGroup>
@@ -132,8 +157,8 @@ module.exports = (function () {
                                 imageWidth="24"
                                 imageHeight="24"
                                 text="Super Smash Bros. Melee"
-                                toggleState={ this.state.isMeleeEnabled }
-                                onToggled={ this.onToggledFactory('isMeleeEnabled') } />
+                                toggleState={ this.state.filteredGame === 'melee' }
+                                onToggled={ this.onToggledFactory('melee') } />
                     </ButtonGroup>
 
                     <ButtonGroup>
@@ -142,8 +167,8 @@ module.exports = (function () {
                                 imageWidth="24"
                                 imageHeight="24"
                                 text="Project M"
-                                toggleState={ this.state.isProjectMEnabled }
-                                onToggled={ this.onToggledFactory('isProjectMEnabled') } />
+                                toggleState={ this.state.filteredGame === 'projectM' }
+                                onToggled={ this.onToggledFactory('projectM') } />
                     </ButtonGroup>
 
                     <ButtonGroup>
@@ -152,26 +177,61 @@ module.exports = (function () {
                                 imageWidth="24"
                                 imageHeight="24"
                                 text="Super Smash Bros. for Wii U"
-                                toggleState={ this.state.isSm4shEnabled }
-                                onToggled={ this.onToggledFactory('isSm4shEnabled') } />
+                                toggleState={ this.state.filteredGame === 'sm4sh' }
+                                onToggled={ this.onToggledFactory('sm4sh') } />
                     </ButtonGroup>
                 </ButtonGroup>
             );
         },
 
-        beaconsList: function () {
-            var that = this;
+        createBeaconRow: function () {
+            return (
+                <div onClick={ this.showForm }>
+                    <div className="beacon-frame beacon-icon-frame">
+                        <i className="fa fa-plus fa-4" />
+                    </div>
 
-            return _.map(this.props.beacons, function (beacon) {
+                    <div className="beacon-frame beacon-content-frame">
+                        <div className="beacon-content-header">
+                            <h3>Create a new beacon!</h3>
+                        </div>
+
+                        <div className="beacon-content-body">
+                            <p>Let your friends know when, where, and what you're playing.</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        },
+
+        beaconsList: function () {
+            var that = this
+              , beacons = _.sortBy(this.props.beacons, function (beacon) {
+                    return new Date().getTime() - new Date(beacon.createdAt).getTime();
+                });
+
+            // Filter down to beacons matching game criteria
+            if (this.state.filteredGame) {
+                beacons = _.filter(beacons, function (beacon) {
+                    return beacon.document.setups[that.state.filteredGame] > 0;
+                });
+            }
+
+            return _.map(beacons, function (beacon) {
+                var rowClassNames = that.state.isFormActive
+                    ? "beacon-row beacon-row-hidden"
+                    : "beacon-row";
+
                 return (
-                    <div key={ beacon.id } className="beacon-row">
+                    <div key={ beacon.id } className={ rowClassNames }>
                         <div className="beacon-frame beacon-image-frame">
                             <img src={ beacon.document.profilePictureUrl } className="img-circle" />
+                            <h5>{ beacon.document.userName }</h5>
                         </div>
 
                         <div className="beacon-frame beacon-content-frame">
                             <div className="beacon-content-header">
-                                <h4>{ beacon.document.userName }</h4>
+                                <h3>{ beacon.document.name }</h3>
                             </div>
 
                             <div className="beacon-content-body">
@@ -184,8 +244,12 @@ module.exports = (function () {
                                 <TimeAgo date={ new Date(beacon.createdAt).toLocaleString('en-US') } />
                             </div>
 
+                            <div className="beacon-attendees-ribbon">
+                                <span>{ beacon.document.attendees.length } / { beacon.document.capacity } <i className="fa fa-users fa-2" /></span>
+                            </div>
+
                             <div className="beacon-games-ribbon">
-                                { that.gamesRibbonIcons(beacon.document.games) }
+                                { that.gamesRibbonIcons(beacon.document.setups) }
                             </div>
                         </div>
                     </div>
@@ -221,30 +285,34 @@ module.exports = (function () {
             );
         },
 
-        gamesRibbonIcons: function (games) {
-            return _.map(games, function (game) {
-                var gameImage = '/app/img/icon/smash-franchise-toggle.png';
+        gamesRibbonIcons: function (setups) {
+            var ribbonIcons = [];
 
-                switch(game) {
-                    case 'smash64':
-                        gameImage = '/app/img/icon/smash-64-toggle.png';
-                        break;
+            _.each(setups, function (count, game) {
+                if (count > 0) {
+                    switch(game) {
+                        case 'smash64':
+                            ribbonIcons.push('/app/img/icon/smash-64-toggle.png');
+                            break;
 
-                    case 'melee':
-                        gameImage = '/app/img/icon/melee-toggle.png';
-                        break;
-                    
-                    case 'projectM':
-                        gameImage = '/app/img/icon/project-m-toggle.png';
-                        break;
-                    
-                    case 'sm4sh':
-                        gameImage = '/app/img/icon/sm4sh-toggle.png';
-                        break;
+                        case 'melee':
+                            ribbonIcons.push('/app/img/icon/melee-toggle.png');
+                            break;
+                        
+                        case 'projectM':
+                            ribbonIcons.push('/app/img/icon/project-m-toggle.png');
+                            break;
+                        
+                        case 'sm4sh':
+                            ribbonIcons.push('/app/img/icon/sm4sh-toggle.png');
+                            break;
+                    }
                 }
-
+            });
+        
+            return _.map(ribbonIcons, function (imgUrl) {
                 return (
-                    <img key={ game } src={ gameImage } width="24" height="24" className="beacon-games-ribbon-icon" />
+                    <img src={ imgUrl } width="24" height="24" className="beacon-games-ribbon-icon" />
                 );
             });
         }

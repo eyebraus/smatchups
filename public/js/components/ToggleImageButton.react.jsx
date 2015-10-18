@@ -10,20 +10,25 @@ module.exports = (function () {
 
         render: function () {
             var that = this
-              , divClasses = ['toggle-image-button']
+              , buttonClasses = []
               , imgClassNames = [this.props.toggleState ? 'enabled' : 'disabled'].join(' ');
+
+            // Add active state if button is toggled
+            if (this.props.toggleState) {
+                buttonClasses.push('active');
+            }
 
             // Add any user-specified classes
             if (_.contains(_.keys(this.props), 'classes')) {
-                divClasses = _.chain(this.props.classes)
-                    .union(divClasses)
+                buttonClasses = _.chain(this.props.classes)
+                    .union(buttonClasses)
                     .value();
             }
 
-            var divClassNames = divClasses.join(' ');
+            var buttonClasses = buttonClasses.join(' ');
 
             return (
-                <Button>
+                <Button className={ buttonClasses } onClick={ this.onClick }>
                     <img src={ this.props.imageUrl } width={ this.props.imageWidth } height={ this.props.imageHeight } className={ imgClassNames } /> { this.props.text }
                 </Button>
             );

@@ -2,7 +2,8 @@
 module.exports = (function () {
     'use strict';
 
-    var _ = require('underscore')._;
+    var _ = require('underscore')._
+      , vargs = require('vargs').Constructor;
 
     var Actions = require('../constants/Actions')
       , AppDispatcher = require('../dispatchers/AppDispatcher')
