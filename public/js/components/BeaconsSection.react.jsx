@@ -206,7 +206,9 @@ module.exports = (function () {
 
         beaconsList: function () {
             var that = this
-              , beacons = _.clone(this.props.beacons);
+              , beacons = _.sortBy(this.props.beacons, function (beacon) {
+                    return new Date().getTime() - new Date(beacon.createdAt).getTime();
+                });
 
             // Filter down to beacons matching game criteria
             if (this.state.filteredGame) {
