@@ -1,8 +1,38 @@
 
-module.exports = (function () {
+module.exports.config = function () {
     'use strict';
 
+    /**
+     * Local dependencies
+     */
+    var Dependency = require('./injector').Dependency
+      , Module = require('./injector').Module
+        ;
+
+    return (
+        <Module name="BeaconsSection" factory={ module.exports.factory }>
+            <Dependency name="Autocomplete" />
+            <Dependency name="BeaconForm" />
+            <Dependency name="BeaconsResourceActions" />
+            <Dependency name="BeaconsStore" />
+            <Dependency name="geoPromise" />
+            <Dependency name="SetupInputElement" />
+            <Dependency name="StoreStateComponentFactory" />
+            <Dependency name="ToggleImageButton" />
+        </Module>
+    );
+};
+
+module.exports.factory = function (Autocomplete, BeaconForm, BeaconsResourceActions, BeaconsStore, geoPromise,
+        SetupInputElement, StoreStateComponentFactory, ToggleImageButton) {
+    'use strict';
+
+    /**
+     * npm dependencies
+     */
     var React = require('react')
+
+    // react-bootstrap modules
       , Button = require('react-bootstrap').Button
       , ButtonGroup = require('react-bootstrap').ButtonGroup
       , ButtonInput = require('react-bootstrap').ButtonInput
@@ -12,21 +42,18 @@ module.exports = (function () {
       , PageHeader = require('react-bootstrap').PageHeader
       , Panel = require('react-bootstrap').Panel
       , Row = require('react-bootstrap').Row
+
+    // react-google-maps modules
       , GoogleMap = require('react-google-maps').GoogleMap
       , Marker = require('react-google-maps').Marker
       , SearchBox = require('react-google-maps').SearchBox
+
+    // react-router modules
       , Link = require('react-router').Link
+
+    // others
       , TimeAgo = require('react-timeago')
       , _ = require('underscore')._;
-
-    var Autocomplete = require('./Autocomplete.react.jsx')
-      , BeaconForm = require('./BeaconForm.react.jsx')
-      , BeaconsResourceActions = require('../actions/BeaconsResourceActions')
-      , BeaconsStore = require('../stores/BeaconsStore')
-      , geoPromise = require('../utilities/geoPromise')
-      , SetupInputElement = require('./SetupInputElement.react.jsx')
-      , StoreStateComponentFactory = require('./factories/StoreStateComponent.react.jsx')
-      , ToggleImageButton = require('./ToggleImageButton.react.jsx');
 
     var BeaconsSection = React.createClass({
 
@@ -326,4 +353,4 @@ module.exports = (function () {
         };
     });
 
-})();
+};

@@ -1,8 +1,23 @@
 
-module.exports = (function () {
+module.exports.config = function () {
     'use strict';
 
-    var httpPromise = require('../utilities/httpPromise');
+    /**
+     * Local dependencies
+     */
+    var Dependency = require('./injector').Dependency
+      , Module = require('./injector').Module
+        ;
+
+    return (
+        <Module name="BeaconsResource" factory={ module.exports.factory }>
+            <Dependency name="httpPromise" />
+        </Module>
+    );
+};
+
+module.exports.factory = function (httpPromise) {
+    'use strict';
 
     return {
 
@@ -24,4 +39,4 @@ module.exports = (function () {
 
     };
 
-})();
+};

@@ -1,17 +1,41 @@
 
-module.exports = (function () {
+module.exports.config = function () {
     'use strict';
 
+    /**
+     * Local dependencies
+     */
+    var Dependency = require('./injector').Dependency
+      , Module = require('./injector').Module
+        ;
+
+    return (
+        <Module name="BeaconForm" factory={ module.exports.factory }>
+            <Dependency name="Autocomplete" />
+            <Dependency name="geoPromise" />
+            <Dependency name="SetupInputElement" />
+        </Module>
+    );
+
+};
+
+module.exports.factory = function (Autocomplete, geoPromise, SetupInputElement) {
+    'use strict';
+
+    /**
+     * npm dependencies
+     */
     var React = require('react')
+
+    // react-bootstrap
       , Button = require('react-bootstrap').Button
       , ButtonInput = require('react-bootstrap').ButtonInput
       , Input = require('react-bootstrap').Input
       , Panel = require('react-bootstrap').Panel
-      , _ = require('underscore')._;
 
-    var Autocomplete = require('./Autocomplete.react.jsx')
-      , geoPromise = require('../utilities/geoPromise')
-      , SetupInputElement = require('./SetupInputElement.react.jsx');
+    // others
+      , _ = require('underscore')._
+        ;
 
     var BeaconForm = React.createClass({
 
@@ -194,4 +218,4 @@ module.exports = (function () {
 
     return BeaconForm;
 
-})();
+};

@@ -24,6 +24,8 @@
     "dependencies": {
         "bower": "^1.4.x",
         "browserify": "^8.1.x",
+        "bulkify": "^1.x.x",
+        "bulk-require": "^0.x.x",
         "envify": "^3.2.x",
         "express": "~3.3.4",
         "flux": "^2.0.x",

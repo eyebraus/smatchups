@@ -1,18 +1,40 @@
 
-(function () {
+module.exports.config = function () {
     'use strict';
 
+    /**
+     * Local dependencies
+     */
+    var Dependency = require('./injector').Dependency
+      , Module = require('./injector').Module
+        ;
+
+    return (
+        <Module name="Application" factory={ module.exports.factory } isRoot={ true }>
+            <Dependency name="App" />
+            <Dependency name="BeaconsSection" />
+            <Dependency name="BuddiesList" />
+            <Dependency name="ChallengesList" />
+            <Dependency name="EventsList" />
+            <Dependency name="Settings" />
+        </Module>
+    );
+
+};
+
+module.exports.factory = function (App, BeaconsSection, BuddiesList, ChallengesList, EventsList, Settings) {
+    'use strict';
+
+    /**
+     * npm dependencies
+     */
     var React = require('react')
+
+    // react-router modules
       , Router = require('react-router')
       , DefaultRoute = Router.DefaultRoute
-      , Route = Router.Route;
-
-    var App = require('./components/App.react.jsx')
-      , BeaconsSection = require('./components/BeaconsSection.react.jsx')
-      , BuddiesList = require('./components/BuddiesList.react.jsx')
-      , ChallengesList = require('./components/ChallengesList.react.jsx')
-      , EventsList = require('./components/EventsList.react.jsx')
-      , Settings = require('./components/Settings.react.jsx');
+      , Route = Router.Route
+        ;
 
     // Set up routes
     var routes = (
@@ -29,4 +51,4 @@
         React.render(<Root />, document.getElementById('smatchups'));
     });
 
-})();
+};
