@@ -3,6 +3,12 @@ module.exports.config = function () {
     'use strict';
 
     /**
+     * npm dependencies
+     */
+    var React = require('react')
+        ;
+
+    /**
      * Local dependencies
      */
     var Dependency = require('./injector').Dependency
@@ -50,5 +56,7 @@ module.exports.factory = function (App, BeaconsSection, BuddiesList, ChallengesL
     Router.run(routes, function (Root) {
         React.render(<Root />, document.getElementById('smatchups'));
     });
+
+    return null;
 
 };

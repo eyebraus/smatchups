@@ -3,10 +3,16 @@ module.exports.config = function () {
     'use strict';
 
     /**
+     * npm dependencies
+     */
+    var React = require('react')
+        ;
+
+    /**
      * Local dependencies
      */
-    var Dependency = require('./injector').Dependency
-      , Module = require('./injector').Module
+    var Dependency = require('../../injector').Dependency
+      , Module = require('../../injector').Module
         ;
 
     return (
