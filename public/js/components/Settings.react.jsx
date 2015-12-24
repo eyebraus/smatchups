@@ -1,12 +1,41 @@
 
-module.exports = (function () {
+module.exports.config = function () {
     'use strict';
 
+    /**
+     * npm dependencies
+     */
     var React = require('react')
+        ;
+
+    /**
+     * Local dependencies
+     */
+    var Dependency = require('../injector').Dependency
+      , Module = require('../injector').Module
+        ;
+
+    return (
+        <Module name="Settings" factory={ module.exports.factory } />
+    );
+};
+
+module.exports.factory = function () {
+    'use strict';
+
+    /**
+     * npm dependencies
+     */
+    var React = require('react')
+
+    // react-bootstrap modules
       , Col = require('react-bootstrap').Col
       , Row = require('react-bootstrap').Row
+
+    // react-router modules
       , Router = require('react-router')
-      , Link = Router.Link;
+      , Link = Router.Link
+        ;
 
     var Settings = React.createClass({
 
@@ -24,4 +53,4 @@ module.exports = (function () {
 
     return Settings;
 
-})();
+};

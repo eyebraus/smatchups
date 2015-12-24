@@ -16,14 +16,14 @@ module.exports = function (grunt) {
             options: {
                 debug: true,
                 extensions: ['.jsx'],
-                transform: ['reactify']
+                transform: ['reactify', 'bulkify']
             },
 
             devApp: {
                 options: {
                     alias: ['react:']  // Make React available externally for dev tools
                 },
-                src: ['./public/js/app.js'],
+                src: ['./public/js/bootstrap.js'],
                 dest: './dist/app/bundle.js'
             },
 
@@ -135,7 +135,7 @@ module.exports = function (grunt) {
         watchify: {
             options: {
                 debug: true,
-                transform: ['reactify'],
+                transform: ['reactify', 'bulkify'],
                 extensions: ['.jsx']
             },
 
@@ -143,7 +143,7 @@ module.exports = function (grunt) {
                 options: {
                     alias: ['react:']  // Make React available externally for dev tools
                 },
-                src: ['./public/js/app.js'],
+                src: ['./public/js/bootstrap.js'],
                 dest: './dist/app/bundle.js'
             },
 

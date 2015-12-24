@@ -1,9 +1,37 @@
 
-module.exports = (function () {
+module.exports.config = function () {
     'use strict';
 
+    /**
+     * npm dependencies
+     */
     var React = require('react')
+        ;
+
+    /**
+     * Local dependencies
+     */
+    var Dependency = require('../injector').Dependency
+      , Module = require('../injector').Module
+        ;
+
+    return (
+        <Module name="LinkedIconButton" factory={ module.exports.factory } />
+    );
+};
+
+module.exports.factory = function () {
+    'use strict';
+
+    /**
+     * npm dependencies
+     */
+    var React = require('react')
+
+    // react-router modules
       , Link = require('react-router').Link
+
+    // others
       , _ = require('underscore')._;
 
     var LinkedIconButton = React.createClass({
@@ -24,4 +52,4 @@ module.exports = (function () {
 
     return LinkedIconButton;
 
-})();
+};

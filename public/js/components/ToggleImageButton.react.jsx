@@ -1,9 +1,37 @@
 
-module.exports = (function () {
+module.exports.config = function () {
     'use strict';
 
+    /**
+     * npm dependencies
+     */
     var React = require('react')
+        ;
+
+    /**
+     * Local dependencies
+     */
+    var Dependency = require('../injector').Dependency
+      , Module = require('../injector').Module
+        ;
+
+    return (
+        <Module name="ToggleImageButton" factory={ module.exports.factory } />
+    );
+};
+
+module.exports.factory = function () {
+    'use strict';
+
+    /**
+     * npm dependencies
+     */
+    var React = require('react')
+
+    // react-bootstrap modules
       , Button = require('react-bootstrap').Button
+
+    // other modules
       , _ = require('underscore')._;
 
     var ToggleImageButton = React.createClass({
@@ -44,4 +72,4 @@ module.exports = (function () {
 
     return ToggleImageButton;
 
-})();
+};

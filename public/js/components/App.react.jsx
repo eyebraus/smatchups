@@ -1,8 +1,34 @@
 
-module.exports = (function () {
+module.exports.config = function () {
     'use strict';
 
+    /**
+     * npm dependencies
+     */
     var React = require('react')
+        ;
+
+    /**
+     * Local dependencies
+     */
+    var Module = require('../injector').Module
+        ;
+
+    return (
+        <Module name="App" factory={ module.exports.factory } />
+    );
+
+};
+
+module.exports.factory = function () {
+    'use strict';
+
+    /**
+     * npm dependencies
+     */
+    var React = require('react')
+
+    // react-bootstrap modules
       , Col = require('react-bootstrap').Col
       , CollapsibleNav = require('react-bootstrap').CollapsibleNav
       , Grid = require('react-bootstrap').Grid
@@ -11,9 +37,12 @@ module.exports = (function () {
       , NavItem = require('react-bootstrap').NavItem
       , PageHeader = require('react-bootstrap').PageHeader
       , Row = require('react-bootstrap').Row
+
+    // react-router modules
       , Router = require('react-router')
       , Navigation = Router.Navigation
-      , RouteHandler = Router.RouteHandler;
+      , RouteHandler = Router.RouteHandler
+        ;
 
     var SmatchupsApp = React.createClass({
 
@@ -58,4 +87,4 @@ module.exports = (function () {
 
     return SmatchupsApp;
 
-})();
+};

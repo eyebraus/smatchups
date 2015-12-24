@@ -1,14 +1,38 @@
 
-module.exports = (function () {
+module.exports.config = function () {
     'use strict';
 
-    var _ = require('underscore')._
-      , vargs = require('vargs').Constructor;
+    /**
+     * npm dependencies
+     */
+    var React = require('react')
+        ;
 
-    var Actions = require('../constants/Actions')
-      , AppDispatcher = require('../dispatchers/AppDispatcher')
-      , EventEmitter = require('events').EventEmitter
-      , Events = require('../constants/Events');
+    /**
+     * Local dependencies
+     */
+    var Dependency = require('../injector').Dependency
+      , Module = require('../injector').Module
+        ;
+
+    return (
+        <Module name="BeaconsStore" factory={ module.exports.factory }>
+            <Dependency name="Actions" />
+            <Dependency name="AppDispatcher" />
+            <Dependency name="Events" />
+        </Module>
+    );
+};
+
+module.exports.factory = function (Actions, AppDispatcher, Events) {
+    'use strict';
+
+    /**
+     * npm dependencies
+     */
+    var EventEmitter = require('events').EventEmitter
+      , _ = require('underscore')._
+      , vargs = require('vargs').Constructor;
 
     var BeaconsStore = Object.create(EventEmitter.prototype);
 
@@ -62,4 +86,4 @@ module.exports = (function () {
 
     return BeaconsStore;
 
-})();
+};

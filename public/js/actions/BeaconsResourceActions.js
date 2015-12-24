@@ -1,10 +1,31 @@
 
-module.exports = (function () {
+module.exports.config = function () {
     'use strict';
 
-    var Actions = require('../constants/Actions')
-      , AppDispatcher = require('../dispatchers/AppDispatcher')
-      , BeaconsResource = require('../resources/BeaconsResource');
+    /**
+     * npm dependencies
+     */
+    var React = require('react')
+        ;
+
+    /**
+     * Local dependencies
+     */
+    var Dependency = require('../injector').Dependency
+      , Module = require('../injector').Module
+        ;
+
+    return (
+        <Module name="BeaconsResourceActions" factory={ module.exports.factory }>
+            <Dependency name="Actions" />
+            <Dependency name="AppDispatcher" />
+            <Dependency name="BeaconsResource" />
+        </Module>
+    );
+};
+
+module.exports.factory = function (Actions, AppDispatcher, BeaconsResource) {
+    'use strict';
 
     return {
 
@@ -49,4 +70,4 @@ module.exports = (function () {
 
     };
 
-})();
+};
