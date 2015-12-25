@@ -1,7 +1,7 @@
 
-'use strict';
-
 module.exports = function (grunt) {
+    'use strict';
+
     // load all grunt tasks
     require('load-grunt-tasks')(grunt);
 
@@ -39,7 +39,7 @@ module.exports = function (grunt) {
         build: {
             app: {
                 options: {
-                    developTasks: ['browserify:devApp', 'stylus:devApp', 'copy:app'],
+                    developTasks: ['jshint', 'browserify:devApp', 'stylus:devApp', 'copy:app'],
                     productionTasks: ['browserify:prodApp', 'stylus:prodApp', 'copy:app']
                 }
             }
@@ -67,10 +67,20 @@ module.exports = function (grunt) {
             }
         },
 
+        jshint: {
+            options: {
+                additionalSuffixes: ['.js', '.jsx'],
+                ingores: [],
+                jshintrc: '.jshintrc'
+            },
+
+            app: ['public/**/*.js', 'public/**/*.jsx']
+        },
+
         run: {
             app: {
                 options: {
-                    developTasks: ['watchify:devApp', 'stylus:devApp', 'copy:app', 'express:devApp', 'watch'],
+                    developTasks: ['jshint', 'watchify:devApp', 'stylus:devApp', 'copy:app', 'express:devApp', 'watch'],
                     productionTasks: ['browserify:prodApp', 'stylus:prodApp', 'copy:app', 'express:prodApp', 'keepalive']
                 }
             }
