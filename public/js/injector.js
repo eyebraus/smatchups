@@ -5,12 +5,11 @@ module.exports = (function () {
     /**
      * npm dependencies
      */
-    var React = require('react')
-      , q = require('q')
-      , _ = require('underscore')._
-      , util = require('util')
-      , vargs = require('vargs').Constructor
-        ;
+    var React = require('react'),
+        q = require('q'),
+        _ = require('underscore')._,
+        util = require('util'),
+        VargsConstructor = require('vargs').Constructor;
 
     /**
      * React components
@@ -84,12 +83,11 @@ module.exports = (function () {
     };
 
     Injector.prototype.resolve = function (/* module[, depth, resolveStack] */) {
-        var args = new (vargs)(arguments)
-          , module = args.first
-          , depth = args.length > 1 ? args.at(1) : 0
-          , resolveStack = args.length > 2 ? args.at(2) : []
-          , that = this
-            ;
+        var args = new (VargsConstructor)(arguments),
+            module = args.first,
+            depth = args.length > 1 ? args.at(1) : 0,
+            resolveStack = args.length > 2 ? args.at(2) : [],
+            that = this;
 
         // Fail if circular dependency is detected
         if (_.contains(resolveStack, module.name)) {
@@ -101,9 +99,7 @@ module.exports = (function () {
         }
 
         // Set depth of module
-        this.depths[module.name] = _.has(this.depths, module.name)
-            ? _.max([depth, this.depths[module.name]])
-            : depth;
+        this.depths[module.name] = _.has(this.depths, module.name) ? _.max([depth, this.depths[module.name]]) : depth;
 
         var depPromises = _.map(module.dependencies, function (dependency) {
             // Fail if module doesn't exist
@@ -122,10 +118,9 @@ module.exports = (function () {
     };
 
     Injector.prototype.construct = function () {
-        var rejected = false
-          , rejection = null
-          , that = this
-            ;
+        var rejected = false,
+            rejection = null,
+            that = this;
 
         // Iterate through dependencies descending by depth
         var modulesDepthSorted = _.chain(this.depths)
@@ -143,10 +138,9 @@ module.exports = (function () {
                 return;
             }
 
-            var moduleName = obj.moduleName
-              , module = that.modules[moduleName]
-              , dependencies = []
-                ;
+            var moduleName = obj.moduleName,
+                module = that.modules[moduleName],
+                dependencies = [];
 
             _.each(module.dependencies, function (dependencyName) {
                 // Fail if any of the dependencies haven't been constructed yet
@@ -187,10 +181,10 @@ module.exports = (function () {
     };
 
     Injector.prototype.run = function (configs) {
-        var rejected = false
-          , rejection = null
-          , that = this
-            ;
+        var msg = '',
+            rejected = false,
+            rejection = null,
+            that = this;
 
         this.configs = configs;
 
@@ -199,25 +193,24 @@ module.exports = (function () {
             if (rejected) {
                 // effectively a continue statement
             } else if (!React.isValidElement(config)) {
-                var msg = 'Config was not a valid React element';
+                msg = 'Config was not a valid React element';
 
                 console.error(msg);
                 rejection = q.reject(msg);
                 rejected = true;
             } else {
-                var module = that.createModule(config)
-                    ;
+                var module = that.createModule(config);
 
                 if (_.has(that.modules, module.name)) {
                     console.warn('Module with name "' + module.name + '" registered more than once.');
-                };
+                }
 
                 that.modules[module.name] = module;
                 that.states[module.name] = 'unresolved';
 
                 if (module.root) {
                     if (null !== that.root) {
-                        var msg = 'More than one root module was defined.';
+                        msg = 'More than one root module was defined.';
 
                         console.error(msg);
                         rejection = q.reject(msg);
@@ -236,7 +229,7 @@ module.exports = (function () {
 
         // Ensure that an entry point was defined
         if (null === that.root) {
-            var msg = 'One module must be specified as root.';
+            msg = 'One module must be specified as root.';
 
             console.error(msg);
             return q.reject(msg);

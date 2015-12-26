@@ -5,15 +5,13 @@ module.exports.config = function () {
     /**
      * npm dependencies
      */
-    var React = require('react')
-        ;
+    var React = require('react');
 
     /**
      * Local dependencies
      */
-    var Dependency = require('../injector').Dependency
-      , Module = require('../injector').Module
-        ;
+    var Dependency = require('../injector').Dependency,
+        Module = require('../injector').Module;
 
     return (
         <Module name="AppDispatcher" factory={ module.exports.factory }>
@@ -28,10 +26,9 @@ module.exports.factory = function (Sources) {
     /**
      * npm dependencies
      */
-    var Dispatcher = require('flux').Dispatcher
-      , assign = require('object-assign')
-      , _ = require('underscore')._
-        ;
+    var Dispatcher = require('flux').Dispatcher,
+        assign = require('object-assign'),
+        _ = require('underscore')._;
 
     var AppDispatcher = assign(new Dispatcher(), {
 

@@ -5,15 +5,13 @@ module.exports.config = function () {
     /**
      * npm dependencies
      */
-    var React = require('react')
-        ;
+    var React = require('react');
 
     /**
      * Local dependencies
      */
-    var Dependency = require('../injector').Dependency
-      , Module = require('../injector').Module
-        ;
+    var Dependency = require('../injector').Dependency,
+        Module = require('../injector').Module;
 
     return (
         <Module name="BeaconsSection" factory={ module.exports.factory }>
@@ -36,30 +34,30 @@ module.exports.factory = function (Autocomplete, BeaconForm, BeaconsResourceActi
     /**
      * npm dependencies
      */
-    var React = require('react')
+    var React = require('react'),
 
-    // react-bootstrap modules
-      , Button = require('react-bootstrap').Button
-      , ButtonGroup = require('react-bootstrap').ButtonGroup
-      , ButtonInput = require('react-bootstrap').ButtonInput
-      , ButtonToolbar = require('react-bootstrap').ButtonToolbar
-      , Col = require('react-bootstrap').Col
-      , Input = require('react-bootstrap').Input
-      , PageHeader = require('react-bootstrap').PageHeader
-      , Panel = require('react-bootstrap').Panel
-      , Row = require('react-bootstrap').Row
+        // react-bootstrap modules
+        Button = require('react-bootstrap').Button,
+        ButtonGroup = require('react-bootstrap').ButtonGroup,
+        ButtonInput = require('react-bootstrap').ButtonInput,
+        ButtonToolbar = require('react-bootstrap').ButtonToolbar,
+        Col = require('react-bootstrap').Col,
+        Input = require('react-bootstrap').Input,
+        PageHeader = require('react-bootstrap').PageHeader,
+        Panel = require('react-bootstrap').Panel,
+        Row = require('react-bootstrap').Row,
 
-    // react-google-maps modules
-      , GoogleMap = require('react-google-maps').GoogleMap
-      , Marker = require('react-google-maps').Marker
-      , SearchBox = require('react-google-maps').SearchBox
+        // react-google-maps modules
+        GoogleMap = require('react-google-maps').GoogleMap,
+        Marker = require('react-google-maps').Marker,
+        SearchBox = require('react-google-maps').SearchBox,
 
-    // react-router modules
-      , Link = require('react-router').Link
+        // react-router modules
+        Link = require('react-router').Link,
 
-    // others
-      , TimeAgo = require('react-timeago')
-      , _ = require('underscore')._;
+        // others
+        TimeAgo = require('react-timeago'),
+        _ = require('underscore')._;
 
     var BeaconsSection = React.createClass({
 
@@ -238,8 +236,8 @@ module.exports.factory = function (Autocomplete, BeaconForm, BeaconsResourceActi
         },
 
         beaconsList: function () {
-            var that = this
-              , beacons = _.sortBy(this.props.beacons, function (beacon) {
+            var that = this,
+                beacons = _.sortBy(this.props.beacons, function (beacon) {
                     return new Date().getTime() - new Date(beacon.createdAt).getTime();
                 });
 

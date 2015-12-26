@@ -5,14 +5,12 @@ module.exports.config = function () {
     /**
      * npm dependencies
      */
-    var React = require('react')
-        ;
+    var React = require('react');
 
     /**
      * Local dependencies
      */
-    var Module = require('../injector').Module
-        ;
+    var Module = require('../injector').Module;
 
     return (
         <Module name="App" factory={ module.exports.factory } />
@@ -26,23 +24,22 @@ module.exports.factory = function () {
     /**
      * npm dependencies
      */
-    var React = require('react')
+    var React = require('react'),
 
-    // react-bootstrap modules
-      , Col = require('react-bootstrap').Col
-      , CollapsibleNav = require('react-bootstrap').CollapsibleNav
-      , Grid = require('react-bootstrap').Grid
-      , Nav = require('react-bootstrap').Nav
-      , Navbar = require('react-bootstrap').Navbar
-      , NavItem = require('react-bootstrap').NavItem
-      , PageHeader = require('react-bootstrap').PageHeader
-      , Row = require('react-bootstrap').Row
+        // react-bootstrap modules
+        Col = require('react-bootstrap').Col,
+        CollapsibleNav = require('react-bootstrap').CollapsibleNav,
+        Grid = require('react-bootstrap').Grid,
+        Nav = require('react-bootstrap').Nav,
+        Navbar = require('react-bootstrap').Navbar,
+        NavItem = require('react-bootstrap').NavItem,
+        PageHeader = require('react-bootstrap').PageHeader,
+        Row = require('react-bootstrap').Row,
 
-    // react-router modules
-      , Router = require('react-router')
-      , Navigation = Router.Navigation
-      , RouteHandler = Router.RouteHandler
-        ;
+        // react-router modules
+        Router = require('react-router'),
+        Navigation = Router.Navigation,
+        RouteHandler = Router.RouteHandler;
 
     var SmatchupsApp = React.createClass({
 

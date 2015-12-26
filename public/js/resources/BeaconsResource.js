@@ -5,15 +5,13 @@ module.exports.config = function () {
     /**
      * npm dependencies
      */
-    var React = require('react')
-        ;
+    var React = require('react');
 
     /**
      * Local dependencies
      */
-    var Dependency = require('../injector').Dependency
-      , Module = require('../injector').Module
-        ;
+    var Dependency = require('../injector').Dependency,
+        Module = require('../injector').Module;
 
     return (
         <Module name="BeaconsResource" factory={ module.exports.factory }>

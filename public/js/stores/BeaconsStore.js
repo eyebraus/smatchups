@@ -5,15 +5,13 @@ module.exports.config = function () {
     /**
      * npm dependencies
      */
-    var React = require('react')
-        ;
+    var React = require('react');
 
     /**
      * Local dependencies
      */
-    var Dependency = require('../injector').Dependency
-      , Module = require('../injector').Module
-        ;
+    var Dependency = require('../injector').Dependency,
+        Module = require('../injector').Module;
 
     return (
         <Module name="BeaconsStore" factory={ module.exports.factory }>
@@ -30,9 +28,9 @@ module.exports.factory = function (Actions, AppDispatcher, Events) {
     /**
      * npm dependencies
      */
-    var EventEmitter = require('events').EventEmitter
-      , _ = require('underscore')._
-      , vargs = require('vargs').Constructor;
+    var EventEmitter = require('events').EventEmitter,
+        _ = require('underscore')._,
+        vargs = require('vargs').Constructor;
 
     var BeaconsStore = Object.create(EventEmitter.prototype);
 

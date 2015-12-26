@@ -5,15 +5,13 @@ module.exports.config = function () {
     /**
      * npm dependencies
      */
-    var React = require('react')
-        ;
+    var React = require('react');
 
     /**
      * Local dependencies
      */
-    var Dependency = require('../injector').Dependency
-      , Module = require('../injector').Module
-        ;
+    var Dependency = require('../injector').Dependency,
+        Module = require('../injector').Module;
 
     return (
         <Module name="httpPromise" factory={ module.exports.factory } />
@@ -26,16 +24,15 @@ module.exports.factory = function () {
     /**
      * npm dependencies
      */
-    var http = require('http')
-      , q = require('q')
-      , _ = require('underscore')._
-        ;
+    var http = require('http'),
+        q = require('q'),
+        _ = require('underscore')._;
 
     return {
 
         get: function (path, options) {
-            var deferral = q.defer()
-              , opts = _.clone(options);
+            var deferral = q.defer(),
+                opts = _.clone(options);
 
             opts.path = path;
 
@@ -57,9 +54,9 @@ module.exports.factory = function () {
         },
 
         post: function (path, body, options) {
-            var deferral = q.defer()
-              , bodyStr = JSON.stringify(body)
-              , opts = _.clone(options);
+            var deferral = q.defer(),
+                bodyStr = JSON.stringify(body),
+                opts = _.clone(options);
 
             opts.method = 'POST';
             opts.path = path;

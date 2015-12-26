@@ -5,16 +5,15 @@ module.exports.config = function () {
     /**
      * npm dependencies
      */
-    var React = require('react')
-        ;
+    var React = require('react');
 
     /**
      * Local dependencies
      */
-    var Dependency = require('../injector').Dependency
-      , Module = require('../injector').Module
-        ;
+    var Dependency = require('../injector').Dependency,
+        Module = require('../injector').Module;
 
+    /* jshint ignore:start */
     return (
         <Module name="BeaconsResourceActions" factory={ module.exports.factory }>
             <Dependency name="Actions" />
@@ -22,6 +21,7 @@ module.exports.config = function () {
             <Dependency name="BeaconsResource" />
         </Module>
     );
+    /* jshint ignore:end */
 };
 
 module.exports.factory = function (Actions, AppDispatcher, BeaconsResource) {

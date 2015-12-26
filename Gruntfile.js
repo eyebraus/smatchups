@@ -39,7 +39,7 @@ module.exports = function (grunt) {
         build: {
             app: {
                 options: {
-                    developTasks: ['jshint', 'browserify:devApp', 'stylus:devApp', 'copy:app'],
+                    developTasks: ['jscs', 'browserify:devApp', 'stylus:devApp', 'copy:app'],
                     productionTasks: ['browserify:prodApp', 'stylus:prodApp', 'copy:app']
                 }
             }
@@ -67,20 +67,18 @@ module.exports = function (grunt) {
             }
         },
 
-        jshint: {
+        jscs: {
             options: {
-                additionalSuffixes: ['.js', '.jsx'],
-                ingores: [],
-                jshintrc: '.jshintrc'
+                config: '.jscsrc'
             },
 
-            app: ['public/**/*.js', 'public/**/*.jsx']
+            src: ['model/**/*.js', 'public/**/*.js', 'public/**/*.jsx', 'routes/**/*.js', 'app.js']
         },
 
         run: {
             app: {
                 options: {
-                    developTasks: ['jshint', 'watchify:devApp', 'stylus:devApp', 'copy:app', 'express:devApp', 'watch'],
+                    developTasks: ['jscs', 'watchify:devApp', 'stylus:devApp', 'copy:app', 'express:devApp', 'watch'],
                     productionTasks: ['browserify:prodApp', 'stylus:prodApp', 'copy:app', 'express:prodApp', 'keepalive']
                 }
             }

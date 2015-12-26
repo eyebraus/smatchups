@@ -5,15 +5,13 @@ module.exports.config = function () {
     /**
      * npm dependencies
      */
-    var React = require('react')
-        ;
+    var React = require('react');
 
     /**
      * Local dependencies
      */
-    var Dependency = require('../injector').Dependency
-      , Module = require('../injector').Module
-        ;
+    var Dependency = require('../injector').Dependency,
+        Module = require('../injector').Module;
 
     return (
         <Module name="BeaconForm" factory={ module.exports.factory }>
@@ -31,16 +29,16 @@ module.exports.factory = function (Autocomplete, geoPromise, SetupInputElement) 
     /**
      * npm dependencies
      */
-    var React = require('react')
+    var React = require('react'),
 
-    // react-bootstrap
-      , Button = require('react-bootstrap').Button
-      , ButtonInput = require('react-bootstrap').ButtonInput
-      , Input = require('react-bootstrap').Input
-      , Panel = require('react-bootstrap').Panel
+        // react-bootstrap
+        Button = require('react-bootstrap').Button,
+        ButtonInput = require('react-bootstrap').ButtonInput,
+        Input = require('react-bootstrap').Input,
+        Panel = require('react-bootstrap').Panel,
 
-    // others
-      , _ = require('underscore')._
+        // others
+        _ = require('underscore')._;
         ;
 
     var BeaconForm = React.createClass({

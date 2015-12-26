@@ -5,15 +5,13 @@ module.exports.config = function () {
     /**
      * npm dependencies
      */
-    var React = require('react')
-        ;
+    var React = require('react');
 
     /**
      * Local dependencies
      */
-    var Dependency = require('./injector').Dependency
-      , Module = require('./injector').Module
-        ;
+    var Dependency = require('./injector').Dependency,
+        Module = require('./injector').Module;
 
     return (
         <Module name="Application" factory={ module.exports.factory } isRoot={ true }>
@@ -34,13 +32,12 @@ module.exports.factory = function (App, BeaconsSection, BuddiesList, ChallengesL
     /**
      * npm dependencies
      */
-    var React = require('react')
+    var React = require('react'),
 
-    // react-router modules
-      , Router = require('react-router')
-      , DefaultRoute = Router.DefaultRoute
-      , Route = Router.Route
-        ;
+        // react-router modules
+        Router = require('react-router'),
+        DefaultRoute = Router.DefaultRoute,
+        Route = Router.Route;
 
     // Set up routes
     var routes = (
