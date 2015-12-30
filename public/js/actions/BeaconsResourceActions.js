@@ -3,25 +3,25 @@ module.exports.config = function () {
     'use strict';
 
     /**
-     * npm dependencies
+     * Packaged dependencies
      */
     var React = require('react');
 
     /**
      * Local dependencies
      */
-    var Dependency = require('../injector').Dependency,
-        Module = require('../injector').Module;
+    var Dependency = require('../injector').Dependency;
+    var Module = require('../injector').Module;
 
-    /* jshint ignore:start */
     return (
-        <Module name="BeaconsResourceActions" factory={ module.exports.factory }>
-            <Dependency name="Actions" />
-            <Dependency name="AppDispatcher" />
-            <Dependency name="BeaconsResource" />
+        <Module name='BeaconsResourceActions'
+                factory={ module.exports.factory }>
+            <Dependency name='Actions' />
+            <Dependency name='AppDispatcher' />
+            <Dependency name='BeaconsResource' />
         </Module>
     );
-    /* jshint ignore:end */
+
 };
 
 module.exports.factory = function (Actions, AppDispatcher, BeaconsResource) {
@@ -44,16 +44,16 @@ module.exports.factory = function (Actions, AppDispatcher, BeaconsResource) {
                     smash64: formData.setupCountSmash64,
                     melee: formData.setupCountMelee,
                     projectM: formData.setupCountProjectM,
-                    sm4sh: formData.setupCountSm4sh
+                    sm4sh: formData.setupCountSm4sh,
                 },
-                userName: 'beerz4yearz'
+                userName: 'beerz4yearz',
             };
 
             return BeaconsResource.create(data)
                 .then(function (beacon) {
                     AppDispatcher.handleServerAction({
                         type: Actions.CreateBeacon,
-                        beacon: beacon
+                        beacon: beacon,
                     });
                 });
         },
@@ -63,10 +63,10 @@ module.exports.factory = function (Actions, AppDispatcher, BeaconsResource) {
                 .then(function (beacons) {
                     AppDispatcher.handleServerAction({
                         type: Actions.ReloadBeacons,
-                        beacons: beacons
+                        beacons: beacons,
                     });
                 });
-        }
+        },
 
     };
 

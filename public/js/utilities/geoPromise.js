@@ -3,37 +3,40 @@ module.exports.config = function () {
     'use strict';
 
     /**
-     * npm dependencies
+     * Packaged dependencies
      */
     var React = require('react');
 
     /**
      * Local dependencies
      */
-    var Dependency = require('../injector').Dependency,
-        Module = require('../injector').Module;
+    var Dependency = require('../injector').Dependency;
+    var Module = require('../injector').Module;
 
     return (
-        <Module name="geoPromise" factory={ module.exports.factory } />
+        <Module name='geoPromise' factory={ module.exports.factory } />
     );
+
 };
 
 module.exports.factory = function () {
     'use strict';
 
     /**
-     * npm dependencies
+     * Packaged dependencies
      */
     var q = require('q');
 
     return {
+
         getCurrentPosition: function () {
             var deferral = q.defer();
 
             if (typeof navigator.geolocation === 'undefined') {
                 deferral.reject({
                     type: 'geolocationIsUndefined',
-                    message: 'Geolocation API is not supported or is not present in browser'
+                    message: 'Geolocation API is not supported or is not '
+                        + 'present in browser',
                 });
             } else {
                 navigator.geolocation.getCurrentPosition(
@@ -42,20 +45,21 @@ module.exports.factory = function () {
                     },
                     function (err) {
                         var errCodeMap = {
-                            'PERMISSION_DENIED': 'permissionDenied',
-                            'POSITION_UNAVAILABLE': 'positionUnavailable',
-                            'TIMEOUT': 'requestTimedOut'
+                            PERMISSION_DENIED: 'permissionDenied',
+                            POSITION_UNAVAILABLE: 'positionUnavailable',
+                            TIMEOUT: 'requestTimedOut',
                         };
 
                         deferral.reject({
                             type: errCodeMap[err.code],
-                            message: err.message
+                            message: err.message,
                         });
                     });
             }
 
             return deferral.promise;
-        }
+        },
+
     };
 
 };

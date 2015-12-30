@@ -3,36 +3,37 @@ module.exports.config = function () {
     'use strict';
 
     /**
-     * npm dependencies
+     * Packaged dependencies
      */
     var React = require('react');
 
     /**
      * Local dependencies
      */
-    var Dependency = require('../injector').Dependency,
-        Module = require('../injector').Module;
+    var Dependency = require('../injector').Dependency;
+    var Module = require('../injector').Module;
 
     return (
-        <Module name="httpPromise" factory={ module.exports.factory } />
+        <Module name='httpPromise' factory={ module.exports.factory } />
     );
+
 };
 
 module.exports.factory = function () {
     'use strict';
 
     /**
-     * npm dependencies
+     * Packaged dependencies
      */
-    var http = require('http'),
-        q = require('q'),
-        _ = require('underscore')._;
+    var http = require('http');
+    var q = require('q');
+    var _ = require('underscore')._;
 
     return {
 
         get: function (path, options) {
-            var deferral = q.defer(),
-                opts = _.clone(options);
+            var deferral = q.defer();
+            var opts = _.clone(options);
 
             opts.path = path;
 
@@ -54,9 +55,9 @@ module.exports.factory = function () {
         },
 
         post: function (path, body, options) {
-            var deferral = q.defer(),
-                bodyStr = JSON.stringify(body),
-                opts = _.clone(options);
+            var deferral = q.defer();
+            var bodyStr = JSON.stringify(body);
+            var opts = _.clone(options);
 
             opts.method = 'POST';
             opts.path = path;
@@ -79,7 +80,7 @@ module.exports.factory = function () {
             req.end(bodyStr);
 
             return deferral.promise;
-        }
+        },
 
     };
 

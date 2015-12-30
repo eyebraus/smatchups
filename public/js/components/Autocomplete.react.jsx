@@ -3,18 +3,18 @@ module.exports.config = function () {
     'use strict';
 
     /**
-     * npm dependencies
+     * Packaged dependencies
      */
     var React = require('react');
 
     /**
      * Local dependencies
      */
-    var Dependency = require('../injector').Dependency,
-        Module = require('../injector').Module;
+    var Dependency = require('../injector').Dependency;
+    var Module = require('../injector').Module;
 
     return (
-        <Module name="Autocomplete" factory={ module.exports.factory } />
+        <Module name='Autocomplete' factory={ module.exports.factory } />
     );
 
 };
@@ -23,7 +23,7 @@ module.exports.factory = function () {
     'use strict';
 
     /**
-     * npm dependencies
+     * Packaged dependencies
      */
     var React = require('react');
 
@@ -32,7 +32,8 @@ module.exports.factory = function () {
         componentDidMount: function () {
             var that = this;
 
-            this.autocomplete = new google.maps.places.Autocomplete(this.refs.textbox.getDOMNode());
+            this.autocomplete = new google.maps.places.Autocomplete(
+                this.refs.textbox.getDOMNode());
             this.autocomplete.setBounds(this.props.bounds);
 
             this.autocomplete.addListener('place_changed', function () {
@@ -46,19 +47,22 @@ module.exports.factory = function () {
 
         render: function () {
             return (
-                <div className="form-group">
-                    <label className="control-label">{ this.props.label }</label>
-                    <input className="form-control"
+                <div className='form-group'>
+                    <label className='control-label'>
+                        { this.props.label }
+                    </label>
+
+                    <input className='form-control'
                             label={ this.props.label }
                             name={ this.props.name }
                             placeholder={ this.props.placeholder }
-                            type="text"
+                            type='text'
                             value={ this.props.value }
-                            ref="textbox"
+                            ref='textbox'
                             onChange={ this.props.onChange } />
                 </div>
             );
-        }
+        },
 
     });
 

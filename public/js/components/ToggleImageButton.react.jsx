@@ -3,41 +3,43 @@ module.exports.config = function () {
     'use strict';
 
     /**
-     * npm dependencies
+     * Packaged dependencies
      */
     var React = require('react');
 
     /**
      * Local dependencies
      */
-    var Dependency = require('../injector').Dependency,
-        Module = require('../injector').Module;
+    var Dependency = require('../injector').Dependency;
+    var Module = require('../injector').Module;
 
     return (
-        <Module name="ToggleImageButton" factory={ module.exports.factory } />
+        <Module name='ToggleImageButton' factory={ module.exports.factory } />
     );
+
 };
 
 module.exports.factory = function () {
     'use strict';
 
     /**
-     * npm dependencies
+     * Packaged dependencies
      */
-    var React = require('react'),
+    var React = require('react');
 
-        // react-bootstrap modules
-        Button = require('react-bootstrap').Button,
+    // React Bootstrap modules
+    var Button = require('react-bootstrap').Button;
 
-        // other modules
-        _ = require('underscore')._;
+    // Other dependencies
+    var _ = require('underscore')._;
 
     var ToggleImageButton = React.createClass({
 
         render: function () {
-            var that = this,
-                buttonClasses = [],
-                imgClassNames = [this.props.toggleState ? 'enabled' : 'disabled'].join(' ');
+            var that = this;
+            var buttonClasses = [];
+            var imgClassNames = [
+                this.props.toggleState ? 'enabled' : 'disabled'].join(' ');
 
             // Add active state if button is toggled
             if (this.props.toggleState) {
@@ -55,7 +57,10 @@ module.exports.factory = function () {
 
             return (
                 <Button className={ buttonClasses } onClick={ this.onClick }>
-                    <img src={ this.props.imageUrl } width={ this.props.imageWidth } height={ this.props.imageHeight } className={ imgClassNames } /> { this.props.text }
+                    <img src={ this.props.imageUrl }
+                            width={ this.props.imageWidth }
+                            height={ this.props.imageHeight }
+                            className={ imgClassNames } /> { this.props.text }
                 </Button>
             );
         },
@@ -64,7 +69,7 @@ module.exports.factory = function () {
             var toggleState = !this.props.toggleState;
 
             return this.props.onToggled(toggleState);
-        }
+        },
 
     });
 

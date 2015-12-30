@@ -3,13 +3,13 @@ module.exports = (function () {
     'use strict';
 
     /**
-     * npm dependencies
+     * Packaged dependencies
      */
-    var React = require('react'),
-        q = require('q'),
-        _ = require('underscore')._,
-        util = require('util'),
-        VargsConstructor = require('vargs').Constructor;
+    var React = require('react');
+    var q = require('q');
+    var _ = require('underscore')._;
+    var util = require('util');
+    var VargsConstructor = require('vargs').Constructor;
 
     /**
      * React components
@@ -20,12 +20,12 @@ module.exports = (function () {
         displayName: 'Dependency',
 
         propTypes: {
-            name: React.PropTypes.string.isRequired
+            name: React.PropTypes.string.isRequired,
         },
 
         render: function () {
             return (<noscript />);
-        }
+        },
 
     });
 
@@ -35,7 +35,7 @@ module.exports = (function () {
 
         getDefaultProps: function () {
             return {
-                isRoot: false
+                isRoot: false,
             };
         },
 
@@ -47,7 +47,7 @@ module.exports = (function () {
 
         render: function () {
             return (<noscript />);
-        }
+        },
 
     });
 
@@ -65,52 +65,58 @@ module.exports = (function () {
     };
 
     Injector.prototype.createModule = function (config) {
-        var dependencies = React.Children.map(config.props.children, function (child) {
-            // Ignore anything that's not of type dependency
-            if (child.type === Dependency) {
-                return child.props.name;
-            } else {
+        var dependencies = React.Children.map(config.props.children,
+            function (child) {
+                // Ignore anything that's not of type dependency
+                if (child.type === Dependency) {
+                    return child.props.name;
+                }
+
                 return null;
-            }
-        });
+            });
 
         return {
             name: config.props.name,
             factory: config.props.factory,
             root: config.props.isRoot,
-            dependencies: _.without(dependencies, null)
+            dependencies: _.without(dependencies, null),
         };
     };
 
-    Injector.prototype.resolve = function (/* module[, depth, resolveStack] */) {
-        var args = new (VargsConstructor)(arguments),
-            module = args.first,
-            depth = args.length > 1 ? args.at(1) : 0,
-            resolveStack = args.length > 2 ? args.at(2) : [],
-            that = this;
+    Injector.prototype.resolve = function () {
+        var args = new (VargsConstructor)(arguments);
+        var module = args.first;
+        var depth = args.length > 1 ? args.at(1) : 0;
+        var resolveStack = args.length > 2 ? args.at(2) : [];
+        var that = this;
 
         // Fail if circular dependency is detected
         if (_.contains(resolveStack, module.name)) {
-            var msg = util.format('Circular dependency from %s to itself was found. Stack: [%s]', module.name,
-                resolveStack.join(', '));
+            var msg = util.format('Circular dependency from %s to itself was '
+                + 'found. Stack: [%s]', module.name, resolveStack.join(', '));
 
             console.error(msg);
             return q.reject(msg);
         }
 
         // Set depth of module
-        this.depths[module.name] = _.has(this.depths, module.name) ? _.max([depth, this.depths[module.name]]) : depth;
+        this.depths[module.name] = _.has(this.depths, module.name)
+            ? _.max([depth, this.depths[module.name]])
+            : depth;
 
         var depPromises = _.map(module.dependencies, function (dependency) {
             // Fail if module doesn't exist
-            if (!_.has(that.modules, dependency) || null === that.modules[dependency]) {
-                var msg = util.format('While resolving "%s", dependency "%s" was not found.', module.name, dependency);
+            if (!_.has(that.modules, dependency)
+                    || null === that.modules[dependency]) {
+                var msg = util.format('While resolving "%s", dependency "%s" '
+                    + 'was not found.', module.name, dependency);
 
                 console.error(msg);
                 return q.reject(msg);
             }
 
-            return that.resolve(that.modules[dependency], depth + 1, resolveStack.concat([module.name]));
+            return that.resolve(that.modules[dependency], depth + 1,
+                resolveStack.concat([module.name]));
         });
 
         // Resolve dependencies of current module
@@ -118,9 +124,9 @@ module.exports = (function () {
     };
 
     Injector.prototype.construct = function () {
-        var rejected = false,
-            rejection = null,
-            that = this;
+        var rejected = false;
+        var rejection = null;
+        var that = this;
 
         // Iterate through dependencies descending by depth
         var modulesDepthSorted = _.chain(this.depths)
@@ -138,15 +144,16 @@ module.exports = (function () {
                 return;
             }
 
-            var moduleName = obj.moduleName,
-                module = that.modules[moduleName],
-                dependencies = [];
+            var moduleName = obj.moduleName;
+            var module = that.modules[moduleName];
+            var dependencies = [];
 
             _.each(module.dependencies, function (dependencyName) {
                 // Fail if any of the dependencies haven't been constructed yet
                 if (null === that.instances[dependencyName]) {
-                    var msg = util.format('While constructing %s, dependency %s had not been constructed yet',
-                        module.name, dependencyName);
+                    var msg = util.format('While constructing %s, dependency '
+                        + '%s had not been constructed yet', module.name,
+                        dependencyName);
 
                     console.error(msg);
                     rejection = q.reject(msg);
@@ -158,7 +165,8 @@ module.exports = (function () {
 
             if (!rejected) {
                 // Construct instance of module
-                that.instances[module.name] = module.factory.apply(module.factory, dependencies);
+                that.instances[module.name] = module.factory.apply(
+                    module.factory, dependencies);
             }
         });
 
@@ -169,7 +177,8 @@ module.exports = (function () {
 
         // Fail if root instance was somehow not initialized
         if (!_.has(this.instances, this.root.name)) {
-            var msg = util.format('Root module %s was not constructed', this.root.name);
+            var msg = util.format('Root module %s was not constructed',
+                this.root.name);
 
             console.error(msg);
             return q.reject(msg);
@@ -181,17 +190,17 @@ module.exports = (function () {
     };
 
     Injector.prototype.run = function (configs) {
-        var msg = '',
-            rejected = false,
-            rejection = null,
-            that = this;
+        var msg = '';
+        var rejected = false;
+        var rejection = null;
+        var that = this;
 
         this.configs = configs;
 
         // Register all modules given
         _.each(configs, function (config) {
             if (rejected) {
-                // effectively a continue statement
+                // Effectively a continue statement
             } else if (!React.isValidElement(config)) {
                 msg = 'Config was not a valid React element';
 
@@ -202,7 +211,8 @@ module.exports = (function () {
                 var module = that.createModule(config);
 
                 if (_.has(that.modules, module.name)) {
-                    console.warn('Module with name "' + module.name + '" registered more than once.');
+                    console.warn('Module with name "' + module.name
+                        + '" registered more than once.');
                 }
 
                 that.modules[module.name] = module;
@@ -245,7 +255,7 @@ module.exports = (function () {
     return {
         Dependency: Dependency,
         Injector: Injector,
-        Module: Module
+        Module: Module,
     };
 
 })();

@@ -39,7 +39,7 @@ module.exports = (function () {
 
         // Utilities
         require('./utilities/geoPromise'),
-        require('./utilities/httpPromise')
+        require('./utilities/httpPromise'),
     ];
 
 })();

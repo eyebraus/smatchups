@@ -3,34 +3,35 @@ module.exports.config = function () {
     'use strict';
 
     /**
-     * npm dependencies
+     * Packaged dependencies
      */
     var React = require('react');
 
     /**
      * Local dependencies
      */
-    var Dependency = require('../injector').Dependency,
-        Module = require('../injector').Module;
+    var Dependency = require('../injector').Dependency;
+    var Module = require('../injector').Module;
 
     return (
-        <Module name="BeaconsStore" factory={ module.exports.factory }>
-            <Dependency name="Actions" />
-            <Dependency name="AppDispatcher" />
-            <Dependency name="Events" />
+        <Module name='BeaconsStore' factory={ module.exports.factory }>
+            <Dependency name='Actions' />
+            <Dependency name='AppDispatcher' />
+            <Dependency name='Events' />
         </Module>
     );
+
 };
 
 module.exports.factory = function (Actions, AppDispatcher, Events) {
     'use strict';
 
     /**
-     * npm dependencies
+     * Packaged dependencies
      */
-    var EventEmitter = require('events').EventEmitter,
-        _ = require('underscore')._,
-        vargs = require('vargs').Constructor;
+    var EventEmitter = require('events').EventEmitter;
+    var _ = require('underscore')._;
+    var vargs = require('vargs').Constructor;
 
     var BeaconsStore = Object.create(EventEmitter.prototype);
 
@@ -68,17 +69,21 @@ module.exports.factory = function (Actions, AppDispatcher, Events) {
 
     BeaconsStore.dispatchToken = AppDispatcher.register(function (action) {
         switch (action.type) {
-            case Actions.CreateBeacon:
+            case Actions.CreateBeacon: {
                 BeaconsStore.addBeacon(action.beacon);
                 BeaconsStore.emitChanged();
+                break;
+            }
 
-            case Actions.ReloadBeacons:
+            case Actions.ReloadBeacons: {
                 BeaconsStore.clearBeacons();
                 BeaconsStore.addBeacons(action.beacons);
                 BeaconsStore.emitChanged();
+            }
 
-            default:
+            default: {
                 break;
+            }
         }
     });
 

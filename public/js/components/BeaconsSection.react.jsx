@@ -3,61 +3,63 @@ module.exports.config = function () {
     'use strict';
 
     /**
-     * npm dependencies
+     * Packaged dependencies
      */
     var React = require('react');
 
     /**
      * Local dependencies
      */
-    var Dependency = require('../injector').Dependency,
-        Module = require('../injector').Module;
+    var Dependency = require('../injector').Dependency;
+    var Module = require('../injector').Module;
 
     return (
-        <Module name="BeaconsSection" factory={ module.exports.factory }>
-            <Dependency name="Autocomplete" />
-            <Dependency name="BeaconForm" />
-            <Dependency name="BeaconsResourceActions" />
-            <Dependency name="BeaconsStore" />
-            <Dependency name="geoPromise" />
-            <Dependency name="SetupInputElement" />
-            <Dependency name="StoreStateComponentFactory" />
-            <Dependency name="ToggleImageButton" />
+        <Module name='BeaconsSection' factory={ module.exports.factory }>
+            <Dependency name='Autocomplete' />
+            <Dependency name='BeaconForm' />
+            <Dependency name='BeaconsResourceActions' />
+            <Dependency name='BeaconsStore' />
+            <Dependency name='geoPromise' />
+            <Dependency name='SetupInputElement' />
+            <Dependency name='StoreStateComponentFactory' />
+            <Dependency name='ToggleImageButton' />
         </Module>
     );
+
 };
 
-module.exports.factory = function (Autocomplete, BeaconForm, BeaconsResourceActions, BeaconsStore, geoPromise,
-        SetupInputElement, StoreStateComponentFactory, ToggleImageButton) {
+module.exports.factory = function (Autocomplete, BeaconForm,
+        BeaconsResourceActions, BeaconsStore, geoPromise, SetupInputElement,
+        StoreStateComponentFactory, ToggleImageButton) {
     'use strict';
 
     /**
-     * npm dependencies
+     * Packaged dependencies
      */
-    var React = require('react'),
+    var React = require('react');
 
-        // react-bootstrap modules
-        Button = require('react-bootstrap').Button,
-        ButtonGroup = require('react-bootstrap').ButtonGroup,
-        ButtonInput = require('react-bootstrap').ButtonInput,
-        ButtonToolbar = require('react-bootstrap').ButtonToolbar,
-        Col = require('react-bootstrap').Col,
-        Input = require('react-bootstrap').Input,
-        PageHeader = require('react-bootstrap').PageHeader,
-        Panel = require('react-bootstrap').Panel,
-        Row = require('react-bootstrap').Row,
+    // React Bootstrap modules
+    var Button = require('react-bootstrap').Button;
+    var ButtonGroup = require('react-bootstrap').ButtonGroup;
+    var ButtonInput = require('react-bootstrap').ButtonInput;
+    var ButtonToolbar = require('react-bootstrap').ButtonToolbar;
+    var Col = require('react-bootstrap').Col;
+    var Input = require('react-bootstrap').Input;
+    var PageHeader = require('react-bootstrap').PageHeader;
+    var Panel = require('react-bootstrap').Panel;
+    var Row = require('react-bootstrap').Row;
 
-        // react-google-maps modules
-        GoogleMap = require('react-google-maps').GoogleMap,
-        Marker = require('react-google-maps').Marker,
-        SearchBox = require('react-google-maps').SearchBox,
+    // React Google Maps modules
+    var GoogleMap = require('react-google-maps').GoogleMap;
+    var Marker = require('react-google-maps').Marker;
+    var SearchBox = require('react-google-maps').SearchBox;
 
-        // react-router modules
-        Link = require('react-router').Link,
+    // React Router modules
+    var Link = require('react-router').Link;
 
-        // others
-        TimeAgo = require('react-timeago'),
-        _ = require('underscore')._;
+    // Other dependencies
+    var TimeAgo = require('react-timeago');
+    var _ = require('underscore')._;
 
     var BeaconsSection = React.createClass({
 
@@ -67,7 +69,7 @@ module.exports.factory = function (Autocomplete, BeaconForm, BeaconsResourceActi
                 center: { lat: 47.6201451, lng: -122.3298646 },
                 currentLocation: null,
                 filteredGame: null,
-                isFormActive: false
+                isFormActive: false,
             };
         },
 
@@ -80,8 +82,14 @@ module.exports.factory = function (Autocomplete, BeaconForm, BeaconsResourceActi
             geoPromise.getCurrentPosition()
                 .then(function (position) {
                     that.setState({
-                        center: { lat: position.coords.latitude, lng: position.coords.longitude },
-                        currentLocation: { lat: position.coords.latitude, lng: position.coords.longitude }
+                        center: {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        },
+                        currentLocation: {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        },
                     });
                 });
         },
