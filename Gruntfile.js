@@ -69,7 +69,8 @@ module.exports = function (grunt) {
 
         jscs: {
             options: {
-                config: '.jscsrc'
+                config: '.jscsrc',
+                esnext: true
             },
 
             src: ['model/**/*.js', 'public/**/*.js', 'public/**/*.jsx', 'routes/**/*.js', 'app.js']
