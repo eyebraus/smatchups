@@ -38,8 +38,10 @@ module.exports.factory = function () {
         render: function () {
             var that = this;
             var buttonClasses = [];
-            var imgClassNames = [
-                this.props.toggleState ? 'enabled' : 'disabled'].join(' ');
+            var toggleClassName = this.props.toggleState
+                ? 'enabled'
+                : 'disabled';
+            var imgClassNames = [toggleClassName].join(' ');
 
             // Add active state if button is toggled
             if (this.props.toggleState) {

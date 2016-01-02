@@ -1,16 +1,24 @@
 
 module.exports = (function () {
+    'use strict';
 
+    /**
+     * Packaged dependencies
+     */
     var redis = require('then-redis');
 
+    /**
+     * Local dependencies
+     */
     var Resource = require('../model/resource');
 
     var redisClient = typeof process.env.REDIS_URL !== 'undefined'
-            ? redis.createClient(process.env.REDIS_URL)
-            : redis.createClient()
-      , beaconsResource = new Resource(redisClient, 'beacons');
+        ? redis.createClient(process.env.REDIS_URL)
+        : redis.createClient();
+    var beaconsResource = new Resource(redisClient, 'beacons');
 
     return {
+
         all: function (req, res) {
             beaconsResource.all()
                 .then(function (beacons) {
@@ -33,7 +41,8 @@ module.exports = (function () {
                 .fail(function (error) {
                     res.send(500, error);
                 });
-        }
+        },
+
     };
 
 })();

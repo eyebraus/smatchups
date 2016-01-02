@@ -68,10 +68,10 @@ module.exports.factory = function (Autocomplete, geoPromise,
                 newState.location = place.geometry.location;
             }
 
+            // JSCS Exception: Google's APIs use low_dashed identifiers
+            // rather than camelCased or UPPER_CASED ones.
+            // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
             if (place.address_components) {
-                // JSCS Exception: Google's APIs use low_dashed identifiers
-                // rather than camelCased or UPPER_CASED ones.
-                // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
                 newState.address = {
                     number: (place.address_components[0]
                         && place.address_components[0].long_name
@@ -92,8 +92,8 @@ module.exports.factory = function (Autocomplete, geoPromise,
                         && place.address_components[5].long_name
                         || ''),
                 };
-                // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
             }
+            // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 
             this.setState(newState);
         },

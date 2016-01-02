@@ -84,11 +84,11 @@ module.exports.factory = function (Autocomplete, BeaconForm,
                     that.setState({
                         center: {
                             lat: position.coords.latitude,
-                            lng: position.coords.longitude
+                            lng: position.coords.longitude,
                         },
                         currentLocation: {
                             lat: position.coords.latitude,
-                            lng: position.coords.longitude
+                            lng: position.coords.longitude,
                         },
                     });
                 });
@@ -101,7 +101,7 @@ module.exports.factory = function (Autocomplete, BeaconForm,
         onBoundsChanged: function () {
             this.setState({
                 bounds: this.refs.map.getBounds(),
-                center: this.refs.map.getCenter()
+                center: this.refs.map.getCenter(),
             });
         },
 
@@ -119,11 +119,11 @@ module.exports.factory = function (Autocomplete, BeaconForm,
 
             if (places.length > 0) {
                 this.setState({
-                    center: places[0].geometry.location
+                    center: places[0].geometry.location,
                 });
             }
         },
-        
+
         onToggledFactory: function (game) {
             var that = this;
 
@@ -146,21 +146,23 @@ module.exports.factory = function (Autocomplete, BeaconForm,
 
         render: function () {
             var createRowClassNames = this.state.isFormActive
-                ? "beacon-row new-beacon-form"
-                : "beacon-row new-beacon-row";
+                ? 'beacon-row new-beacon-form'
+                : 'beacon-row new-beacon-row';
 
             return (
-                <Row className="beacons-section">
-                    <Col xs={ 12 } sm={ 12 } md={ 12 } className="beacons-filters">
+                <Row className='beacons-section'>
+                    <Col xs={ 12 } sm={ 12 } md={ 12 }
+                            className='beacons-filters'>
                         { this.beaconsFilters() }
                     </Col>
 
-                    <Col xs={ 6 } sm={ 6 } md={ 6 } className="beacons-list-and-form">
-                        <div key="post-new" className={ createRowClassNames }>
+                    <Col xs={ 6 } sm={ 6 } md={ 6 }
+                            className='beacons-list-and-form'>
+                        <div key='post-new' className={ createRowClassNames }>
                             { this.state.isFormActive
                                 ? <BeaconForm
                                         bounds={ this.state.bounds }
-                                        onCancel={ this.hideForm } 
+                                        onCancel={ this.hideForm }
                                         onSubmit={ this.onFormSubmitted }/>
                                 : this.createBeaconRow() }
                         </div>
@@ -170,7 +172,10 @@ module.exports.factory = function (Autocomplete, BeaconForm,
                             : <noscript /> }
                     </Col>
 
-                    <Col xs={ 6 } sm={ 6 } md={ 6 } className="beacons-map" data-spy="affix" data-offset-top="58">
+                    <Col xs={ 6 } sm={ 6 } md={ 6 }
+                            className='beacons-map'
+                            data-spy='affix'
+                            data-offset-top='58'>
                         { this.beaconsMap() }
                     </Col>
                 </Row>
@@ -182,42 +187,54 @@ module.exports.factory = function (Autocomplete, BeaconForm,
                 <ButtonGroup justified>
                     <ButtonGroup>
                         <ToggleImageButton
-                                imageUrl="/app/img/icon/smash-64-toggle.png"
-                                imageWidth="24"
-                                imageHeight="24"
-                                text="Super Smash Bros. 64"
-                                toggleState={ this.state.filteredGame === 'smash64' }
-                                onToggled={ this.onToggledFactory('smash64') } />
+                                imageUrl='/app/img/icon/smash-64-toggle.png'
+                                imageWidth='24'
+                                imageHeight='24'
+                                text='Super Smash Bros. 64'
+                                toggleState={
+                                    this.state.filteredGame === 'smash64'
+                                }
+                                onToggled={ this.onToggledFactory(
+                                    'smash64') } />
                     </ButtonGroup>
 
                     <ButtonGroup>
                         <ToggleImageButton
-                                imageUrl="/app/img/icon/melee-toggle.png"
-                                imageWidth="24"
-                                imageHeight="24"
-                                text="Super Smash Bros. Melee"
-                                toggleState={ this.state.filteredGame === 'melee' }
-                                onToggled={ this.onToggledFactory('melee') } />
+                                imageUrl='/app/img/icon/melee-toggle.png'
+                                imageWidth='24'
+                                imageHeight='24'
+                                text='Super Smash Bros. Melee'
+                                toggleState={
+                                    this.state.filteredGame === 'melee'
+                                }
+                                onToggled={ this.onToggledFactory(
+                                    'melee') } />
                     </ButtonGroup>
 
                     <ButtonGroup>
                         <ToggleImageButton
-                                imageUrl="/app/img/icon/project-m-toggle.png"
-                                imageWidth="24"
-                                imageHeight="24"
-                                text="Project M"
-                                toggleState={ this.state.filteredGame === 'projectM' }
-                                onToggled={ this.onToggledFactory('projectM') } />
+                                imageUrl='/app/img/icon/project-m-toggle.png'
+                                imageWidth='24'
+                                imageHeight='24'
+                                text='Project M'
+                                toggleState={
+                                    this.state.filteredGame === 'projectM'
+                                }
+                                onToggled={ this.onToggledFactory(
+                                    'projectM') } />
                     </ButtonGroup>
 
                     <ButtonGroup>
                         <ToggleImageButton
-                                imageUrl="/app/img/icon/sm4sh-toggle.png"
-                                imageWidth="24"
-                                imageHeight="24"
-                                text="Super Smash Bros. for Wii U"
-                                toggleState={ this.state.filteredGame === 'sm4sh' }
-                                onToggled={ this.onToggledFactory('sm4sh') } />
+                                imageUrl='/app/img/icon/sm4sh-toggle.png'
+                                imageWidth='24'
+                                imageHeight='24'
+                                text='Super Smash Bros. for Wii U'
+                                toggleState={
+                                    this.state.filteredGame === 'sm4sh'
+                                }
+                                onToggled={ this.onToggledFactory(
+                                    'sm4sh') } />
                     </ButtonGroup>
                 </ButtonGroup>
             );
@@ -226,17 +243,20 @@ module.exports.factory = function (Autocomplete, BeaconForm,
         createBeaconRow: function () {
             return (
                 <div onClick={ this.showForm }>
-                    <div className="beacon-frame beacon-icon-frame">
-                        <i className="fa fa-plus fa-4" />
+                    <div className='beacon-frame beacon-icon-frame'>
+                        <i className='fa fa-plus fa-4' />
                     </div>
 
-                    <div className="beacon-frame beacon-content-frame">
-                        <div className="beacon-content-header">
+                    <div className='beacon-frame beacon-content-frame'>
+                        <div className='beacon-content-header'>
                             <h3>Create a new beacon!</h3>
                         </div>
 
-                        <div className="beacon-content-body">
-                            <p>Let your friends know when, where, and what you're playing.</p>
+                        <div className='beacon-content-body'>
+                            <p>
+                                Let your friends know when, where, and what
+                                you're playing.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -244,10 +264,11 @@ module.exports.factory = function (Autocomplete, BeaconForm,
         },
 
         beaconsList: function () {
-            var that = this,
-                beacons = _.sortBy(this.props.beacons, function (beacon) {
-                    return new Date().getTime() - new Date(beacon.createdAt).getTime();
-                });
+            var that = this;
+            var beacons = _.sortBy(this.props.beacons, function (beacon) {
+                return new Date().getTime()
+                    - new Date(beacon.createdAt).getTime();
+            });
 
             // Filter down to beacons matching game criteria
             if (this.state.filteredGame) {
@@ -258,37 +279,46 @@ module.exports.factory = function (Autocomplete, BeaconForm,
 
             return _.map(beacons, function (beacon) {
                 var rowClassNames = that.state.isFormActive
-                    ? "beacon-row beacon-row-hidden"
-                    : "beacon-row";
+                    ? 'beacon-row beacon-row-hidden'
+                    : 'beacon-row';
 
                 return (
                     <div key={ beacon.id } className={ rowClassNames }>
-                        <div className="beacon-frame beacon-image-frame">
-                            <img src={ beacon.document.profilePictureUrl } className="img-circle" />
+                        <div className='beacon-frame beacon-image-frame'>
+                            <img src={ beacon.document.profilePictureUrl }
+                                    className='img-circle' />
                             <h5>{ beacon.document.userName }</h5>
                         </div>
 
-                        <div className="beacon-frame beacon-content-frame">
-                            <div className="beacon-content-header">
+                        <div className='beacon-frame beacon-content-frame'>
+                            <div className='beacon-content-header'>
                                 <h3>{ beacon.document.name }</h3>
                             </div>
 
-                            <div className="beacon-content-body">
+                            <div className='beacon-content-body'>
                                 <p>{ beacon.document.message }</p>
                             </div>
                         </div>
 
-                        <div className="beacon-frame beacon-info-frame">
-                            <div className="beacon-timestamp">
-                                <TimeAgo date={ new Date(beacon.createdAt).toLocaleString('en-US') } />
+                        <div className='beacon-frame beacon-info-frame'>
+                            <div className='beacon-timestamp'>
+                                <TimeAgo date={
+                                    new Date(beacon.createdAt)
+                                        .toLocaleString('en-US')
+                                } />
                             </div>
 
-                            <div className="beacon-attendees-ribbon">
-                                <span>{ beacon.document.attendees.length } / { beacon.document.capacity } <i className="fa fa-users fa-2" /></span>
+                            <div className='beacon-attendees-ribbon'>
+                                <span>
+                                    { beacon.document.attendees.length } /
+                                    { beacon.document.capacity }
+                                    <i className='fa fa-users fa-2' />
+                                </span>
                             </div>
 
-                            <div className="beacon-games-ribbon">
-                                { that.gamesRibbonIcons(beacon.document.setups) }
+                            <div className='beacon-games-ribbon'>
+                                { that.gamesRibbonIcons(
+                                    beacon.document.setups) }
                             </div>
                         </div>
                     </div>
@@ -302,19 +332,21 @@ module.exports.factory = function (Autocomplete, BeaconForm,
                         center={ this.state.center }
                         containerProps={ {
                             style: {
-                                height: '800px'
-                            }
+                                height: '800px',
+                            },
                         } }
                         defaultZoom={ 15 }
                         onBoundsChanged={ this.onBoundsChanged }
-                        ref="map">
+                        ref='map'>
 
                     <SearchBox
                             bounds={ this.state.bounds }
-                            classes="google-maps-search-box"
-                            controlPosition={ google.maps.ControlPosition.TOP_LEFT }
+                            classes='google-maps-search-box'
+                            controlPosition={
+                                google.maps.ControlPosition.TOP_LEFT
+                            }
                             onPlacesChanged={ this.onPlacesChanged }
-                            ref="searchBox" />
+                            ref='searchBox' />
 
                     { this.props.beacons.map(function (beacon, index) {
                         <Marker key={ index } position={ beacon.position } />
@@ -329,40 +361,52 @@ module.exports.factory = function (Autocomplete, BeaconForm,
 
             _.each(setups, function (count, game) {
                 if (count > 0) {
-                    switch(game) {
-                        case 'smash64':
-                            ribbonIcons.push('/app/img/icon/smash-64-toggle.png');
+                    switch (game) {
+                        case 'smash64': {
+                            ribbonIcons.push(
+                                '/app/img/icon/smash-64-toggle.png');
                             break;
+                        }
 
-                        case 'melee':
-                            ribbonIcons.push('/app/img/icon/melee-toggle.png');
+                        case 'melee': {
+                            ribbonIcons.push(
+                                '/app/img/icon/melee-toggle.png');
                             break;
-                        
-                        case 'projectM':
-                            ribbonIcons.push('/app/img/icon/project-m-toggle.png');
+                        }
+
+                        case 'projectM': {
+                            ribbonIcons.push(
+                                '/app/img/icon/project-m-toggle.png');
                             break;
-                        
-                        case 'sm4sh':
-                            ribbonIcons.push('/app/img/icon/sm4sh-toggle.png');
+                        }
+
+                        case 'sm4sh': {
+                            ribbonIcons.push(
+                                '/app/img/icon/sm4sh-toggle.png');
                             break;
+                        }
                     }
                 }
             });
-        
+
             return _.map(ribbonIcons, function (imgUrl) {
                 return (
-                    <img src={ imgUrl } width="24" height="24" className="beacon-games-ribbon-icon" />
+                    <img src={ imgUrl }
+                            width='24'
+                            height='24'
+                            className='beacon-games-ribbon-icon' />
                 );
             });
-        }
+        },
 
     });
 
     // Mixin StoreStateComponent functionality for the BeaconsStore
-    return StoreStateComponentFactory(BeaconsSection, BeaconsStore, function (store) {
-        return {
-            beacons: store.getBeacons()
-        };
-    });
+    return StoreStateComponentFactory(BeaconsSection, BeaconsStore,
+        function (store) {
+            return {
+                beacons: store.getBeacons(),
+            };
+        });
 
 };

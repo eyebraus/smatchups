@@ -36,8 +36,11 @@ module.exports.factory = function () {
     var LinkedIconButton = React.createClass({
 
         render: function () {
-            var iconClassNames = ['fa', this.props.iconType,
-                this.props.iconSize].join(' ');
+            var iconClassNames = [
+                'fa',
+                this.props.iconType,
+                this.props.iconSize,
+            ].join(' ');
 
             return (
                 <Link to={ this.props.routeName }>
