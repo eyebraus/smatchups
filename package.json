@@ -60,6 +60,7 @@
     },
     "devDependencies": {
         "grunt-contrib-watch": "~0.5.3",
+        "grunt-jsdoc": "^1.1.x",
         "grunt-mocha": "^0.4.x",
         "grunt-watchify": "^0.1.x",
         "jscs": "^2.7.x",

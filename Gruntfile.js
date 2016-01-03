@@ -39,7 +39,7 @@ module.exports = function (grunt) {
         build: {
             app: {
                 options: {
-                    developTasks: ['jscs', 'browserify:devApp', 'stylus:devApp', 'copy:app'],
+                    developTasks: ['jscs', 'browserify:devApp', 'jsdoc', 'stylus:devApp', 'copy:app'],
                     productionTasks: ['browserify:prodApp', 'stylus:prodApp', 'copy:app']
                 }
             }
@@ -76,10 +76,19 @@ module.exports = function (grunt) {
             src: ['model/**/*.js', 'public/**/*.js', 'public/**/*.jsx', 'routes/**/*.js', 'app.js']
         },
 
+        jsdoc: {
+            doc: {
+                src: ['model/**/*.js', 'public/**/*.js', 'public/**/*.jsx', 'routes/**/*.js', 'app.js'],
+                options: {
+                    destination: 'dist/doc',
+                },
+            }
+        },
+
         run: {
             app: {
                 options: {
-                    developTasks: ['jscs', 'watchify:devApp', 'stylus:devApp', 'copy:app', 'express:devApp', 'watch'],
+                    developTasks: ['jscs', 'watchify:devApp', 'jsdoc', 'stylus:devApp', 'copy:app', 'express:devApp', 'watch'],
                     productionTasks: ['browserify:prodApp', 'stylus:prodApp', 'copy:app', 'express:prodApp', 'keepalive']
                 }
             }
