@@ -1,4 +1,10 @@
 
+/**
+ * Promise-based RESTful wrapper around the HTTP APIs for beacons.
+ *
+ * @module resources/BeaconsResource
+ */
+
 module.exports.config = function () {
     'use strict';
 
@@ -26,6 +32,14 @@ module.exports.factory = function (httpPromise) {
 
     return {
 
+        /**
+         * Fetch all beacon instances.
+         *
+         * @returns {promise} Promise resolved with all beacons returned as an
+         *      array of JSON blobs. Promise is rejected in the event of any
+         *      bad status codes, e.g. 4xx or 5xx.
+         */
+
         all: function () {
             return httpPromise.get('/beacons', {
                 headers: {
@@ -33,6 +47,16 @@ module.exports.factory = function (httpPromise) {
                 },
             });
         },
+
+        /**
+         * Create a new beacon.
+         *
+         * @param {Object} beacon - beacon document data
+         * @returns {promise} Promise resolved with new beacon. This includes
+         *      actual beacon data in addition to document metadata such as id,
+         *      revision, timestamps, etc. Promise is rejected in the event of
+         *      any bad status codes, e.g. 4xx or 5xx.
+         */
 
         create: function (beacon) {
             return httpPromise.post('/beacons', { document: beacon }, {

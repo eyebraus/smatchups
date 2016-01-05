@@ -1,4 +1,11 @@
 
+/**
+ * Defines names for actions. Actions are issued by components via action
+ * creators, and are dispatched to a dispatcher once they are completed.
+ *
+ * @module constants/Actions
+ */
+
 module.exports.config = function () {
     'use strict';
 
@@ -26,6 +33,12 @@ module.exports.factory = function () {
      * Packaged dependencies
      */
     var keymirror = require('keymirror');
+
+    /**
+     * List of action names.
+     *
+     * @exports constants/Actions
+     */
 
     return keymirror({
         CreateBeacon: null,

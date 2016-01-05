@@ -1,4 +1,10 @@
 
+/**
+ * Promise-based utility for executing HTTP methods, i.e. GET, POST, etc.
+ *
+ * @module utility/httpPromise
+ */
+
 module.exports.config = function () {
     'use strict';
 
@@ -31,6 +37,16 @@ module.exports.factory = function () {
 
     return {
 
+        /**
+         * Wraps node's http.get method in a promise.
+         *
+         * @param {string} path - path to issue a GET request against
+         * @param {Object} options - additional options to pass to get method
+         * @returns {promise} Promise resolved when all response data has been
+         *      received and parsed. Promise rejected on any error condition,
+         *      e.g. status 4xx or 5xx.
+         */
+
         get: function (path, options) {
             var deferral = q.defer();
             var opts = _.clone(options);
@@ -53,6 +69,19 @@ module.exports.factory = function () {
 
             return deferral.promise;
         },
+
+        /**
+         * Issues node's http.request with POST method and wrap response in
+         * promise.
+         *
+         * @param {string} path - path to issue a POST request against
+         * @param {Object} body - data to attach to POST request
+         * @param {Object} options - additional options to pass to request
+         *      method
+         * @returns {promise} Promise resolved when all response data has been
+         *      received and parsed. Promise rejected on any error condition,
+         *      e.g. status 4xx or 5xx.
+         */
 
         post: function (path, body, options) {
             var deferral = q.defer();

@@ -1,4 +1,11 @@
 
+/**
+ * Defines names for events. Events are fired by stores to notify components of
+ * changes in application state.
+ *
+ * @module constants/Events
+ */
+
 module.exports.config = function () {
     'use strict';
 
@@ -26,6 +33,12 @@ module.exports.factory = function () {
      * Packaged dependencies
      */
     var keymirror = require('keymirror');
+
+    /**
+     * List of event names.
+     *
+     * @exports constants/Events
+     */
 
     return keymirror({
         BeaconsStoreChanged: null,

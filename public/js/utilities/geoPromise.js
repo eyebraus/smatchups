@@ -1,4 +1,11 @@
 
+/**
+ * Promise-based utility for retrieving geolocation information from the web
+ * client.
+ *
+ * @module utility/geoPromise
+ */
+
 module.exports.config = function () {
     'use strict';
 
@@ -28,6 +35,15 @@ module.exports.factory = function () {
     var q = require('q');
 
     return {
+
+        /**
+         * Wraps the browser's getCurrentPosition function in a promise.
+         *
+         * @returns {promise} Promise resolved with the client's current
+         *      geolocation. Promise rejected if something prevented retrieval
+         *      of the geolocation (e.g. user denied request), or if the browser
+         *      does not support the geolocation APIs.
+         */
 
         getCurrentPosition: function () {
             var deferral = q.defer();

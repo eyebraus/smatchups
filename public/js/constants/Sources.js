@@ -1,4 +1,11 @@
 
+/**
+ * Defines names for action sources. Action sources allow consumers to handle
+ * actions differently based on their origin, i.e. HTTP API versus web client.
+ *
+ * @module constants/Sources
+ */
+
 module.exports.config = function () {
     'use strict';
 
@@ -26,6 +33,12 @@ module.exports.factory = function () {
      * Packaged dependencies
      */
     var keymirror = require('keymirror');
+
+    /**
+     * List of source names.
+     *
+     * @exports constants/Sources
+     */
 
     return keymirror({
         Component: null,

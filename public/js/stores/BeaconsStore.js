@@ -1,4 +1,8 @@
 
+/**
+ * Application store for all beacon data.
+ */
+
 module.exports.config = function () {
     'use strict';
 
@@ -33,25 +37,59 @@ module.exports.factory = function (Actions, AppDispatcher, Events) {
     var _ = require('underscore')._;
     var vargs = require('vargs').Constructor;
 
+    /**
+     * Application store for all beacon data.
+     *
+     * @exports stores/BeaconsStore
+     */
+
     var BeaconsStore = Object.create(EventEmitter.prototype);
 
     var beacons = {};
+
+    /**
+     * Emit the BeaconsStoreChanged event.
+     */
 
     BeaconsStore.emitChanged = function () {
         this.emit(Events.BeaconsStoreChanged);
     };
 
+    /**
+     * Add a listener for the BeaconsStoreChanged event.
+     *
+     * @param {function} fn - event handler callback to bind to the event
+     */
+
     BeaconsStore.addChangedListener = function (fn) {
         this.on(Events.BeaconsStoreChanged, fn);
     };
+
+    /**
+     * Remove a listener on the BeaconsStoreChanged event.
+     *
+     * @param {function} fn - event handler callback to unbind from the event
+     */
 
     BeaconsStore.removeChangedListener = function (fn) {
         this.removeListener(Events.BeaconsStoreChanged, fn);
     };
 
+    /**
+     * Add a new beacon to the in-memory store.
+     *
+     * @param {Object} beacon - new beacon to add
+     */
+
     BeaconsStore.addBeacon = function (beacon) {
         beacons[beacon.id] = beacon;
     };
+
+    /**
+     * Add multiple new beacons to the in-memory store.
+     *
+     * @param {Object[]} newBeacons - collection of new beacons to add
+     */
 
     BeaconsStore.addBeacons = function (newBeacons) {
         _.each(newBeacons, function (beacon) {
@@ -59,9 +97,19 @@ module.exports.factory = function (Actions, AppDispatcher, Events) {
         });
     };
 
+    /**
+     * Flush all beacons from the in-memory store.
+     */
+
     BeaconsStore.clearBeacons = function () {
         beacons = {};
     };
+
+    /**
+     * Return all beacons currently in the in-memory store.
+     *
+     * @returns {Object[]} All beacons currently in the in-memory store
+     */
 
     BeaconsStore.getBeacons = function () {
         return _.values(beacons);
