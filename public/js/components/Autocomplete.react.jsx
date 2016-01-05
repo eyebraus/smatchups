@@ -1,4 +1,10 @@
 
+/**
+ * React component which wraps a Google Places API autocomplete textbox.
+ *
+ * @module components/Autocomplete
+ */
+
 module.exports.config = function () {
     'use strict';
 
@@ -29,6 +35,16 @@ module.exports.factory = function () {
 
     var Autocomplete = React.createClass({
 
+        /**
+         * React lifecycle handler, fired when component is finished mounting to
+         * the DOM.
+         *
+         * For this component specifically: create a new Autocomplete on the
+         * component's textbox; set its bounds via the received bounds prop;
+         * attach a handler to the Plcaes place_changed event, which updates
+         * bounds as the position changes.
+         */
+
         componentDidMount: function () {
             var that = this;
 
@@ -41,9 +57,23 @@ module.exports.factory = function () {
             });
         },
 
+        /**
+         * React lifecycle handler, fired when component is finished updating
+         * after a props or state change.
+         *
+         * For this component specifically: keep the Autocomplete bounds in sync
+         * with the bounds receieved from the props.
+         */
+
         componentDidUpdate: function () {
             this.autocomplete.setBounds(this.props.bounds);
         },
+
+        /**
+         * Generates DOM subtree based on current properties and state.
+         *
+         * @returns {Object} Current DOM representation of component
+         */
 
         render: function () {
             return (

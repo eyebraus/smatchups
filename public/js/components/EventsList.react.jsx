@@ -1,4 +1,12 @@
 
+/**
+ * React component: index page listing nearby events, fests, or tournaments.
+ * These are distinct from beacons in that they are considerably larger events,
+ * and are promoted beyond their local area.
+ *
+ * @module components/EventsList
+ */
+
 module.exports.config = function () {
     'use strict';
 
@@ -31,6 +39,12 @@ module.exports.factory = function () {
     var Row = require('react-bootstrap').Row;
 
     var EventsList = React.createClass({
+
+        /**
+         * Generates DOM subtree based on current properties and state.
+         *
+         * @returns {Object} Current DOM representation of component
+         */
 
         render: function () {
             return (

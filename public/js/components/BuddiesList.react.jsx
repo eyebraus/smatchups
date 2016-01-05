@@ -1,4 +1,12 @@
 
+/**
+ * React component: index page listing all user's buddies, i.e. other players
+ * met at events. Shows their latest activity (privacy settings allowing) and
+ * if they're currently hosting any events.
+ *
+ * @module components/BuddiesList
+ */
+
 module.exports.config = function () {
     'use strict';
 
@@ -31,6 +39,12 @@ module.exports.factory = function () {
     var Row = require('react-bootstrap').Row;
 
     var BuddiesList = React.createClass({
+
+        /**
+         * Generates DOM subtree based on current properties and state.
+         *
+         * @returns {Object} Current DOM representation of component
+         */
 
         render: function () {
             return (

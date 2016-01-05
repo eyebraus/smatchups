@@ -1,4 +1,10 @@
 
+/**
+ * React component: settings menu for users.
+ *
+ * @module components/Settings
+ */
+
 module.exports.config = function () {
     'use strict';
 
@@ -36,6 +42,12 @@ module.exports.factory = function () {
     var Link = Router.Link;
 
     var Settings = React.createClass({
+
+        /**
+         * Generates DOM subtree based on current properties and state.
+         *
+         * @returns {Object} Current DOM representation of component
+         */
 
         render: function () {
             return (

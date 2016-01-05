@@ -1,4 +1,10 @@
 
+/**
+ * React component: form that users can fill out to create a new beacon.
+ *
+ * @module components/BeaconForm
+ */
+
 module.exports.config = function () {
     'use strict';
 
@@ -43,6 +49,12 @@ module.exports.factory = function (Autocomplete, geoPromise,
 
     var BeaconForm = React.createClass({
 
+        /**
+         * Creates initial component state.
+         *
+         * @returns {Object} Initial component state
+         */
+
         getInitialState: function () {
             return {
                 address: {},
@@ -59,6 +71,15 @@ module.exports.factory = function (Autocomplete, geoPromise,
                 visibility: 'locals',
             };
         },
+
+        /**
+         * Event handler, fired when the Autocomplete component's place is
+         * changed.
+         *
+         * @param {Object} place - new place object; see the PlaceResult entry
+         *      at the {@link https://developers.google.com/maps/|Google Maps}
+         *      API reference for more info about this object.
+         */
 
         onAutocompleteChanged: function (place) {
             var newState = {};
@@ -98,6 +119,15 @@ module.exports.factory = function (Autocomplete, geoPromise,
             this.setState(newState);
         },
 
+        /**
+         * Event handler factory. Fired when a numeric or string form input is
+         * updated.
+         *
+         * @param {string} keyName - name of state member to set
+         * @returns {function} Event handler for a value change on a string or
+         *      numeric form element
+         */
+
         onChangeFactory: function (keyName) {
             var that = this;
 
@@ -109,6 +139,14 @@ module.exports.factory = function (Autocomplete, geoPromise,
             };
         },
 
+        /**
+         * Event handler factory. Fired when a checkbox form input is updated.
+         *
+         * @param {string} enumValue - value to set state enum to when checkbox
+         *      checked.
+         * @returns {function} Event handler for a checkbox checked event
+         */
+
         onCheckedFactory: function (enumValue) {
             var that = this;
 
@@ -119,11 +157,28 @@ module.exports.factory = function (Autocomplete, geoPromise,
             };
         },
 
+        /**
+         * Event handler, fired when form or sub-element receives a keystroke.
+         * The primary purpose is to prevent form submission on pressing enter
+         * inside the Autocomplete.
+         *
+         * @param {Object} event - event instance payload; contains information
+         *      about which key was pressed.
+         */
+
         onKeyPress: function (event) {
             if (event.which === 13) {
                 event.preventDefault();
             }
         },
+
+        /**
+         * Event handler, fired when the form is submitted. Suppresses the
+         * default form submission behavior, and performs the action received
+         * via props.
+         *
+         * @param {Object} event - event instance payload
+         */
 
         onSubmit: function (event) {
             // Block normal event propagation
@@ -131,6 +186,12 @@ module.exports.factory = function (Autocomplete, geoPromise,
 
             this.props.onSubmit(_.clone(this.state));
         },
+
+        /**
+         * Generates DOM subtree based on current properties and state.
+         *
+         * @returns {Object} Current DOM representation of component
+         */
 
         render: function () {
             return (

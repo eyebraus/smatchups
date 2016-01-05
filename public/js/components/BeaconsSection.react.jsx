@@ -1,4 +1,11 @@
 
+/**
+ * React component: index page listing and mapping all visible beacons, and
+ * providing filtering functionality.
+ *
+ * @module components/BeaconsSection
+ */
+
 module.exports.config = function () {
     'use strict';
 
@@ -63,6 +70,12 @@ module.exports.factory = function (Autocomplete, BeaconForm,
 
     var BeaconsSection = React.createClass({
 
+        /**
+         * Creates initial component state.
+         *
+         * @returns {Object} Initial component state
+         */
+
         getInitialState: function () {
             return {
                 bounds: null,
@@ -72,6 +85,15 @@ module.exports.factory = function (Autocomplete, BeaconForm,
                 isFormActive: false,
             };
         },
+
+        /**
+         * React lifecycle handler, fired when component is finished mounting to
+         * the DOM.
+         *
+         * For this component specifically: issue a request for all beacons, and
+         * set the map's position to the user's current location, if it's
+         * available.
+         */
 
         componentDidMount: function () {
             var that = this;
@@ -94,9 +116,19 @@ module.exports.factory = function (Autocomplete, BeaconForm,
                 });
         },
 
+        /**
+         * Command to hide the beacon form element.
+         */
+
         hideForm: function () {
             this.setState({ isFormActive: false });
         },
+
+        /**
+         * Event handler, fired when the bounds of the map element change.
+         * Updates component state to reflect the new bounds and center of the
+         * map.
+         */
 
         onBoundsChanged: function () {
             this.setState({
@@ -104,6 +136,13 @@ module.exports.factory = function (Autocomplete, BeaconForm,
                 center: this.refs.map.getCenter(),
             });
         },
+
+        /**
+         * Event handler, fired when the user submits the beacon form. Issues
+         * action to create a new beacon on the backend and closes the form.
+         *
+         * @param {Object} beacon - beacon data submit from the beacon form.
+         */
 
         onFormSubmitted: function (beacon) {
             var that = this;
@@ -114,6 +153,11 @@ module.exports.factory = function (Autocomplete, BeaconForm,
                 });
         },
 
+        /**
+         * Event handler, fired when search box's place is updated. Recenters
+         * the map to the currently selected place, if one exists.
+         */
+
         onPlacesChanged: function () {
             var places = this.refs.searchBox.getPlaces();
 
@@ -123,6 +167,14 @@ module.exports.factory = function (Autocomplete, BeaconForm,
                 });
             }
         },
+
+        /**
+         * Event handler factory. Fired when one of the filter buttons is
+         * toggled. Updates state to filter to only the currently selected game.
+         *
+         * @param {string} game - game to filter beacons down to
+         * @returns {function} Event handler for filter button toggle event
+         */
 
         onToggledFactory: function (game) {
             var that = this;
@@ -140,9 +192,19 @@ module.exports.factory = function (Autocomplete, BeaconForm,
             };
         },
 
+        /**
+         * Command to hide the beacon form element.
+         */
+
         showForm: function ()  {
             this.setState({ isFormActive: true });
         },
+
+        /**
+         * Generates DOM subtree based on current properties and state.
+         *
+         * @returns {Object} Current DOM representation of component
+         */
 
         render: function () {
             var createRowClassNames = this.state.isFormActive
@@ -181,6 +243,12 @@ module.exports.factory = function (Autocomplete, BeaconForm,
                 </Row>
             );
         },
+
+        /**
+         * Generates DOM subtree for beacon filtering functionality.
+         *
+         * @returns {Object} Current DOM representation of component
+         */
 
         beaconsFilters: function () {
             return (
@@ -263,6 +331,12 @@ module.exports.factory = function (Autocomplete, BeaconForm,
             );
         },
 
+        /**
+         * Generates DOM subtree for list of becaons.
+         *
+         * @returns {Object} Current DOM representation of component
+         */
+
         beaconsList: function () {
             var that = this;
             var beacons = _.sortBy(this.props.beacons, function (beacon) {
@@ -326,6 +400,12 @@ module.exports.factory = function (Autocomplete, BeaconForm,
             });
         },
 
+        /**
+         * Generates DOM subtree for map of becaons.
+         *
+         * @returns {Object} Current DOM representation of component
+         */
+
         beaconsMap: function () {
             return (
                 <GoogleMap
@@ -355,6 +435,13 @@ module.exports.factory = function (Autocomplete, BeaconForm,
                 </GoogleMap>
             );
         },
+
+        /**
+         * Reusable sub-component that displays a ribbon of game setups
+         * available at current beacon.
+         *
+         * @returns {Object} Current DOM representation of component
+         */
 
         gamesRibbonIcons: function (setups) {
             var ribbonIcons = [];

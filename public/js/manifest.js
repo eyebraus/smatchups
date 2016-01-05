@@ -1,4 +1,11 @@
 
+/**
+ * Loads all modules in the app via CommonJS. Awkward solution, but allows files
+ * with config functions to be easily located and generated.
+ *
+ * @module manifest
+ */
+
 module.exports = (function () {
     'use strict';
 

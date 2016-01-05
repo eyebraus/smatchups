@@ -1,4 +1,11 @@
 
+/**
+ * React component: icon button that links to another React Router component.
+ * Icons are supported through font-awesome.
+ *
+ * @module components/LinkedIconButton
+ */
+
 module.exports.config = function () {
     'use strict';
 
@@ -34,6 +41,12 @@ module.exports.factory = function () {
     var _ = require('underscore')._;
 
     var LinkedIconButton = React.createClass({
+
+        /**
+         * Generates DOM subtree based on current properties and state.
+         *
+         * @returns {Object} Current DOM representation of component
+         */
 
         render: function () {
             var iconClassNames = [

@@ -1,4 +1,11 @@
 
+/**
+ * React component: toggle button containing a small image icon along with some
+ * text.
+ *
+ * @module components/ToggleImageButton
+ */
+
 module.exports.config = function () {
     'use strict';
 
@@ -34,6 +41,12 @@ module.exports.factory = function () {
     var _ = require('underscore')._;
 
     var ToggleImageButton = React.createClass({
+
+        /**
+         * Generates DOM subtree based on current properties and state.
+         *
+         * @returns {Object} Current DOM representation of component
+         */
 
         render: function () {
             var that = this;

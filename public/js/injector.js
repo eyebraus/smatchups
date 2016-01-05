@@ -1,6 +1,7 @@
 
 /**
  * Components and classes for handling dependency injection.
+ *
  * @module injector
  */
 
@@ -19,6 +20,7 @@ module.exports = (function () {
     /**
      * Allows modules to define dependencies on other modules. Must be a child
      * of a Module component.
+     *
      * @exports injector/Dependency
      */
 
@@ -38,6 +40,7 @@ module.exports = (function () {
 
     /**
      * Defines a single module.
+     *
      * @exports injector/Module
      */
 
@@ -67,6 +70,7 @@ module.exports = (function () {
      * Resolves and injects dependencies for all modules in the application.
      * This is what constructs and passes dependencies between modules outside
      * of a test environment.
+     *
      * @exports injector/Injector
      */
 
@@ -82,6 +86,7 @@ module.exports = (function () {
     /**
      * Creates an object-literal representation of a module definition, based on
      * a Module component instance.
+     *
      * @param {injector/Module} config - module definition instance
      * @retuns {Object} Object-literal instance of config, with name, factory
      *      method, whether or not that module is root, and list of dependency
@@ -112,6 +117,7 @@ module.exports = (function () {
      * to determine a partial ordering in which to create module instances, e.g.
      * if a -> b, then a should be instanced before b. Also detects any circular
      * references.
+     *
      * @param {Object} module - object-literal instance of a module definition
      * @param {number} [depth=0] - current depth of the dependency tree
      * @param {string[]} [resolveStack=[]] - current stack of module names that
@@ -165,6 +171,7 @@ module.exports = (function () {
     /**
      * Construct instances of all modules, using partial ordering determined in
      * resolution step.
+     *
      * @returns {promise} Promise returning instance of root module. Promise is
      *      rejected if partial ordering was somehow incorrect, or root module
      *      somehow ended up not being constructed.
@@ -238,6 +245,7 @@ module.exports = (function () {
 
     /**
      * Resolve and construct all modules and run the application.
+     *
      * @param {injector/Module[]} configs - all module definitions in the app
      * @returns {promise} Promise returning root module instance. Rejected if:
      *      - one or more configs were not valid

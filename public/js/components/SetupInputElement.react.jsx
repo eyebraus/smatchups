@@ -1,4 +1,11 @@
 
+/**
+ * React component: input element for providing a number of setups a beacon or
+ * event will have. Contains a numeric input next to the game's icon.
+ *
+ * @module components/SetupInputElement
+ */
+
 module.exports.config = function () {
     'use strict';
 
@@ -31,6 +38,12 @@ module.exports.factory = function () {
     var Input = require('react-bootstrap').Input;
 
     var SetupInputElement = React.createClass({
+
+        /**
+         * Generates DOM subtree based on current properties and state.
+         *
+         * @returns {Object} Current DOM representation of component
+         */
 
         render: function () {
             return (

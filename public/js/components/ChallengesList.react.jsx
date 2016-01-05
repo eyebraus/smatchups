@@ -1,4 +1,12 @@
 
+/**
+ * React component: index page listing any head-to-head challenges sent to user.
+ * Allows for arrangement of money match terms, as well as resolving the outcome
+ * of such matches.
+ *
+ * @module components/ChallengesList
+ */
+
 module.exports.config = function () {
     'use strict';
 
@@ -31,6 +39,12 @@ module.exports.factory = function () {
     var Row = require('react-bootstrap').Row;
 
     var ChallengesList = React.createClass({
+
+        /**
+         * Generates DOM subtree based on current properties and state.
+         *
+         * @returns {Object} Current DOM representation of component
+         */
 
         render: function () {
             return (

@@ -1,4 +1,10 @@
 
+/**
+ * React component constituting the application frame.
+ *
+ * @module components/SmatchupsApp
+ */
+
 module.exports.config = function () {
     'use strict';
 
@@ -45,17 +51,36 @@ module.exports.factory = function () {
 
         mixins: [Navigation],
 
+        /**
+         * Creates initial component state.
+         *
+         * @returns {Object} Initial component state
+         */
+
         getInitialState: function () {
             return {
                 activeRoute: 'beacons',
             };
         },
 
+        /**
+         * Event handler, fired when a NavItem is selected in the Nav.
+         *
+         * @param {string} selectedKey - the key of the NavItem which was
+         *      selected.
+         */
+
         onNavSelect: function (selectedKey) {
             this.transitionTo(selectedKey);
 
             this.setState({ activeRoute: selectedKey });
         },
+
+        /**
+         * Generates DOM subtree based on current properties and state.
+         *
+         * @returns {Object} Current DOM representation of component
+         */
 
         render: function () {
             return (

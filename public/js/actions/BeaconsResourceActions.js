@@ -1,4 +1,11 @@
 
+/**
+ * Issues actions on the BeaconsResource, e.g. creating beacons from form info,
+ * getting all beacons in the backend.
+ *
+ * @module actions/BeaconsResourceActions
+ */
+
 module.exports.config = function () {
     'use strict';
 
@@ -27,7 +34,23 @@ module.exports.config = function () {
 module.exports.factory = function (Actions, AppDispatcher, BeaconsResource) {
     'use strict';
 
+    /**
+     * Functions for issuing actions on the BeaconsResource.
+     *
+     * @exports actions/BeaconsResourceActions
+     */
+
     return {
+
+        /**
+         * Issues request to create a new beacon, based on data obtained from a
+         * form.
+         *
+         * @param {Object} formData - beacon data obtained from an HTML form
+         * @returns {promise} Promise resolved when the new beacon is created,
+         *      returning the new beacon instance. Promise is rejected in the
+         *      case of any 4xx or 5xx errors.
+         */
 
         createBeaconFromForm: function (formData) {
             // Convert beacon form data into beacon model
@@ -57,6 +80,13 @@ module.exports.factory = function (Actions, AppDispatcher, BeaconsResource) {
                     });
                 });
         },
+
+        /**
+         * Gets all beacons from the backend.
+         *
+         * @returns {promise} Promise resolved when all beacons are retrieved.
+         * Promise rejected in the case of any 4xx or 5xx status.
+         */
 
         reloadBeacons: function () {
             BeaconsResource.all()
