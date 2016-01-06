@@ -1,29 +1,29 @@
 
 (function () {
+    'use strict';
 
     /**
-     * npm dependencies
+     * Packaged dependencies
      */
-
-    var express = require('express')
-      , http = require('http')
-      , path = require('path')
-      , stylus = require('stylus')
-      , winston = require('winston')
-      , _ = require('underscore')._;
+    var express = require('express');
+    var http = require('http');
+    var path = require('path');
+    var stylus = require('stylus');
+    var winston = require('winston');
+    var _ = require('underscore')._;
 
     /**
      * Local dependencies
      */
+    var beacons = require('./routes/beacons');
+    var index = require('./routes/index');
 
-    var beacons = require('./routes/beacons')
-      , index = require('./routes/index');
+    var log = new (winston.Logger)({
+        transports: [new (winston.transports.Console)()],
+    });
 
-    var app = express()
-      , log = new (winston.Logger)({
-            transports: [
-                new (winston.transports.Console)()]
-        });
+    var app = express();
+    var server = null;
 
     app.configure(function () {
         app.set('port', process.env.PORT || 3000);
@@ -37,7 +37,7 @@
             src: path.join(__dirname, 'public'),
             compile: function (str, path) {
                 return stylus(str).set('filename', path);
-            }
+            },
         }));
         app.use(app.router);
         app.use(express.static(path.join(__dirname, 'dist')));
@@ -55,8 +55,8 @@
 
     server = http.createServer(app);
 
-    server.listen(app.get('port'), function(){
-        console.log("Express server listening on port " + app.get('port'));
+    server.listen(app.get('port'), function () {
+        console.log('Express server listening on port ' + app.get('port'));
     });
 
 })();

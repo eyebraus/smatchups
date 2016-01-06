@@ -1,41 +1,55 @@
 
+/**
+ * Promise-based utility for executing HTTP methods, i.e. GET, POST, etc.
+ *
+ * @module utility/httpPromise
+ */
+
 module.exports.config = function () {
     'use strict';
 
     /**
-     * npm dependencies
+     * Packaged dependencies
      */
-    var React = require('react')
-        ;
+    var React = require('react');
 
     /**
      * Local dependencies
      */
-    var Dependency = require('../injector').Dependency
-      , Module = require('../injector').Module
-        ;
+    var Dependency = require('../injector').Dependency;
+    var Module = require('../injector').Module;
 
     return (
-        <Module name="httpPromise" factory={ module.exports.factory } />
+        <Module name='httpPromise' factory={ module.exports.factory } />
     );
+
 };
 
 module.exports.factory = function () {
     'use strict';
 
     /**
-     * npm dependencies
+     * Packaged dependencies
      */
-    var http = require('http')
-      , q = require('q')
-      , _ = require('underscore')._
-        ;
+    var http = require('http');
+    var q = require('q');
+    var _ = require('underscore')._;
 
     return {
 
+        /**
+         * Wraps node's http.get method in a promise.
+         *
+         * @param {string} path - path to issue a GET request against
+         * @param {Object} options - additional options to pass to get method
+         * @returns {promise} Promise resolved when all response data has been
+         *      received and parsed. Promise rejected on any error condition,
+         *      e.g. status 4xx or 5xx.
+         */
+
         get: function (path, options) {
-            var deferral = q.defer()
-              , opts = _.clone(options);
+            var deferral = q.defer();
+            var opts = _.clone(options);
 
             opts.path = path;
 
@@ -56,10 +70,23 @@ module.exports.factory = function () {
             return deferral.promise;
         },
 
+        /**
+         * Issues node's http.request with POST method and wrap response in
+         * promise.
+         *
+         * @param {string} path - path to issue a POST request against
+         * @param {Object} body - data to attach to POST request
+         * @param {Object} options - additional options to pass to request
+         *      method
+         * @returns {promise} Promise resolved when all response data has been
+         *      received and parsed. Promise rejected on any error condition,
+         *      e.g. status 4xx or 5xx.
+         */
+
         post: function (path, body, options) {
-            var deferral = q.defer()
-              , bodyStr = JSON.stringify(body)
-              , opts = _.clone(options);
+            var deferral = q.defer();
+            var bodyStr = JSON.stringify(body);
+            var opts = _.clone(options);
 
             opts.method = 'POST';
             opts.path = path;
@@ -82,7 +109,7 @@ module.exports.factory = function () {
             req.end(bodyStr);
 
             return deferral.promise;
-        }
+        },
 
     };
 

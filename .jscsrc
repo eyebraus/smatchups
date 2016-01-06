@@ -1,0 +1,5 @@
+{
+    "preset": "node-style-guide",
+    "validateIndentation": 4,
+    "disallowSpacesInFunction": null
+}

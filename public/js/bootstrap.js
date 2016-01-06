@@ -3,30 +3,28 @@
     'use strict';
 
     /**
-     * npm dependencies
+     * Packaged dependencies
      */
-    var _ = require('underscore')._
-        ;
+    var _ = require('underscore')._;
 
     /**
      * Local dependencies
      */
-    var Injector = require('./injector').Injector
-      , manifest = require('./manifest')
-        ;
+    var Injector = require('./injector').Injector;
+    var manifest = require('./manifest');
 
     // Process all module configs
     var configs = _.map(manifest, function (module, index) {
         if (!_.has(module, 'config') || !_.isFunction(module.config)) {
-            throw 'Module at index ' + index + ' did not contain property "config" with function value';
+            throw 'Module at index ' + index + ' did not contain property '
+                + '"config" with function value';
         }
 
         return module.config();
     });
 
     // Run app using given configs
-    var injector = new Injector()
-        ;
+    var injector = new Injector();
 
     injector.run(configs)
         .then(function () {
